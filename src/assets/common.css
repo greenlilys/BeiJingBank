@@ -1,0 +1,67 @@
+
+html, body, div, span, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, address, big, cite, code,
+del, em, ins, kbd, q, samp,
+small, strong, sub, sup, tt, var,
+b, u, i, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+ caption, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header,
+menu, nav, output, section, summary,
+time, mark, audio, video{
+	margin: 0;
+	padding: 0;
+	border: 0; 	
+	font-weight: normal;
+	vertical-align: baseline;
+}
+
+a,a:link,a:visited,a:hover,a:active {
+	outline: 0;
+	text-decoration: none;
+	color:#fff;
+}
+
+img {
+	border: none;
+	text-decoration: none;
+	font-size:0;
+	vertical-align:middle;
+}
+
+li {
+	list-style: none;
+}
+.clear:after{content:"";display:block;clear:both}
+.clear{zoom:1}
+
+.fl{float:left}
+.fr{float:right}
+.hide{display:none}
+.show{display:block}
+.bw{background:#fff;}
+.tr{text-align: center;}
+
+.flex-wrap{ display: -webkit-box;	display: -webkit-flex;	display: flex; }
+.flex-con{     -webkit-box-flex: 1;     -webkit-flex: 1;    flex: 1;}
+.flex-vertical{ -webkit-box-orient: vertical;-webkit-flex-direction: column;flex-direction: column;}
+.flex-horizontal{ -webkit-box-orient: horizontal;-webkit-flex-direction: row;flex-direction: row;}
+.flex-justify-between{
+	justify-content: space-between;
+}
+.flex-justify-around{
+	justify-content: space-around;
+}
+.flex-justify-center{
+	justify-content: center;
+}
+
+.flex-align-center{
+align-items: center;
+}
+.flex-justify-end{
+	justify-content: flex-end;
+}
+.router-link-exact-active{background:red;}
