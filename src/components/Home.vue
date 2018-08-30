@@ -121,11 +121,7 @@
   		<div class="flex-con flex-wrap flex-vertical flex-justify-center flex-align-center">
   			<p>1200<span>+次</span></p>
   			<h4>日均换电</h4>
-  		</div>
-  		<div class="flex-con flex-wrap flex-vertical flex-justify-center flex-align-center">
-  			<p>6<span>家</span></p>
-  			<h4>月租</h4>
-  		</div>
+  		</div>  		
   	</div>
   	
   	<div class="btnbox">  		
@@ -196,7 +192,7 @@ text-align: center;margin-top:40px;margin-bottom:80px;box-shadow: 0 6px 10px #b0
 .citya{text-align: center;font-size:36px;color:#citya;line-height:92px;}
 .cityb{text-align: center;font-size:18px;color:#citya;line-height:26px;}
 .tablebox >div{border:1px #63b62f solid}
-.tablebox >div:nth-child(1),.tablebox >div:nth-child(2),.tablebox >div:nth-child(3),.tablebox >div:nth-child(4){border-right:none;}
+.tablebox >div:nth-child(1),.tablebox >div:nth-child(2),.tablebox >div:nth-child(3){border-right:none;}
 .tablebox{height:150px;width:1200px;margin:30px auto 0 auto;}
 .tablebox p{font-size:42px;color:#63B62F;text-align:center;}
 .tablebox h4{font-size:24px;color:#63B62F;text-align:center;}
