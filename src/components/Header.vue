@@ -33,7 +33,7 @@
 			
 			}
 		},
-		created(){	
+		created(){	//页面刷新执行
 			console.log('header--created')
 			var cunpath = this.$router.history.current.fullPath;			
 			this.rendertext(cunpath);

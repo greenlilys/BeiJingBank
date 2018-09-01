@@ -52,7 +52,7 @@
 				<div class="flex-con">
 					<div style="text-align:center;"><img src="../assets/images/per1.jpg" alt="" /></div>
 					<h1>李清贤</h1>
-					<h2>总经理 & 天牛网创始人</h2>
+					<h2>创始人 | CEO</h2>
 					<p>
 						天牛网创始人！信奉：唯用心做事,方有好结果！15年的行业经历，让他站稳了脚跟！如今，高度的责任感和使命感让他第一次站在了解决民生问题的制高点,开创"天牛网"，让所有电动车用户动力十足！！！
 					</p>
@@ -60,17 +60,17 @@
 				<div class="flex-con">
 					<div style="text-align:center;"><img src="../assets/images/per2.jpg" alt="" /></div>
 					<h1>许霞明</h1>
-					<h2>执行总经理</h2>
+					<h2>联合创始人 | COO</h2>
 					<p>
 						天牛网执行总经理！70后的他，踏实、沉稳但又不失诙谐和时尚！源于对李总的认可，基于对前景的看好，起于对梦想的追求，毅然决然和天牛同命运共甘苦！始终相信：一群人、一条心、一个目标、一起努力，一定赢！！！
 					</p>
 				</div>
 				<div class="flex-con">
 					<div style="text-align:center;"><img src="../assets/images/per3.jpg" alt="" /></div>
-					<h1>赵治丹</h1>
-					<h2>企业顾问</h2>
+					<h1>张攀</h1>
+					<h2>联合创始人 | CPO</h2>
 					<p>
-						不修边幅，不做修饰，粗看很有个性的一个人。粗狂的外表后面，俨然是专业与经验的沉淀，不羁和率性的结合。不同行业经验的累积，不同层级人员的碰撞，让他得以在行业中游刃有余！
+						14年丰富的互联网、O2O从业经验。全国最大的短途物流服务商趣活美食送前产品研发总监，亲历了外卖大战；北京亦庄开发区区属共享汽车服务品牌“经彩出行”前产品研发总监。曾任职三星中国、光宇游戏，主持了百万同时在线网游《问道》全运营体系产品及行业领先的广告大数据分析系统的构建。
 					</p>
 				</div>
 			</div>
@@ -105,9 +105,9 @@
 	.imgbox img{display:inline-block;width:333px;height:412px;}
 	h4{font-size:36px;padding-top:40px;text-align: center;}
 	.person{width:100%;background:url('../assets/images/story3.jpg') no-repeat;background-size:cover;height:867px;}
-	.perbox{width:1200px;margin:0 auto;margin-top:64px;text-align: center;}
-	.perbox h1{font-size:36px;line-height:50px;margin-top:64px;}
+	.perbox{width:1200px;margin:0 auto;margin-top:44px;text-align: center;}
+	.perbox h1{font-size:36px;line-height:50px;margin-top:44px;}
 	.perbox h2{font-size:22px;line-height:60px;}
-	.perbox p{font-size:14px;line-height:40px;text-align:justify;padding:0 60px;}
+	.perbox p{font-size:14px;line-height:40px;text-align:justify;padding:0 22px;}
 	h5{font-size:22px;text-align: center;margin-bottom:60px;}
 </style>

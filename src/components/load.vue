@@ -2,6 +2,7 @@
 	<div>
 		<div class="imgbox">
 			<div class="content">
+				<div class="phoneimg"><img src="../assets/images/phone.png" alt="" /></div>
 				<div class="loadbox">
 					<div class="duan flex-wrap flex-horizontal flex-justify-between">
 						<div v-for="(v,i) in tabs" :class='{active : i == cunid}' @click="handlechange(v,i)">{{v}}</div>						
@@ -17,7 +18,7 @@
 			  			iPhone下载</div>			  		
 			  					  		
 			  		<div class="erweima">
-			  			<img :src='imgs' alt="" />
+			  			<img v-if="isshow" :src='imgs' alt="" />
 			  		</div>			  		
 			  		
 				</div>
@@ -41,27 +42,33 @@
 			return{
 				tabs:['用户端','网点端'],
 				cunid:'0',
-				imgs:''
+				imgs:'',
+				isshow:false
 				
 			}
 		},
 		methods:{
 			handlechange(v,i){
+				this.isshow =false;
 				this.cunid = i;
 				this.imgs = "";
 			},
 			androidload(){
 				if(this.cunid == '0'){
-					this.imgs = require('../assets/images/anyong.jpg');
+					this.isshow =true;
+					this.imgs = require('../assets/images/anyong.jpg');					
 				}else{
-					this.imgs = require('../assets/images/anwang.png');
+					this.isshow =true;
+					this.imgs = require('../assets/images/anwang.png');					
 				}
 			},
 			iphoneload(){
 				if(this.cunid == '0'){
-					this.imgs = require('../assets/images/appleyong.png');
+					this.isshow =true;
+					this.imgs = require('../assets/images/appleyong.png');					
 				}else{
-					this.imgs = require('../assets/images/applewang.png');
+					this.isshow =true;
+					this.imgs = require('../assets/images/applewang.png');					
 				}
 			}
 		},
@@ -71,10 +78,11 @@
 	}
 </script>
 
-<style scoped>
-	.imgbox{width:100%;background:url('../assets/images/load1.jpg');background-size:cover;height:647px;background-repeat:no-repeat;}
+<style scoped>	
+	.imgbox{background:#84efdb;width:100%;height:647px;}
 	.content{width:1200px;margin:0 auto;height:100%;position:relative;}
 	.loadbox{position:absolute;left:526px;top:172px;width:400px;border:none;}
+	.phoneimg{position:absolute;top:40px;left:100px;}
 	.erweima{position:absolute;right:-80px;bottom:0;width:150px;height:150px;border:none;}
 	.erweima img{width:150px;height:150px;display:inline-block;border:none;border-color:transparent;outline:none;font-size:0;}
 	.duan{font-size:36px;color:#354248;}
