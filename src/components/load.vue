@@ -4,19 +4,17 @@
 			<div class="content">
 				<div class="phoneimg"><img src="../assets/images/phone.png" alt="" /></div>
 				<div class="loadbox">
-					<div class="duan flex-wrap flex-horizontal flex-justify-between">
-						<div v-for="(v,i) in tabs" :class='{active : i == cunid}' @click="handlechange(v,i)">{{v}}</div>						
+					<div class="duan clear">
+						<div class='fl btns' v-for="(v,i) in tabs" :class='{active : i == cunid}' @click="handlechange(v,i)">{{v}}</div>						
 					</div>
 					<p v-if="cunid == 0">用户租用电池安装使用</p>
-					<p v-else>运营网点、申请经营网点用户安装使用</p>
-					
+					<p v-else>运营网点、申请经营网点用户安装使用</p>					
 					<div class="btnbox" style="margin-top:74px;" @click="androidload">
 			  			<img src="../assets/images/andule.png" alt="" />
 			  			Android下载</div>
 			  		<div class="btnbox" style="margin-top:30px;" @click="iphoneload">
 			  			<img src="../assets/images/apple.png" alt="" />
-			  			iPhone下载</div>			  		
-			  					  		
+			  			iPhone下载</div>	
 			  		<div class="erweima">
 			  			<img v-if="isshow" :src='imgs' alt="" />
 			  		</div>			  		
@@ -86,7 +84,8 @@
 	.erweima{position:absolute;right:-80px;bottom:0;width:150px;height:150px;border:none;}
 	.erweima img{width:150px;height:150px;display:inline-block;border:none;border-color:transparent;outline:none;font-size:0;}
 	.duan{font-size:36px;color:#354248;}
-	.duan>div{line-height:54px;cursor:pointer;}
+	.duan>div{line-height:54px;cursor:pointer;margin-right:120px;}
+	.duan>div:nth-child(2){margin-right:0;}
 	.active{border-bottom:6px solid #63b62f;}
 	.loadbox p{font-size:22px;color:#354248;margin-top:60px;}	
 	.btnbox{width:240px;height:60px;background:#63b62f;border-radius:10px;font-size:24px;color:#fff;line-height: 60px;

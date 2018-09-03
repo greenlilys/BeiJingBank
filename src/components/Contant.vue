@@ -13,13 +13,13 @@
 				</div>	
 			</div>
 		</div>
-		
+				
 		<p class="welcome">欢迎致电</p>
-			<div class="welcomebox flex-wrap flex-horizontal flex-justify-center">
-				<h3>平台热线：  400-862-5918</h3>
-				<h3>运营加盟：  1893 7659 583</h3>
-				<h3>招聘专线：  1893 7659 583</h3>
-				<h3>用户投诉与建议：  1803 7380 008</h3>
+			<div class="clear welcomebox">
+				<h3 class="fl">平台热线：  400-862-5918</h3>
+				<h3 class="fl">运营加盟：  1893 7659 583</h3>
+				<h3 class="fl">招聘专线：  1893 7659 583</h3>
+				<h3 class="fl">用户投诉与建议：  1803 7380 008</h3>
 		</div>
 	</div>
 </template>
@@ -34,7 +34,8 @@
 	.contant p{font-size:22px;line-height:48px;}
 	.textbox{padding-left:40px;padding-top:290px;box-sizing: border-box;}
 	p.welcome{font-size:36px;color:#000;text-align: center;margin-top:70px;}
-	.welcomebox{width:1000px;margin:0 auto;flex-wrap:wrap;margin-top:60px;}
-	.welcomebox h3{font-size:30px;border-left:6px solid #63b62f;padding-left:22px;width:500px;box-sizing: border-box;}
+	.welcomebox{width:1000px;margin:0 auto;	
+	 margin-top:60px;}
+	.welcomebox h3{font-size:30px;border-left:6px solid #63b62f;padding-left:22px;width:500px;box-sizing: border-box;height:50px;line-height: 50px;}
 	.welcomebox h3:nth-child(3),.welcomebox h3:nth-child(4){margin:30px 0 60px 0;}
 </style>

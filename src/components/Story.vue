@@ -48,8 +48,8 @@
 		
 		<div  class="person">
 			<h4>核心团队</h4>
-			<div class="perbox flex-wrap flex-horizontal">
-				<div class="flex-con">
+			<div class="perbox clear">
+				<div class="fl">
 					<div style="text-align:center;"><img src="../assets/images/per1.jpg" alt="" /></div>
 					<h1>李清贤</h1>
 					<h2>创始人 | CEO</h2>
@@ -57,7 +57,7 @@
 						天牛网创始人！信奉：唯用心做事,方有好结果！15年的行业经历，让他站稳了脚跟！如今，高度的责任感和使命感让他第一次站在了解决民生问题的制高点,开创"天牛网"，让所有电动车用户动力十足！！！
 					</p>
 				</div>
-				<div class="flex-con">
+				<div class="fl">
 					<div style="text-align:center;"><img src="../assets/images/per2.jpg" alt="" /></div>
 					<h1>许霞明</h1>
 					<h2>联合创始人 | COO</h2>
@@ -65,8 +65,8 @@
 						天牛网执行总经理！70后的他，踏实、沉稳但又不失诙谐和时尚！源于对李总的认可，基于对前景的看好，起于对梦想的追求，毅然决然和天牛同命运共甘苦！始终相信：一群人、一条心、一个目标、一起努力，一定赢！！！
 					</p>
 				</div>
-				<div class="flex-con">
-					<div style="text-align:center;"><img src="../assets/images/per3.jpg" alt="" /></div>
+				<div class="fl">
+					<div style="text-align:center;"><img src="../assets/images/per3.png" alt="" /></div>
 					<h1>张攀</h1>
 					<h2>联合创始人 | CPO</h2>
 					<p>
@@ -81,7 +81,7 @@
 			<div class="imgbox clear" style="width:1116px;margin:0 auto;">
 				<img src="../assets/images/story7.jpg" alt="" />
 				<img src="../assets/images/story9.jpg" alt="" />
-				<img src="../assets/images/story8.jpg" alt="" />
+				<img src="../assets/images/story8.png" alt="" />
 			</div>
 		</div>
 		
@@ -106,6 +106,7 @@
 	h4{font-size:36px;padding-top:40px;text-align: center;}
 	.person{width:100%;background:url('../assets/images/story3.jpg') no-repeat;background-size:cover;height:867px;}
 	.perbox{width:1200px;margin:0 auto;margin-top:44px;text-align: center;}
+	.perbox>div{width:33.33%;}
 	.perbox h1{font-size:36px;line-height:50px;margin-top:44px;}
 	.perbox h2{font-size:22px;line-height:60px;}
 	.perbox p{font-size:14px;line-height:40px;text-align:justify;padding:0 22px;}

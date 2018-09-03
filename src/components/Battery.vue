@@ -2,26 +2,27 @@
 	<div class="batteryBox">
 		<div class="imgboxs"><img src="../assets/images/batterybanner.jpg" alt="" /></div>
 		<div class="bw">
-			<div class="batr bw flex-wrap flex-horizontal flex-justify-between">
-			<div class="com first">
-				<h1>打开<br/>天牛网APP</h1>				
-				<p>在应用商店搜索天牛网，完成下载安装。</p>				
-			</div>			
-			<img src="../assets/images/barrow.jpg" class="arror" alt="" />
-			<div class="com second">
-				<h1>选择<br/>租用锂电型号</h1>				
-				<p>两种常见型号，满足大多数电动车用户的需求。</p>
-			</div>				
-			<img src="../assets/images/barrow.jpg" class="arror" alt="" />
-			<div class="com third">
-				<h1>选择<br/>换电网点</h1>				
-				<p>科学合理的网点分布，保障电力十足</p>
-			</div>			
-			<img src="../assets/images/barrow.jpg" class="arror" alt="" />
-			<div class="com fore">
-				<h1>到店<br/>15s换电</h1>				
-				<p>在应用商店搜索天牛网，完成下载安装。</p>
-			</div>				
+			<div class="batr clear">
+				<div class="com first fl">
+					<h1>打开<br/>天牛网APP</h1>				
+					<p>在应用商店搜索天牛网，完成下载安装。</p>				
+				</div>	
+				<div class="arrowimg fl"><img src="../assets/images/barrow.jpg" class="arror" alt="" /></div>
+				
+				<div class="com second fl">
+					<h1>选择<br/>租用锂电型号</h1>				
+					<p>两种常见型号，满足大多数电动车用户的需求。</p>
+				</div>				
+				<div class="arrowimg fl"><img src="../assets/images/barrow.jpg" class="arror" alt="" /></div>
+				<div class="com third fl">
+					<h1>选择<br/>换电网点</h1>				
+					<p>科学合理的网点分布，保障电力十足</p>
+				</div>			
+				<div class="arrowimg fl"><img src="../assets/images/barrow.jpg" class="arror" alt="" /></div>
+				<div class="com fore fl">
+					<h1>到店<br/>15s换电</h1>				
+					<p>在应用商店搜索天牛网，完成下载安装。</p>
+				</div>				
 			</div>
 		</div>
 		
@@ -185,15 +186,16 @@
 <style scoped>
 	.batteryBox{width:100%;background:#eeeeee;}
 	.imgboxs{width:100%;height:606px;}
-	.imgboxs img{display:inline-block;width:100%;}
+	.imgboxs img{display:inline-block;width:100%;height:100%;}
+	.arrowimg{padding-top:160px;}
 	.batr{width:1116px;margin:0 auto;height:292px;padding-top:20px;}
-	.arror{width:58px;height:36px;align-self:center;}
-	.first{background:url('../assets/images/battery1.jpg');background-repeat:no-repeat;}
-	.second{background:url('../assets/images/battery3.jpg');background-repeat:no-repeat;}
-	.third{background:url('../assets/images/battery2.jpg');background-repeat:no-repeat;}
-	.fore{background:url('../assets/images/battery4.jpg');background-repeat:no-repeat;}
+	.arror{width:58px;height:36px;margin:0 34px;}
+	.first{background:url('../assets/images/battery1.jpg');background-repeat:no-repeat;background-position:center;}
+	.second{background:url('../assets/images/battery3.jpg');background-repeat:no-repeat;background-position:center;}
+	.third{background:url('../assets/images/battery2.jpg');background-repeat:no-repeat;background-position:center;}
+	.fore{background:url('../assets/images/battery4.jpg');background-repeat:no-repeat;background-position:center;}
 	.com{background-size:cover;width:184px;height:292px;}
-	.com h1{font-size:24px;color:#fff;text-align:center;margin-top:120px;line-height:36px;}
+	.com h1{font-size:24px;color:#fff;text-align:center;padding-top:120px;line-height:36px;}
 	.com p{font-size:14px;color:#fff;line-height:26px;margin-top:36px;padding:0 6px;text-align: justify;}
 	.btnbox{width:100%;padding-top:40px;padding-bottom:30px;}
 	.btnbox div{margin:0 auto;width:180px;height:50px;background:#63b62f;border-radius:25px;font-size:24px;color:#fff;line-height: 50px;
