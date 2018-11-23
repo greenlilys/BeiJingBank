@@ -1,53 +1,34 @@
-
-html, body, div, span, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, address, big, cite, code,
-del, em, ins, kbd, q, samp,
-small, strong, sub, sup, tt, var,
-b, u, i, dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
- caption, 
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header,
-menu, nav, output, section, summary,
-time, mark, audio, video{
-	margin: 0;
-	padding: 0;
-	border: 0; 	
-	font-weight: normal;
-	vertical-align: baseline;
-}
-
-a,a:link,a:visited,a:hover,a:active {
-	outline: 0;
-	text-decoration: none;
-	color:#fff;
-}
-
-img {
-	border: none;
-	text-decoration: none;
-	font-size:0;
-	vertical-align:middle;
-}
-
-li {
-	list-style: none;
-}
-.clear:after{content:"";display:block;clear:both}
-.clear{zoom:1}
-
-.fl{float:left}
-.fr{float:right}
-.hide{display:none}
-.show{display:block}
-.bw{background:#fff;}
-.tr{text-align: center;}
-
-.flex-wrap{ display: -webkit-flex;display: -moz-box;display: -ms-flexbox;display: flex; }
-.flex-con{     -webkit-box-flex: 1; -moz-box-flex: 1;    -webkit-flex: 1;-ms-flex: 1;    flex: 1;}
+*{
+   margin:0;
+   padding:0;
+ }
+ html, body {
+ 	width: 100%;
+ 	height:100%;
+ }
+ html, body, div, span, iframe,
+ h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+ a, abbr, address, big, cite, code,
+ del, em, ins, kbd, q, samp,
+ small, strong, sub, sup, tt, var,
+ b, u, i, dl, dt, dd, ol, ul, li,
+ fieldset, form, label, legend,
+ table, caption, tbody, tfoot, thead, tr, th, td,
+ article, aside, canvas, details, embed,
+ figure, figcaption, footer, header,
+ menu, nav, output, section, summary,
+ time, mark, audio, video{
+ 	margin: 0;
+ 	padding: 0;
+ 	border: 0; 	
+ 	font-weight: normal;
+ 	/*vertical-align: baseline;*/
+ }
+.flex-wrap{ display: -webkit-box;	display: -webkit-flex;	display: flex; }
+.flex-con{     -webkit-box-flex: 1;     -webkit-flex: 1;    flex: 1;}
 .flex-vertical{ -webkit-box-orient: vertical;-webkit-flex-direction: column;flex-direction: column;}
 .flex-horizontal{ -webkit-box-orient: horizontal;-webkit-flex-direction: row;flex-direction: row;}
+
 .flex-justify-between{
 	justify-content: space-between;
 }
@@ -64,4 +45,208 @@ align-items: center;
 .flex-justify-end{
 	justify-content: flex-end;
 }
-.router-link-exact-active{background:red;}
+img {
+ 	border: none;
+ 	text-decoration: none;
+ 	font-size:0;
+ 	vertical-align:middle;
+ }
+
+li {
+ 	list-style: none;
+ }
+ 
+ /*1像素边框*/
+.border-t,.border-b{ position:relative; }
+.border-t:before,.border-b:after{content: ''; position: absolute; left: 0;right:0;
+background: #ddd;height: 0.02rem;-webkit-transform: scaleY(0.5);
+transform: scaleY(0.5); 
+ /*-webkit-transform-origin: left bottom;transform-origin: left bottom;    */
+}
+.border-b:after{ bottom:-0.01rem;-webkit-transform-origin: 0 0;transform-origin: 0 0;}
+.border-t:before{top:0;-webkit-transform-origin: 0 0;transform-origin: 0 0;}
+
+.input-b{position:relative;}
+.input-b:after{content: ''; position: absolute; left: 0;
+background: #999;right:0;height: 1px;-webkit-transform: scaleY(0.5);
+transform: scaleY(0.5);     -webkit-transform-origin: left bottom;transform-origin: left bottom; bottom:0;}
+/*清除浮动*/
+ .clear:after{content:"";display:block;clear:both;}
+ .clear{zoom:1}
+ .fl{float:left}
+ .fr{float:right}
+/*显示隐藏*/
+ .hide{display:none}
+ .show{display:block}
+
+ .ellipsis{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/*背景色*/
+ .color_back_blue{
+ 	background-color:#0099ff;
+ }
+ .color_back_white{
+ 	background-color:#fff;
+ }
+ .color_back_gray{
+ 	background-color:#f5f5f3;
+ }
+
+ .c_content{width: 6.7rem;	margin: auto;}
+ 
+/*字体颜色*/
+  .color_blue{
+ 	color:#0099ff;
+ }
+ .color_regu{
+ 	color:#333;
+ }
+ .color_gray{
+ 	color:#999;
+ }
+ .color_white{
+ 	color:#fff;
+ }
+/*字体大小*/
+.font_30{
+	font-size:0.3rem;
+}
+.font_24{
+	font-size:0.24rem;
+}
+.font_28{
+	font-size:0.28rem;
+}
+.font_30{
+	font-size:0.3rem;
+}
+.font_18{
+	font-size:0.18rem;
+}
+.font_36{
+	font-size:0.36rem;
+}
+.font_b{font-weight:bolder;}
+.w_100{width:100%;}
+.h_100{height:100%;}
+
+/*间距*/
+.mb_10{margin-bottom:0.1rem;}
+.mt_10{margin-top:0.1rem;}
+.mb_20{margin-bottom:0.2rem;}
+.mt_20{margin-top:0.2rem;}
+.ml_20{margin-left:0.2rem};
+.mr_20{margin-right:0.2rem};
+
+.mb_30{margin-bottom:0.3rem;}
+.mt_30{margin-top:0.3rem;}
+.ml_30{margin-left:0.3rem};
+.mr_30{margin-right:0.3rem};
+
+.mb_40{margin-bottom:0.4rem;}
+.mt_40{margin-top:0.4rem;}
+.ml_40{margin-left:0.4rem};
+.mr_40{margin-right:0.4rem};
+
+.mb_50{margin-bottom:0.5rem;}
+.mt_50{margin-top:0.5rem;}
+.ml_50{margin-left:0.5rem};
+.mr_50{margin-right:0.5rem};
+
+.f_center{text-align:center;}
+
+.pb_10{
+	padding-bottom:0.1rem;
+}
+.pt_10{
+	padding-top:0.1rem;
+}
+.pb_20{
+	padding-bottom:0.2rem;
+}
+.pt_20{
+	padding-top:0.2rem;
+}
+.pb_30{
+	padding-bottom:0.3rem;
+}
+.pt_30{
+	padding-top:0.3rem;
+}
+.pb_40{
+	padding-bottom:0.4rem;
+}
+.pt_40{
+	padding-top:0.4rem;
+}
+
+.jianBian{background: linear-gradient(#ffffff, #f1f1f1);}
+.jianBian_blue{background: linear-gradient(#0099ff, #0188e1);}
+.mint-cell-wrapper{padding:0;font-size:0.28rem;}
+
+
+/*日期样式*/
+.second{line-height: 0.4rem;}
+.datay input.input_border{	
+	margin-bottom:0;border:none; outline: none;
+	box-sizing: border-box;background-color: #fff;
+	-webkit-appearance:none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+    padding:0.24rem 0.3rem;
+    height:0.8rem;  
+    margin:0;
+    border-radius:0.06rem;
+    font:inherit;
+    box-sizing:border-box;
+    -webkit-user-select: text;
+}
+.second .f_content{padding:0.4rem 0;}
+	.arrowup{width:0.3rem;height:0.15rem;position:absolute;top:0.2rem;right:0.1rem;}
+	.arrowup img{width:100%;height:100%;}
+	.datay input{width:100%;}	
+	.datay{position:relative;}
+/*按钮样式*/
+.meet{
+				
+		width: 6.7rem;		
+		height:0.82rem;
+		box-shadow: 0px 0px 8px #a5a5a5;
+		color:#fff;
+		border-radius:0.1rem;		
+		text-align:center;		
+}
+.meet span{font-size:0.6rem;transform: scale(0.5);}
+/*顶部灰条*/
+	.topTiao{width:100%;height:0.2rem;}
+.actived:active{background:#005b98;color:#989898;}
+
+/*计数器*/
+.inputbox{				
+		border:0.02rem #cac9ce solid;
+		border-radius:0.1rem;	
+		overflow: hidden;
+	}
+	.inputbox div{			
+		height:0.64rem;				
+	}
+	
+	.sets{
+		font-size:3.6rem;	
+		transform: scale(0.1);
+		/*font-size:0.36rem;	*/
+	}
+	.pre,.add{
+		background:#F9F9F9;
+		text-align: center;
+		color:#939598;
+		width:0.6rem;			
+	}
+	.add:active{background:#cac9ce;}
+	.pre:active{background:#cac9ce;}	
+	.num{
+		width:0.8rem;
+		text-align: center;
+		border-left:1px #cac9ce solid;
+		border-right:1px #cac9ce solid;
+		color:#5c5b60;
+	}

@@ -1,16 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Main from '@/components/Main'
-import Home from '@/components/Home'
-import Battery from '@/components/Battery'
-import Story from '@/components/Story'
-import Load from '@/components/Load'
-import Contant from '@/components/Contant'
 
+import Order from '@/components/Order'
+import My from '@/components/My'
+import Orderdetail from '@/components/Orderdetail'
+import Addaddress from '@/components/Addaddress'
+
+import Home from '@/components/Home'
+import GeneralClean from '@/components/GeneralClean'
+import Diqi from '@/components/Diqi'
 Vue.use(Router)
 
 export default new Router({
-	
+	// mode:history,
 	routes: [
 		{
 			path: '/',	
@@ -18,34 +20,30 @@ export default new Router({
 	
 		},
 		{
+			name:'Home',
 			path:'/Home',
-			component: Main,
-			children:[
-				{
-					path:'',
-					component:Home
-				},
-				{
-					path:'Battery',
-					component:Battery
-				},
-				{
-					path:'Load',
-					component:Load
-					
-				},
-				{
-					path:'Story',
-					component:Story
-					
-				},
-				{
-					path:'Contant',
-					component:Contant
-					
-				}
-			]
-	
+			component:Home
+		},
+		{
+			name:'Order',
+			path:'/Order',
+			component:Order
+		},
+		{
+			name:'My',
+			path:'/My',
+			component:My
+		},
+		{
+			name:'Orderdetail',
+			path:'/Orderdetail',
+			component:Orderdetail
+		},
+		{
+			name:'Addaddress',
+			path:'/Addaddress',
+			component:Addaddress
 		}
+		
 	]
 })

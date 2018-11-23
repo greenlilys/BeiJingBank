@@ -5,11 +5,15 @@
   "author": "wangdongwen <1635382999@qq.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --host 192.168.3.217",
     "start": "npm run dev",
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "element-ui": "^2.4.10",
+    "mint-ui": "^2.2.13",
+    "sha1": "^1.1.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
