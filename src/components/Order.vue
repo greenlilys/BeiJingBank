@@ -94,8 +94,7 @@ export default{
 		}
 	},
 	mounted(){
-		this.getOrderList();
-		// console.log(this.dataFormet());
+		this.getOrderList();		
 	},
 	computed:{
 		
