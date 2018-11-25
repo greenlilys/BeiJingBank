@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { Toast } from 'mint-ui';
 import {httpPost} from './assets/common.js'
 
 Vue.use(Vuex)
@@ -7,13 +8,17 @@ Vue.use(Vuex)
 var state = {	
 	openId:'',
 	rightsValidity:'',
-	timeLength:'',
-	addressActive:false
+	timeLength:0,
+	addressActive:false,
+	grneralSerLen:2
 };
 
 const actions = {
 	increment:({commit})=>{		
 		commit('increment');
+	},
+	addnum:({commit})=>{
+		commit('addnum');
 	}
 };
 
@@ -40,6 +45,17 @@ const mutations = {
 	setAddActive(state,{addressActive}){		
 		state.addressActive = addressActive;
 		console.log(state.addressActive)
+	},
+	addnum(state){
+		if(state.grneralSerLen >= state.timeLength){
+			Toast('剩余权限不足');
+			return false;
+		}
+		if(state.grneralSerLen == 10){
+			Toast('时长不超过10小时');
+			return false;
+		}
+		state.grneralSerLen++
 	}
 };
 
@@ -52,6 +68,9 @@ const getters = {
 	},
 	addressActive(state){
 		return state.addressActive
+	},
+	grneralSerLen(state){
+		return state.grneralSerLen
 	}
 }
 

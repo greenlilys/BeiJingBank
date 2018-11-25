@@ -15,20 +15,16 @@
 				<div class="font_28 mt_40 flex-wrap flex-horizontal mr_20">				
 					<div><span class="servertitle color_regu">服务项目：</span></div>
 					<div class="flex-wrap flex-vertical">
-						<div class="mb_10 flex-wrap flex-horizontal flex-align-center" v-for="(item,index) in Project">
-							<span class="color_gray flex-con">{{item.name}}</span>
-							<div class="inputbox ml_20 flex-wrap flex-horizontal">
-								<div class="pre flex-wrap flex-justify-center flex-align-center" @click="prenum(item.id)"><span class="sets">-</span></div>
-								<div class="num flex-wrap flex-justify-center flex-align-center"> <span class="sets">{{item.num}}</span></div>
-								<div class="add flex-wrap flex-justify-center flex-align-center" @click="addnum(item.id)"><span class="sets">+</span></div>
+						<template v-for="(item,index) in Project">
+							<div class="mb_10 flex-wrap flex-horizontal flex-align-center" :key="index">
+								<span class="color_gray flex-con">{{item.name}}</span>
+								<div class="inputbox ml_20 flex-wrap flex-horizontal">
+									<div class="pre flex-wrap flex-justify-center flex-align-center" @click="prenum(item.id)"><span class="sets">-</span></div>
+									<div class="num flex-wrap flex-justify-center flex-align-center"> <span class="sets">{{item.num}}</span></div>
+									<div class="add flex-wrap flex-justify-center flex-align-center" @click="addnum(item.id)"><span class="sets">+</span></div>
+								</div>							
 							</div>
-							
-						</div>
-						<!-- <div class="mb_10 flex-wrap flex-horizontal flex-align-center"><span class="color_gray flex-con">冰箱</span><Inputnumber class="ml_20"></Inputnumber></div> -->
-						<!-- <div class="mt_10 flex-wrap flex-horizontal flex-align-center"><span class="color_gray flex-con">洗衣机</span><Inputnumber class="ml_20"></Inputnumber></div>
-						<div class="mt_10 flex-wrap flex-horizontal flex-align-center"><span class="color_gray flex-con">空调</span><Inputnumber class="ml_20"></Inputnumber></div>
-						<div class="mt_10 flex-wrap flex-horizontal flex-align-center"><span class="color_gray flex-con">热水器</span><Inputnumber class="ml_20"></Inputnumber></div> -->
-						
+						</template>	
 					</div>				
 				</div>
 				<p class="mt_40 font_28"><span class="color_regu">服务时常：</span><span class="color_gray"><span style="color:#0099ff;">{{serviceLength}}</span>小时</span></p>
@@ -102,16 +98,7 @@
 					<div>
 						<img class="addresarrow" src="../assets/images/arrow.png" alt="" />
 					</div>
-				</div>
-					<!-- <div class="address flex-wrap flex-horizontal flex-justify-between flex-align-center">
-						<div class="color_regu">
-							<h1 class="name font_28"><span>李明 </span><span>17300130100</span></h1>
-							<h2 class="addre font_28">北京市东城区张自忠路15号</h2>
-						</div>
-						<div>
-							<img class="addresarrow" src="../assets/images/arrow.png" alt="" />
-						</div>
-					</div> -->
+				</div>				
 
 		<div class="meet jianBian_blue flex-wrap flex-align-center flex-justify-center"><span>立即预约</span></div>
 	</div>
@@ -251,9 +238,9 @@ export default {
   },
   computed: {
     ...mapGetters(["timeLength", "rightsValidity"])
-  },
+  }, 
   created() {
-    // this.serviceProject();
+	// this.serviceProject();	
   },
   mounted() {
 

@@ -23,7 +23,6 @@ Vue.prototype.$GLOBALconfig=GLOBALconfig;
 Vue.prototype.$bus = bus;
 Vue.prototype.$sendTitle = sendTitle;
 
-
 Vue.use(ElementUI);
 Vue.use(MintUI)
 Vue.config.productionTip = false

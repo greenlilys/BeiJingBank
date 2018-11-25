@@ -4,7 +4,8 @@
 <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :top-distance="topDis" 
 :bottom-distance="botDis" :auto-fill="false" ref="loadmore">
 <div class="topTiao border-bot"></div>
-	<div class="color_back_white border-bot pb_40" v-for="item in orderList" @click="navOrderdetail(item.orderNumber,item.status,item.appointmentTimeLength,item.createTime,item.serviceItem,item.userName,item.phone,item.address,item.type,item.id)">
+	<template v-for="(item,index) in orderList">
+	<div class="color_back_white border-bot pb_40" :key="index" @click="navOrderdetail(item.orderNumber,item.status,item.appointmentTimeLength,item.createTime,item.serviceItem,item.userName,item.phone,item.address,item.type,item.id)">
 		<div class="c_content">
 			<div class="top flex-wrap flex-horizontal flex-justify-between flex-align-center font_28">
 				<div><span class="color_regu">订单号：</span><span class="color_gray">{{item.orderNumber}}</span></div>
@@ -26,6 +27,7 @@
 			</div>
 		</div>
 	</div>
+	</template>
 	</mt-loadmore>
 </div>
 

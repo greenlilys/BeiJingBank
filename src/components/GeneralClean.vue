@@ -17,7 +17,7 @@
 	        			</span>	        			
 						<div class="inputbox flex-wrap flex-horizontal">
 							<div class="pre flex-wrap flex-justify-center flex-align-center" @click="prenum"><span class="sets">-</span></div>
-							<div class="num flex-wrap flex-justify-center flex-align-center"> <span class="sets">{{num}}</span></div>
+							<div class="num flex-wrap flex-justify-center flex-align-center"> <span class="sets">{{grneralSerLen}}</span></div>
 							<div class="add flex-wrap flex-justify-center flex-align-center" @click="addnum"><span class="sets">+</span></div>
 						</div>
 					</div>
@@ -115,12 +115,15 @@ import {mapGetters,mapActions} from 'vuex';
 		data() {
 			return {				
 				pickerdata:'',
-				pickertime:'',
-				num:2,//服务时长
+				pickertime:'',				
 				startDate:new Date()
+				
 			}
 		},
 		methods: {
+			...mapActions([
+			'addnum'
+			]),
 			openPicker() {//打开年月日选择器
 		        this.$refs.picker.open();
 		     },
@@ -149,23 +152,23 @@ import {mapGetters,mapActions} from 'vuex';
 				
 		     },		    
 		     prenum(){
-				if(this.num == 2) {
-					Toast('时长不少于2小时');
-					return false;
-				}
-				this.num--;
+				// if(this.num == 2) {
+				// 	Toast('时长不少于2小时');
+				// 	return false;
+				// }
+				// this.num--;				
 			},
-			addnum(){
-				if(this.num >= this.timeLength){
-					Toast('剩余权限不足');
-					return false;
-				}
-				if(this.num == 10){
-					Toast('时长不超过10小时');
-					return false;
-				} 
-				this.num++;
-			},
+			// addnum(){
+				// if(this.num >= this.timeLength){
+				// 	Toast('剩余权限不足');
+				// 	return false;
+				// }
+				// if(this.num == 10){
+				// 	Toast('时长不超过10小时');
+				// 	return false;
+				// } 
+				// this.num++;
+			// },
 			setAddress(){
 				// 如果地址列表有数据跳转到我的，否则跳转到地址表单页
 				if(this.addressListLength > 0){
@@ -184,9 +187,10 @@ import {mapGetters,mapActions} from 'vuex';
 			}
 		   
 		},
+		
 		computed:{
 			...mapGetters([
-				'timeLength','rightsValidity'
+				'timeLength','rightsValidity','grneralSerLen'
 			])
 		},
 		created(){

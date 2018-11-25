@@ -30,9 +30,7 @@
 				showSetAddress:true,
 				addressUserName:'',
 				phone:'',
-				address:''
-								
-					
+				address:''						
 			}
 		},
 		methods: {			
