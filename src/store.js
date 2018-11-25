@@ -8,7 +8,7 @@ Vue.use(Vuex)
 var state = {	
 	openId:'',
 	rightsValidity:'',
-	timeLength:0,
+	timeLength:6,
 	addressActive:false,
 	grneralSerLen:2
 };
@@ -19,6 +19,9 @@ const actions = {
 	},
 	addnum:({commit})=>{
 		commit('addnum');
+	},
+	prenum:({commit})=>{
+		commit('prenum')
 	}
 };
 
@@ -56,6 +59,13 @@ const mutations = {
 			return false;
 		}
 		state.grneralSerLen++
+	},
+	prenum(state){
+		if(state.grneralSerLen == 2) {
+			Toast('时长不少于2小时');
+			return false;
+		}
+		state.grneralSerLen--;
 	}
 };
 

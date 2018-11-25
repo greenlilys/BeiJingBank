@@ -122,7 +122,7 @@ import {mapGetters,mapActions} from 'vuex';
 		},
 		methods: {
 			...mapActions([
-			'addnum'
+			'addnum','prenum'
 			]),
 			openPicker() {//打开年月日选择器
 		        this.$refs.picker.open();
@@ -151,13 +151,13 @@ import {mapGetters,mapActions} from 'vuex';
 				  }			 
 				
 		     },		    
-		     prenum(){
+		    //  prenum(){
 				// if(this.num == 2) {
 				// 	Toast('时长不少于2小时');
 				// 	return false;
 				// }
 				// this.num--;				
-			},
+			// },
 			// addnum(){
 				// if(this.num >= this.timeLength){
 				// 	Toast('剩余权限不足');
