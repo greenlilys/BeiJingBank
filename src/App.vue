@@ -30,7 +30,8 @@
 				myImgActive:require('./assets/images/my_active.png'),
 				tabIndex:0,
 				isShowBorder:true,
-				title:'家政预约'
+				title:'家政预约',
+				openId:'NtL9yyJE3UU7E6qyKKuo/dz68y9Ke7m1pGPdreqZQlsL+7UfWz0PSZh6p/98JK9rJLL0nGfME7p+yurzoYMHmCFq/MOncjj45TZesZip+GgjtlE3R1rcDYJZ+EklVAKLDVESHHMVLEMXuYFuyC3jxg=='
 				
 				
 				
@@ -81,30 +82,57 @@
 					this.tabIndex = 1;
 					this.title = '我的订单';
 				}else if(str == 'My'){
+					
 					this.isShowBorder = false;
 					this.tabIndex = 2;
-					this.title = '';
+					this.title = '';					
 				}else{
 					this.title = '添加地址';
 					this.isShowBorder = true;
 					this.tabIndex = 2;
 				}
+			},
+			//获得url地址的openid
+			getOpenId(){
+				var urlFull = window.location.href;
+				console.log(urlFull)
+				var arg = urlFull.split('?');
+				if(arg[0] == urlFull){
+					return false;
+				}
+				
+				var args = arg[1].split('&');
+				for(var i =0;i<args.length;i++){
+					var arr = args[i].split('=');					
+					if(arr[0] == 'openId'){
+						this.openId = arr[1];
+					}
+					if(arr[0] == 'orderId'){//有订单id,跳转到订单详情页
+						this.$router.push({path:'/Orderdetail',query:{id:arr[1]}})
+					}
+				}				
 			}
 			
 		},
 		created(){
-			//页面刷新根据当前路由设定相关信息								
-			var nameCun = this.$router.history.current.name;
-			this.resetTab(nameCun);				
+			//页面刷新				
+			console.log(this.$route.name)						
+			var nameCun = this.$route.name;
+			this.resetTab(nameCun);	
+			this.getOpenId();
+			this.$store.commit('getmsg',{openId:this.openId});			
 		},
 		mounted() {
-			this.init();			
-
+			this.init();
 		},
 		watch:{
-			//监听路由变化设定相关信息
-			$route(to,from){				
-				this.resetTab(to.name);				
+			//切换页面路由改变
+			$route(to,from){
+				console.log(to.name);
+				this.resetTab(to.name);							
+				if(from.name != 'Home' || to.name != 'My'){					
+					this.$store.commit('setAddActive',{addressActive:false});
+				}
 			}
 		}
 	}
@@ -153,19 +181,9 @@
     width:100%;   
 }
 
-#bottom img{
-	width:0.44rem;
-	height:0.44rem;
-	font-size:0;
-	/*vertical-align: top;*/
-	
-}
+#bottom img{width:0.44rem;height:0.44rem;font-size:0;}
 #bottom div{display:flex;justify-content: center;align-items: center;flex-direction: row;}
-#bottom span{	
-	/*vertical-align: middle;*/
-	padding-left:0.1rem;
-	/*line-height: 1;*/	
-	}
+#bottom span{padding-left:0.1rem;}
 .top-t,.top-b{ position:relative; }
 .top-t:before,.top-b:after{content: ''; position: absolute; left: 0;right:0;
 background: #9c9c9b;height: 1px;-webkit-transform: scaleY(0.5);

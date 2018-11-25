@@ -3,16 +3,21 @@
 	<div class="topTiao border-b"></div>
 		<div class="btnbox">
 			<div class="btn flex-wrap flex-horizontal">
-				<div v-for='(v,i) in tabtext' @click="tabActive(i)" :class="[i == activeid? 'btnactive' : 'btnstyle','jianBian']" class="btntab flex-wrap flex-justify-center flex-align-center"> <span class="align_c">{{v}}</span></div>			
+				<template  v-for='(v,i) in tabtext'>
+					<div @click="tabActive(i)" :class="[i == activeid? 'btnactive' : 'btnstyle','jianBian']" class="btntab flex-wrap flex-justify-center flex-align-center" :key="i"> <span class="align_c">{{v}}</span></div>			
+				</template>				
 			</div>
 		</div>
-		<component :is='current' :rightsValidity='rightsValidity' :timeLength='timeLength'></component>
+		<keep-alive>		
+		<component :is='current' :addressListLength='addressListLength' :showSetAddress='showSetAddress' :addressUserName='addressUserName' :phone='phone' :address='address'></component>
+		</keep-alive>
 	</div>
 </template>
 
 <script>
 	import GeneralClean from './GeneralClean'
 	import Diqi from './Diqi'
+	import {mapGetters,mapActions} from 'vuex';
 	export default{
 		name:'Home',
 		data() {
@@ -20,27 +25,34 @@
 				tabtext:['一般清洁','家电清洗'],//按钮循环对象
 				activeid:0,//处于激活状态的按钮索引
 				groups:['GeneralClean','Diqi'],
-				current:GeneralClean,//当前组件
-				rightsValidity:'',//权益有效期				
-				userId:'',//用户id
-				timeLength:'',//剩余权限
-				openId:'NtL9yyJE3UU7E6qyKKuo/dz68y9Ke7m1pGPdreqZQlsL+7UfWz0PSZh6p/98JK9rJLL0nGfME7p+yurzoYMHmCFq/MOncjj45TZesZip+GgjtlE3R1rcDYJZ+EklVAKLDVESHHMVLEMXuYFuyC3jxg=='
-				
+				current:GeneralClean,
+				addressListLength:1,//地址列表是否有数据
+				showSetAddress:true,
+				addressUserName:'',
+				phone:'',
+				address:''
+								
+					
 			}
 		},
-		methods: {
-			
+		methods: {			
 		     tabActive(i){
 		     	if(i == this.activeid){
 		     		return false;//如果点击激活按钮，返回
 		     	}else{
 		     		this.activeid = i;
 		     		this.current = this.groups[i];
-		     	}
-		     	
-		     	console.log(i);
-		     	
-		     },
+		     	}		     	
+			 },
+			 //获得用户地址列表
+			getAddressList(){			
+				this.$post('/api/sp/appUser/queryAddress',{
+					userId:'27d2ecc5b92640dbbe895922e0bb85b3'
+				}).then(data=>{				
+					this.addressListLength = data.data.length;
+				})					
+			
+			},
 		     //根据openid获得userid
 			getUserId(){	
 				var self = this;
@@ -51,48 +63,41 @@
 						resolve(data.data.userId);
 					}).catch(err=>{
 						reject(err)
-					})
-				
+					})				
 				})
-			},
-			//获得url地址的openid
-			getOpenId(){
-				var urlFull = window.location.href;
-				var arg = urlFull.split('?');
-				if(arg[0] == urlFull){
-					return false;
+			}			
+		},
+		created(){			
+			if(this.$route.query.type == 1 || this.$route.query.type == 0){
+				let queryObj = this.$route.query;
+				if(queryObj.type == 0){//家电清洁
+					this.current = 'Diqi';
+					this.activeid = 1;										
+				}else{
+					this.current = 'GeneralClean';
+					this.activeid = 0;
 				}
-				
-				var args = arg[1].split('&');
-				for(var i =0;i<args.length;i++){
-					var arr = args[i].split('=');					
-					if(arr[0] == 'openId'){
-						this.openId = arr[1];
-					}
-					if(arr[0] == 'orderId'){//有订单id,跳转到订单详情页
-						this.$router.push({path:'/Orderdetail',query:{id:arr[1]}})
-					}
-				}				
+				this.showSetAddress = false;
+				this.addressUserName = queryObj.addressUserName;
+				this.phone = queryObj.phone;
+				this.address = queryObj.address;				
 			}
+			//获得地址列表，判断用户是否有地址		
+			// this.getAddressList();
 		},
-		created(){
-			
-		},
-		mounted(){
-			// this.getOpenId();
-			var self = this;
-			this.getUserId().then(data=>{
-				self.$post('/api/sp/appUser/queryUser',{
-					id:data
-				}).then(data=>{
-					console.log(data.data)
-					
-					self.rightsValidity = data.data[0].rightsValidity;
-					self.timeLength = data.data[0].timeLength;
-					console.log(self.rightsValidity)
-				})
+		mounted(){			
+			// var self = this;
+			// this.getUserId().then(data=>{
+			// 	self.$post('/api/sp/appUser/queryUser',{
+			// 		id:data
+			// 	}).then(data=>{
+			// 		console.log(data.data)					
+			// 		self.rightsValidity = data.data[0].rightsValidity;
+			// 		self.timeLength = data.data[0].timeLength;
+			// 		console.log(self.rightsValidity)
+			// 	})
 				
-			})			
+			// })			
 			
 		},
 		components:{

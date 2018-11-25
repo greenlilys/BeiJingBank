@@ -47,7 +47,7 @@
 					<div class="flex-wrap flex-horizontal flex-align-center">
 						<span>日期选择：</span>
 						<div class="datay input-b flex-con" @click="openPicker">						
-							<input class="input_border font_28 color_regu" type="text" placeholder="请选择您需要服务的日期" />
+							<input class="input_border font_28 color_regu" type="text" v-model="pickerdata" placeholder="请选择您需要服务的日期" />
 							<div class="arrowup"><img src="../assets/images/uparrow.png" alt="" /></div>
 						</div>
 					</div>	
@@ -55,14 +55,13 @@
 					<div class="flex-wrap flex-horizontal flex-align-center">
 						<span>选择时间：</span>
 						<div class="datay input-b flex-con" @click="openPickerTime">						
-							<input class="input_border font_28 color_regu" type="text" placeholder="上门时间每日早8点到晚18点" />
+							<input class="input_border font_28 color_regu" type="text" v-model="pickertime" placeholder="上门时间每日早8点到晚18点" />
 							<div class="arrowup"><img src="../assets/images/uparrow.png" alt="" /></div>
 						</div>
 					</div>	
 					
 					<div>					
-						 <mt-datetime-picker
-						  v-model="pickerdata"
+						 <mt-datetime-picker						  
 						  type="date"
 						  ref="picker"
 						  year-format="{value} 年"
@@ -72,8 +71,7 @@
 						  @confirm="dataConfirm">
 						</mt-datetime-picker>	
 
-						  <mt-datetime-picker
-						  v-model="pickertime"
+						  <mt-datetime-picker						 
 						  type="time"
 						  ref="pickertime"
 						  hour-format="{value} 时"
@@ -85,16 +83,35 @@
 				</div>				
 			</div>
 
-	<div class="mb_20 color_back_white border-b border-t pt_40 pb_40">
-		<div class="address flex-wrap flex-horizontal flex-justify-between flex-align-center">
-			<div class="color_regu">
-				<h1 class="name font_28"><span>李明 </span><span>17300130100</span></h1>
-				<h2 class="addre font_28">北京市东城区张自忠路15号</h2>
-			</div>
-			<div>
-				<img class="addresarrow" src="../assets/images/arrow.png" alt="" />
-			</div>
-		</div>
+			<div class="mb_20 color_back_white border-b border-t pb_30">				
+				<div class="address pt_20 pb_30 flex-wrap flex-horizontal flex-justify-between flex-align-center"
+					 v-if="showSetAddress" @click="setAddress">
+					<div class="color_regu">
+						<h1 class="name font_28">请设置服务地址</h1>						
+					</div>
+					<div>
+						<img class="addresarrow" src="../assets/images/arrow.png" alt="" />
+					</div>
+				</div>
+
+				<div class="address pt_40 pb_30 flex-wrap flex-horizontal flex-justify-between flex-align-center" @click="navAddList" v-else>
+					<div class="color_regu">
+						<h1 class="name font_28"><span>{{addressUserName}}</span><span class="ml_20">{{phone}}</span></h1>
+						<h2 class="addre font_28">{{address}}</h2>
+					</div>
+					<div>
+						<img class="addresarrow" src="../assets/images/arrow.png" alt="" />
+					</div>
+				</div>
+					<!-- <div class="address flex-wrap flex-horizontal flex-justify-between flex-align-center">
+						<div class="color_regu">
+							<h1 class="name font_28"><span>李明 </span><span>17300130100</span></h1>
+							<h2 class="addre font_28">北京市东城区张自忠路15号</h2>
+						</div>
+						<div>
+							<img class="addresarrow" src="../assets/images/arrow.png" alt="" />
+						</div>
+					</div> -->
 
 		<div class="meet jianBian_blue flex-wrap flex-align-center flex-justify-center"><span>立即预约</span></div>
 	</div>
@@ -114,149 +131,216 @@
 </template>
 
 <script>
-	import Inputnumber from './Inputnumber'
-	import { Toast } from 'mint-ui';
-	export default{		
-		data(){
-			return{
-				pickerdata:'',
-				pickertime:'',				
-				startDate:new Date(),
-				Project:[],
-				num1:'',
-				serviceLength:0//服务时长
-				
-			}			
-		},
-		methods: {
-			openPicker() {//打开年月日选择器
-		        this.$refs.picker.open();
-		     },
-		     openPickerTime(){//打开时分选择器
-		     	this.$refs.pickertime.open();
-		     },
-		     dataConfirm(val){//确定年月日
-		     	console.log(new Date(val).getTime())
-		     },
-		     timeConfirm(){//确定时分
+import Inputnumber from "./Inputnumber";
+import { Toast } from "mint-ui";
+import { mapGetters, mapActions } from "vuex";
+export default {
+  data() {
+    return {
+      pickerdata: "",
+      pickertime: "",
+      startDate: new Date(),
+      Project: [],
+      num1: "",
+      serviceLength: 0, //服务时长
+      serviceItem: "",
+      serviceItems: ""
+    };
+  },
+  methods: {
+    openPicker() {
+      //打开年月日选择器
+      this.$refs.picker.open();
+    },
+    openPickerTime() {
+      //打开时分选择器
+      this.$refs.pickertime.open();
+    },
+    dataConfirm(val) {
+      //确定年月日
+      let dataTime = new Date(val);
+      let y = dataTime.getFullYear();
+      let m = dataTime.getMonth() + 1;
+      let d = dataTime.getDate();
+      let setzero = function(str) {
+        return str < 10 ? "0" + str : str;
+      };
+      let result = y + "-" + setzero(m) + "-" + setzero(d);
+      this.pickerdata = result;
+    },
+    timeConfirm(val) {
+      //确定时分
+      if (parseInt(val) < 8 || parseInt(val) > 18) {
+        Toast("上门时间选择错误");
+      } else {
+        this.pickertime = val;
+      }
+    },
+    //获得服务项目列表，每个列表对象增加计数属性num，初始值为0
+    serviceProject() {
+      this.$post("/api/sp/serviceItem/queryServiceItem", {}).then(data => {
+        let foo = data.data;
+        for (let i = 0, len = foo.length; i < len; i++) {
+          foo[i].num = 0;
+        }
+        this.Project = foo;
+      });
+    },
+    //  减少 id:当前选择服务项目id
+    prenum(id) {
+      let Project = this.Project;
+      //  如果当前项目num为0，返回，否则减1
+      for (let i = 0, len = Project.length; i < len; i++) {
+        if (Project[i].id == id) {
+          if (Project[i].num == 0) {
+            return false;
+          } else {
+            Project[i].num--;
+          }
+        }
+      }
+      //  重新计算总服务数量，服务时长
+      let totalnum = Project.reduce(function(pre, next) {
+        return pre + next.num;
+      }, 0);
+      this.serviceLength = totalnum * 4;
+      this.Project = Project;
+    },
+    //  增加
+    addnum(id) {
+      let Project = this.Project;
+      //  如果总服务数量已经等于3，返回
+      let result = Project.reduce(function(pre, next) {
+        return pre + next.num;
+      }, 0);
+      if (result == 3) {
+        //选择台数等于3
+        Toast("不能超过3台");
+        return false;
+      }
+      //否则当前服务项目加1
+      for (let i = 0, len = Project.length; i < len; i++) {
+        if (Project[i].id == id) {
+          Project[i].num++;
+        }
+      }
+      //  重新计算总服务数量，服务时长
+      let totalnum = Project.reduce(function(pre, next) {
+        return pre + next.num;
+      }, 0);
+      if (totalnum < 3) {
+        this.serviceLength = totalnum * 4;
+      } else {
+        this.serviceLength = 10;
+      }
+      this.Project = Project;
+    },
+    setAddress() {
+      // 如果地址列表有数据跳转到我的，否则跳转到地址表单页
+      if (this.addressListLength > 0) {
+		this.$router.push({ path: "/My", query: { type: 0 } });
+		this.$store.commit('setAddActive',{addressActive:true});
+      } else {
+        this.$router.push({ path: "/Addaddress", query: { type: 0 } });
+      }
+    },
+    navAddList() {
+	  this.$router.push({ path: "/My", query: { type: 0 } });
+	  this.$store.commit('setAddActive',{addressActive:true});
+    }
+  },
+  computed: {
+    ...mapGetters(["timeLength", "rightsValidity"])
+  },
+  created() {
+    // this.serviceProject();
+  },
+  mounted() {
 
-		     },
-		     //获得服务项目
-		     serviceProject(){
-		     	this.$post('/api/sp/serviceItem/queryServiceItem',{
-
-		     	}).then(data=>{
-		     		let foo = data.data;
-		     		for(let i =0,len=foo.length;i<len;i++){
-		     			foo[i].num = 0;
-		     		}
-		     		this.Project = foo;
-		     	})
-		     },
-		     prenum(id){
-		     	let Project = this.Project;
-		     	for(let i =0,len=Project.length;i<len;i++){
-		     		if(Project[i].id == id){
-		     			if(Project[i].num == 0){
-		     				return false;
-		     			}else{
-		     				Project[i].num--;
-		     			}
-		     		}
-		     	}
-		     	let totalnum = Project.reduce(function(pre,next){
-					     		return pre+next.num;
-					     	},0);		     	
-		     	this.serviceLength = totalnum * 4;		     	
-		     	this.Project = Project;
-		     },
-		     addnum(id){
-
-		     	let Project = this.Project;		     	
-		     	let result = Project.reduce(function(pre,next){
-					     		return pre+next.num;
-					     	},0);
-		     	if(result == 3){//选择台数等于3		     		
-		     		Toast('不能超过3台');
-		     		return false;
-		     	}
-		     	for(let i =0,len=Project.length;i<len;i++){
-		     		if(Project[i].id == id){
-		     			Project[i].num++;
-		     		}
-		     	}
-		     	let totalnum = Project.reduce(function(pre,next){
-					     		return pre+next.num;
-					     	},0);
-		     	if(totalnum < 3){
-		     		this.serviceLength = totalnum * 4;
-		     	}else{
-		     		this.serviceLength = 10;
-		     	}
-		     	
-		     	this.Project = Project;
-		     },
-		     handleChange(val){
-		     	
-		     },
-		     caculateTotal(arr){
-		     	let result = arr.reduce(function(pre,next){
-					     		return pre+next.num;
-					     	},0);
-		     	if(result == 3){//选择台数等于3
-		     		this.serviceLength = 10;
-		     		Toast('不能超过3台');
-		     		return false;
-		     	}else{
-		     		this.serviceLength = result * 4;
-		     	}		     	
-		     	
-		     }
-		   
-		},
-		created(){
-			this.serviceProject();
-			
-		},
-		mounted(){
-
-		},
-		props:['rightsValidity','lastTime'],
-		components:{
-			Inputnumber
-		}
-	}
+  },
+  components: {
+    Inputnumber
+  },
+  props: [
+    "addressListLength",
+    "showSetAddress",
+    "addressUserName",
+    "phone",
+    "address"
+  ]
+};
 </script>
 
 <style scoped>
-	.dianqi{width:100%;}
-	.contentBox{width:100%;}
-	.content{width: 6.7rem;	margin: auto;}
-	.server {width: 100%;}	
-	.server div:nth-child(1) {width: 3.35rem;height: 2.05rem;}	
-	.server div:nth-child(1) img {width: 100%;height: 100%;}
-	.server div:nth-child(2) p {font-size: 0.28rem;	line-height: 0.4rem;text-align: justify;text-indent: 0.54rem;padding-left:0.28rem;}	
-	.server div:nth-child(2) h1 {font-size: 0.28rem;line-height: 0.5rem;font-weight: 700;padding-left:0.28rem;}	
-	.servertitle{padding-top:0.16rem;display:block;}
-	.mt_10{margin-top:0.1rem;}			
-	.f_content,.address {width: 6.7rem;	margin: auto;}		
-		
-	.addre,	.name {	line-height: 0.52rem;}	
-	.addresarrow{width:0.33rem;height:0.62rem;}
-	.meet{
-		margin:auto;		
-		width: 6.7rem;		
-		height:0.82rem;
-		box-shadow: 0px 0px 8px #a5a5a5;
-		color:#fff;
-		border-radius:0.1rem;
-		margin-top:0.3rem;
-		text-align:center;		
-	}
-	.meet span{font-size:0.6rem;transform: scale(0.5);}
-	.serverdetail{font-size:0.3rem;font-weight:bolder;color:#333;margin-bottom:0.2rem;}
-	.houseserver{line-height:0.38rem;color:#666;font-size:0.28rem;}
-	.inputboxs{width:2rem;height:0.64rem;}
-		
-	
+.dianqi {
+  width: 100%;
+}
+.contentBox {
+  width: 100%;
+}
+.content {
+  width: 6.7rem;
+  margin: auto;
+}
+.server {
+  width: 100%;
+}
+.server div:nth-child(1) {
+  width: 3.35rem;
+  height: 2.05rem;
+}
+.server div:nth-child(1) img {
+  width: 100%;
+  height: 100%;
+}
+.server div:nth-child(2) p {
+  font-size: 0.28rem;
+  line-height: 0.4rem;
+  text-align: justify;
+  text-indent: 0.54rem;
+  padding-left: 0.28rem;
+}
+.server div:nth-child(2) h1 {
+  font-size: 0.28rem;
+  line-height: 0.5rem;
+  font-weight: 700;
+  padding-left: 0.28rem;
+}
+.servertitle {
+  padding-top: 0.16rem;
+  display: block;
+}
+.mt_10 {
+  margin-top: 0.1rem;
+}
+.f_content,
+.address {
+  width: 6.7rem;
+  margin: auto;
+}
+
+.addre,
+.name {
+  line-height: 0.52rem;
+}
+.addresarrow {
+  width: 0.33rem;
+  height: 0.62rem;
+}
+
+.serverdetail {
+  font-size: 0.3rem;
+  font-weight: bolder;
+  color: #333;
+  margin-bottom: 0.2rem;
+}
+.houseserver {
+  line-height: 0.38rem;
+  color: #666;
+  font-size: 0.28rem;
+}
+.inputboxs {
+  width: 2rem;
+  height: 0.64rem;
+}
 </style>

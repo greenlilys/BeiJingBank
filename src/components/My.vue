@@ -8,10 +8,13 @@
 			</div>
 			<div class="flex-wrap flex-vertical flex-justify-center bottombox">
 				<div class="items flex-wrap flex-horizontal">
-					<div v-for="(item,index) in numobj" class="color_white flex-con flex-vertical flex-justify-around borderR">
-						<p class="font_36 color_white">{{item.nums}}</p>
-						<p class="font_28 color_white">{{item.tests}}</p>
-					</div>
+					<template v-for = "(item,index) in numobj">
+						<div  class="color_white flex-con flex-vertical flex-justify-around borderR" :key='index'>
+							<p class="font_36 color_white">{{item.nums}}</p>
+							<p class="font_28 color_white">{{item.tests}}</p>
+						</div>
+					</template>
+					
 				</div>
 			</div>
 		</div>
@@ -24,23 +27,25 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="color_back_white border-bot font_28" v-for="item in addressList">
-			<div class="c_content addressBox pt_20 pb_20">
-				<p class="color_regu"> <span>{{item.userName}}</span><span class="ml_20">{{item.phone}}</span></p>
-				<p class="flex-wrap flex-horizontal flex-justify-between">
-					<span class="color_regu">{{item.address}}</span>
-					<span class="color_gray edit" @click="editAddress(item.phone,item.address,item.addressUserName,item.id)">编辑</span>
-				</p>
-			</div>
-		</div>
-	
+		<template  v-for="(item,index) in addressList">
+			<div class="color_back_white border-bot font_28" :key="index">
+				<div class="c_content addressBox pt_20 pb_20" @click="setServiceAdd(item.addressUserName,item.phone,item.address)">
+					<p class="color_regu"> <span>{{item.addressUserName}}</span><span class="ml_20">{{item.phone}}</span></p>
+					<p class="flex-wrap flex-horizontal flex-justify-between">
+						<span class="color_regu">{{item.address}}</span>
+						<span class="color_gray edit" @click.stop="editAddress(item.phone,item.address,item.addressUserName,item.id)">编辑</span>
+					</p>
+				</div>
+			</div>		
+		</template>			
 	</div>
 
 </template>
 
 <script>
 import { Loadmore } from 'mint-ui'
+import {mapGetters,mapActions} from 'vuex';
+
 export default{
 	name:'My',
 	data(){
@@ -62,11 +67,27 @@ export default{
 					
 				}
 			],
-			addressList:[]
+			addressList:[
+				{
+					addressUserName:'张三',
+					phone:13598096793,
+					address:'回龙观'
+				},
+				{
+					addressUserName:'王五',
+					phone:13598096793,
+					address:'天通苑'
+				}
+				
+			],
+			number:'',		
+			type:''//是从一般清洁或者家电清洁跳转过来0：家电   1一般
+			
 		
 		}
 	},
 	methods:{
+		
 		//添加地址
 		addAddress(){
 			this.$router.push({path:'/Addaddress',query:{}})
@@ -89,12 +110,30 @@ export default{
 				addressUserName:addressUserName,
 				id:id
 			}})
+		},
+		//设置为服务地址
+		setServiceAdd(addressUserName,phone,address){
+			// 只有从Home到My点击事件生效
+			console.log(this.addressActive)
+			if(this.addressActive){
+				this.$router.replace({path:'/Home',query:{type:this.type,addressUserName:addressUserName,phone:phone,address:address}});		
+			}			
 		}
+	},	
+	created(){	
+		if(this.$route.query.type){
+			this.type = this.$route.query.type;			
+		}		
+		
 	},
 	mounted(){
-		this.getAddressList();
-
-
+		// console.log(this.addressActive)
+		// this.getAddressList();	
+	},
+	computed:{
+		...mapGetters([
+				'addressActive'
+			])
 	}
 }
 </script>

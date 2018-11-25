@@ -213,7 +213,8 @@ transform: scaleY(0.5);     -webkit-transform-origin: left bottom;transform-orig
 		box-shadow: 0px 0px 8px #a5a5a5;
 		color:#fff;
 		border-radius:0.1rem;		
-		text-align:center;		
+		text-align:center;
+		margin: 0 auto;		
 }
 .meet span{font-size:0.6rem;transform: scale(0.5);}
 /*顶部灰条*/

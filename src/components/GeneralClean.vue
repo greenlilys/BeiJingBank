@@ -29,7 +29,7 @@
 					<div class="flex-wrap flex-horizontal flex-align-center">
 						<span>日期选择：</span>
 						<div class="datay input-b flex-con" @click="openPicker">						
-							<input class="input_border font_28 color_regu" type="text" placeholder="请选择您需要服务的日期" />
+							<input class="input_border font_28 color_regu" type="text"  v-model="pickerdata" placeholder="请选择您需要服务的日期" />
 							<div class="arrowup"><img src="../assets/images/uparrow.png" alt="" /></div>
 						</div>
 					</div>	
@@ -37,14 +37,13 @@
 					<div class="flex-wrap flex-horizontal flex-align-center">
 						<span>选择时间：</span>
 						<div class="datay input-b flex-con" @click="openPickerTime">						
-							<input class="input_border font_28 color_regu" type="text" placeholder="上门时间每日早8点到晚18点" />
+							<input class="input_border font_28 color_regu" type="text" v-model="pickertime" placeholder="上门时间每日早8点到晚18点" />
 							<div class="arrowup"><img src="../assets/images/uparrow.png" alt="" /></div>
 						</div>
 					</div>	
 					
 					<div>	
-						<mt-datetime-picker
-						  v-model="pickerdata"
+						<mt-datetime-picker						 
 						  type="date"
 						  ref="picker"
 						  year-format="{value} 年"
@@ -54,31 +53,43 @@
 						  @confirm="dataConfirm">
 						</mt-datetime-picker>	
 
-						  <mt-datetime-picker
-						  v-model="pickertime"
+						  <mt-datetime-picker						 
 						  type="time"
 						  ref="pickertime"
 						  hour-format="{value} 时"
 						  minute-format="{value} 分"
-						  @confirm="dataConfirm"
+						  @confirm="timeConfirm"
 						  >
 						</mt-datetime-picker>					
 					</div>
 				</div>				
 			</div>
 
-			<div class="pt_40 pb_40 mb_20 color_back_white border-bot border-t">
-				<div class="address pb_30 flex-wrap flex-horizontal flex-justify-between flex-align-center">
+			<div class=" pb_30 mb_20 color_back_white border-bot border-t">
+
+				<div class="address pt_20 pb_30 flex-wrap flex-horizontal flex-justify-between flex-align-center"
+				 v-if="showSetAddress" @click="setAddress">
 					<div class="color_regu">
-						<h1 class="name font_28"><span>李明 </span><span>17300130100</span></h1>
-						<h2 class="addre font_28">北京市东城区张自忠路15号</h2>
+						<h1 class="name font_28">请设置服务地址</h1>						
 					</div>
 					<div>
 						<img class="addresarrow" src="../assets/images/arrow.png" alt="" />
 					</div>
 				</div>
+
+				<div class="address pt_40 pb_30 flex-wrap flex-horizontal flex-justify-between flex-align-center" @click="navAddList" v-else>
+					<div class="color_regu">
+						<h1 class="name font_28"><span>{{addressUserName}}</span><span class="ml_20">{{phone}}</span></h1>
+						<h2 class="addre font_28">{{address}}</h2>
+					</div>
+					<div>
+						<img class="addresarrow" src="../assets/images/arrow.png" alt="" />
+					</div>
+				</div>
+
 				
-				<div class="meet jianBian_blue flex-wrap flex-align-center flex-justify-center"><span>立即预约</span></div>
+				
+				<div class="meet jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="creatOrder"><span>立即预约</span></div>
 			</div>
 
 			<div class="pt_40 pb_40 color_back_white border-t">
@@ -99,15 +110,14 @@
 
 <script>
 import { Toast } from 'mint-ui';
+import {mapGetters,mapActions} from 'vuex';
 	export default {
 		data() {
 			return {				
 				pickerdata:'',
 				pickertime:'',
-				num:2,//计数器
+				num:2,//服务时长
 				startDate:new Date()
-				
-				
 			}
 		},
 		methods: {
@@ -117,15 +127,27 @@ import { Toast } from 'mint-ui';
 		     openPickerTime(){//打开时分选择器
 		     	this.$refs.pickertime.open();
 		     },
-		     dataConfirm(val){
-		     	console.log(new Date(val).getTime())
+		     dataConfirm(val){				
+				 let dataTime = new Date(val);
+				 let y = dataTime.getFullYear();
+				 let m = dataTime.getMonth() + 1;
+				 let d = dataTime.getDate();
+				 let setzero = function(str){
+					 return str < 10 ? '0' + str : str;
+				 }
+				 let result = y + '-' +setzero(m) + '-' + setzero(d);
+				 this.pickerdata = result;
+				 console.log(result);
 		     },
-		     timeConfirm(){
-
-		     },
-		     handleChange(){
-
-		     },
+		     timeConfirm(val){
+				  console.log(parseInt(val))
+				  if(parseInt(val) < 8 || parseInt(val) > 18){
+					  Toast('上门时间选择错误');
+				  }else{
+					   this.pickertime = val;
+				  }			 
+				
+		     },		    
 		     prenum(){
 				if(this.num == 2) {
 					Toast('时长不少于2小时');
@@ -134,7 +156,7 @@ import { Toast } from 'mint-ui';
 				this.num--;
 			},
 			addnum(){
-				if(this.num == this.timeLength){
+				if(this.num >= this.timeLength){
 					Toast('剩余权限不足');
 					return false;
 				}
@@ -143,29 +165,48 @@ import { Toast } from 'mint-ui';
 					return false;
 				} 
 				this.num++;
+			},
+			setAddress(){
+				// 如果地址列表有数据跳转到我的，否则跳转到地址表单页
+				if(this.addressListLength > 0){
+					this.$router.push({path:'/My',query:{type:1}});	
+					this.$store.commit('setAddActive',{addressActive:true});				
+				}else{
+					this.$router.push({path:'/Addaddress',query:{type:1}})
+				}
+			},
+			navAddList(){
+				this.$router.push({path:'/My',query:{type:1}});
+				this.$store.commit('setAddActive',{addressActive:true});
+			},
+			creatOrder(){
+
 			}
 		   
+		},
+		computed:{
+			...mapGetters([
+				'timeLength','rightsValidity'
+			])
 		},
 		created(){
 			
 		},
 		mounted(){
 			
-		},
-		props:['rightsValidity','timeLength'],
+		},	
 		components: {
 			
-		}
+		},
+		props:['addressListLength','showSetAddress','addressUserName','phone','address']
 	}
 </script>
 
 <style scoped>
 	#content {width:100%;}	
 	#top {height: 0.88rem;line-height: 0.88rem;width: 100%;	position: relative;	}	
-	#bottom {background-color: #88D6E9;height: 0.98rem;	line-height: 0.98rem;width: 100%;font-size: 0.28rem;}
-	
-	.f_content,.address {width: 6.7rem;	margin:0 auto;}
-	/*.address{height:1.4rem;}	*/
+	#bottom {background-color: #88D6E9;height: 0.98rem;	line-height: 0.98rem;width: 100%;font-size: 0.28rem;}	
+	.f_content,.address {width: 6.7rem;	margin:0 auto;}	
 	.server {width: 100%;}	
 	.server div:nth-child(1) {width: 3.35rem;height: 2.05rem;}	
 	.server div:nth-child(1) img {width: 100%;height: 100%;}	
@@ -173,19 +214,12 @@ import { Toast } from 'mint-ui';
 	.server div:nth-child(2) h1 {font-size: 0.28rem;line-height: 0.5rem;font-weight: 700;padding-left:0.28rem;}	
 	.auth {	margin-top: 0.5rem;	margin-bottom: 0.3rem;}		
 	.addre,	.name {	line-height: 0.52rem;}	
-	.addresarrow{width:0.33rem;height:0.62rem;}
-	
+	.addresarrow{width:0.33rem;height:0.62rem;}	
 	.serverdetail{font-size:0.3rem;font-weight:bolder;color:#333;margin-bottom:0.2rem;}
-	.houseserver{line-height:0.38rem;color:#666;font-size:0.28rem;}
-		
-	/*input::-webkit-input-placeholder{color:#999;}*/
-	.meet{margin: 0 auto;}
+	.houseserver{line-height:0.38rem;color:#666;font-size:0.28rem;}		
+	/*input::-webkit-input-placeholder{color:#999;}*/	
 	.border-top,.border-bot{ position:relative; }
-.border-top:before,.border-bot:after{content: ''; position: absolute; left: 0;right:0;
-background: #ddd;height: 0.02rem;-webkit-transform: scaleY(0.5);
-transform: scaleY(0.5); 
- /*-webkit-transform-origin: left bottom;transform-origin: left bottom;    */
-}
-.border-bot:after{ bottom:-0.02rem;-webkit-transform-origin: 0 0;transform-origin: 0 0;}
-.border-top:before{top:0;-webkit-transform-origin: 0 0;transform-origin: 0 0;}
+	.border-top:before,.border-bot:after{content: ''; position: absolute; left: 0;right:0;background: #ddd;height: 0.02rem;-webkit-transform: scaleY(0.5);transform: scaleY(0.5); }
+	.border-bot:after{ bottom:-0.02rem;-webkit-transform-origin: 0 0;transform-origin: 0 0;}
+	.border-top:before{top:0;-webkit-transform-origin: 0 0;transform-origin: 0 0;}
 </style>

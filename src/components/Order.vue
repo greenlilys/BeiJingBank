@@ -33,6 +33,7 @@
 
 <script>
 import { Toast } from 'mint-ui';
+import {mapGetters,mapActions} from 'vuex';
 export default{
 	name:'Order',
 	data(){
@@ -52,6 +53,9 @@ export default{
 			this.$router.push({path:'/Orderdetail',query:{orderNumber:orderNumber,status:status,appointmentTimeLength:appointmentTimeLength,createTime:createTime,serviceItem:serviceItem,userName:userName,phone:phone,address:address,type:type,id:id}});
 
 		},
+		...mapActions([
+			'increment'
+			]),
 		//查询订单列表
 		getOrderList(){
 			if(this.totalPage == 3){
@@ -94,7 +98,9 @@ export default{
 		}
 	},
 	mounted(){
-		this.getOrderList();		
+		// this.getOrderList();
+			this.number = this.$store.state.count;
+		console.log(this.number)		
 	},
 	computed:{
 		
