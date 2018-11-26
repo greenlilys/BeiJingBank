@@ -22,7 +22,7 @@
 </template>
 <script>
 import { Toast } from 'mint-ui';
-
+import {mapGetters,mapActions} from 'vuex';
 	export default{
 		data(){
 			return{
@@ -41,6 +41,9 @@ import { Toast } from 'mint-ui';
 		},
 		created(){
 			console.log(this.$route.query);
+			if(this.$route.query.type){//如果用户没有地址，下单时第一次创建地址，传过来的type
+					this.type = this.$route.query.type;			
+			}	
 			if(JSON.stringify(this.$route.query) == '{}'){
 				this.isCreate = true;//创建地址
 				return false;
@@ -98,7 +101,7 @@ import { Toast } from 'mint-ui';
 				if(!this.testForm()) return false;
 				if(this.isCreate){//创建地址
 					this.$post('/api/sp/appUser/createAddress',{
-						userId:'27d2ecc5b92640dbbe895922e0bb85b3',						
+						userId:this.userId,						
 						address:this.address,
 						phone:this.phone,
 						addressUserName:this.addressUserName,
@@ -106,16 +109,16 @@ import { Toast } from 'mint-ui';
 					}).then(data=>{
 						console.log(data)
 						Toast('添加成功');
-						// this.$router.replace('/My');
+						this.$router.replace('/My');
 					})
 				}else{//编辑地址
 					this.$post('/api/sp/appUser/editAddress',{
-					userId:'27d2ecc5b92640dbbe895922e0bb85b3',
+					userId:this.userId,
 					id:this.id,
 					address:this.address,
 					phone:this.phone,
 					addressUserName:this.addressUserName,
-						smsCode:this.smsCode
+					smsCode:this.smsCode
 					}).then(data=>{
 						console.log(data)
 						Toast('编辑成功');						
@@ -160,6 +163,11 @@ import { Toast } from 'mint-ui';
 			    	this.isShowBg = true;
 			    }
 			}
+		},
+		computed:{
+			...mapGetters([
+				'userId'
+			])
 		}
 	}
 </script>

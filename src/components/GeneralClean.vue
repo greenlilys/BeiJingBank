@@ -68,7 +68,7 @@
 			<div class=" pb_30 mb_20 color_back_white border-bot border-t">
 
 				<div class="address pt_20 pb_30 flex-wrap flex-horizontal flex-justify-between flex-align-center"
-				 v-if="showSetAddress" @click="setAddress">
+				 v-if="addressListLength == 0" @click="setAddress">
 					<div class="color_regu">
 						<h1 class="name font_28">请设置服务地址</h1>						
 					</div>
@@ -89,7 +89,7 @@
 
 				
 				
-				<div class="meet jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="creatOrder"><span>立即预约</span></div>
+				<div class="meet actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="creatOrder"><span>立即预约</span></div>
 			</div>
 
 			<div class="pt_40 pb_40 color_back_white border-t">
@@ -113,11 +113,8 @@ import { Toast } from 'mint-ui';
 import {mapGetters,mapActions} from 'vuex';
 	export default {
 		data() {
-			return {				
-				pickerdata:'',
-				pickertime:'',				
-				startDate:new Date()
-				
+			return {
+				startDate:new Date()				
 			}
 		},
 		methods: {
@@ -130,52 +127,20 @@ import {mapGetters,mapActions} from 'vuex';
 		     openPickerTime(){//打开时分选择器
 		     	this.$refs.pickertime.open();
 		     },
-		     dataConfirm(val){				
-				 let dataTime = new Date(val);
-				 let y = dataTime.getFullYear();
-				 let m = dataTime.getMonth() + 1;
-				 let d = dataTime.getDate();
-				 let setzero = function(str){
-					 return str < 10 ? '0' + str : str;
-				 }
-				 let result = y + '-' +setzero(m) + '-' + setzero(d);
-				 this.pickerdata = result;
-				 console.log(result);
+		     dataConfirm(val){
+				 this.$store.commit('dataConfirm',{pickerdata:val})				
 		     },
 		     timeConfirm(val){
-				  console.log(parseInt(val))
-				  if(parseInt(val) < 8 || parseInt(val) > 18){
-					  Toast('上门时间选择错误');
-				  }else{
-					   this.pickertime = val;
-				  }			 
-				
-		     },		    
-		    //  prenum(){
-				// if(this.num == 2) {
-				// 	Toast('时长不少于2小时');
-				// 	return false;
-				// }
-				// this.num--;				
-			// },
-			// addnum(){
-				// if(this.num >= this.timeLength){
-				// 	Toast('剩余权限不足');
-				// 	return false;
-				// }
-				// if(this.num == 10){
-				// 	Toast('时长不超过10小时');
-				// 	return false;
-				// } 
-				// this.num++;
-			// },
+				 this.$store.commit('timeConfirm',{pickertime:val})	
+		     },	    
+		    
 			setAddress(){
 				// 如果地址列表有数据跳转到我的，否则跳转到地址表单页
 				if(this.addressListLength > 0){
 					this.$router.push({path:'/My',query:{type:1}});	
 					this.$store.commit('setAddActive',{addressActive:true});				
 				}else{
-					this.$router.push({path:'/Addaddress',query:{type:1}})
+					this.$router.push({path:'/Addaddress',query:{type:1}});
 				}
 			},
 			navAddList(){
@@ -183,14 +148,51 @@ import {mapGetters,mapActions} from 'vuex';
 				this.$store.commit('setAddActive',{addressActive:true});
 			},
 			creatOrder(){
-
+				if(!this.pickerdata){
+					Toast('请填写预约日期');
+					return false;
+				}
+				if(!this.pickertime){
+					Toast('请填写预约时间');
+					return false;
+				}
+				if(this.showSetAddress || !this.address){
+					Toast('请设置服务地址');
+					return false;
+				}
+				
+				let bar = this.pickerdata.split('-');
+				let foo = this.pickertime.split(':');
+				let y = Number(bar[0]);
+				let m = Number(bar[1])-1;
+				let d = Number(bar[2]);
+				let h = Number(foo[0]);
+				let t = Number(foo[1]);
+				console.log(y,m,d,h,t);
+				let result = new Date(y,m,d,h,t).getTime();
+				console.log(result)			
+				let resultTime = this.pickerdata + ' ' + this.pickertime;
+				this.$post('/api/sp/order/createOrder',{
+					address:this.address,
+					appointmentTime:result,
+					type:'1',
+					userId:this.userId
+					// userName:''
+				}).then(data=>{
+					if(data.errcode == 200){
+						Toast('下单成功');
+						 this.$router.replace('/Order');
+					}
+				}).catch(err=>{
+						Toast('下单失败')
+				})
 			}
 		   
 		},
 		
 		computed:{
 			...mapGetters([
-				'timeLength','rightsValidity','grneralSerLen'
+				'timeLength','rightsValidity','grneralSerLen','userId','pickerdata','pickertime'
 			])
 		},
 		created(){
@@ -202,7 +204,7 @@ import {mapGetters,mapActions} from 'vuex';
 		components: {
 			
 		},
-		props:['addressListLength','showSetAddress','addressUserName','phone','address']
+		props:['addressListLength','addressUserName','phone','address']
 	}
 </script>
 

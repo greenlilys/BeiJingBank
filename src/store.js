@@ -7,47 +7,65 @@ Vue.use(Vuex)
 
 var state = {	
 	openId:'',
-	rightsValidity:'',
-	timeLength:6,
+	userId:'',
+	rightsValidity:'',//权益有效期
+	timeLength:0,//剩余权益时长
+	bjUserId:'',//权益码
 	addressActive:false,
-	grneralSerLen:2
+	grneralSerLen:2,//一般清洁预约时长
+	pickerdata:'',//一般清洁日期
+	pickertime:'',//一般清洁时间
+	pickerdatas:'',//家电清洁日期
+	pickertimes:'',//家电清洁时间
+	Project:[],//服务项目数组
+	serviceLength:0,//家电预约服务时长
+	orderNum:'',//用户订单总数
+	addressUserName:'',//服务人
+	phone:'',//电话
+	address:''//服务地址
+
 };
 
 const actions = {
-	increment:({commit})=>{		
-		commit('increment');
-	},
 	addnum:({commit})=>{
 		commit('addnum');
 	},
 	prenum:({commit})=>{
 		commit('prenum')
+	},
+	dataConfirm:({commit})=>{
+		commit('dataConfirm')
+	},
+	serviceProject:({commit})=>{//触发获取服务项目列表
+		commit('serviceProject')
+	},
+	prenums:({commit})=>{
+		commit('prenums')
 	}
 };
 
-const mutations = {
-	
+const mutations = {	
 	getmsg(state,{openId}){		
-		state.openId = openId;
-		console.log(state.openId);
-		// httpPost('/api/sp/appUser/getUserId',{
-		// 	openId:openId
-		// }).then(data=>{
-		// 	return data.data.userId
-		// }).then(data=>{
-		// 	return httpPost('/api/sp/appUser/queryUser',{
-		// 				id:data
-		// 			})
-		// }).then(data=>{
-		// 	console.log(data.data)			
-		// 	this.state.rightsValidity = data.data[0].rightsValidity;
-		// 	this.state.timeLength = data.data[0].timeLength;
-		// 	console.log(this.state.rightsValidity)
-		// })
+		state.openId = openId;		
+		httpPost('/api/sp/appUser/getUserId',{
+			openId:openId
+		}).then(data=>{
+			state.userId = data.data.userId;			
+			return data.data.userId
+		}).then(data=>{//userId
+			return httpPost('/api/sp/appUser/queryUser',{
+				id:data
+			})
+		}).then(data=>{						
+			state.rightsValidity = data.data[0].rightsValidity;
+			state.timeLength = data.data[0].timeLength;
+			state.bjUserId = data.data[0].bjUserId;
+			console.log('权益有效期' + state.rightsValidity)
+			console.log('剩余权益时长' + state.timeLength)
+		})
 	},
 	setAddActive(state,{addressActive}){		
-		state.addressActive = addressActive;
-		console.log(state.addressActive)
+		state.addressActive = addressActive;		
 	},
 	addnum(state){
 		if(state.grneralSerLen >= state.timeLength){
@@ -66,22 +84,168 @@ const mutations = {
 			return false;
 		}
 		state.grneralSerLen--;
+	},
+	dataConfirm(state,{pickerdata}){
+		 let dataTime = new Date(pickerdata);
+				 let y = dataTime.getFullYear();
+				 let m = dataTime.getMonth() + 1;
+				 let d = dataTime.getDate();
+				 let setzero = function(str){
+					 return str < 10 ? '0' + str : str;
+				 }
+				 let result = y + '-' +setzero(m) + '-' + setzero(d);
+				 state.pickerdata = result;					
+	},
+	timeConfirm(state,{pickertime}){
+		  if(parseInt(pickertime) < 8 || parseInt(pickertime) > 18){
+					  Toast('上门时间选择错误');
+				  }else{
+					   state.pickertime = pickertime;
+				  }	
+	},
+	dataConfirms(state,{pickerdatas}){//家电清洁日期计算
+		let dataTime = new Date(pickerdatas);
+				 let y = dataTime.getFullYear();
+				 let m = dataTime.getMonth() + 1;
+				 let d = dataTime.getDate();
+				 let setzero = function(str){
+					 return str < 10 ? '0' + str : str;
+				 }
+				 let result = y + '-' +setzero(m) + '-' + setzero(d);
+				 state.pickerdatas = result;	
+	},
+	timeConfirms(state,{pickertimes}){//家电清洁时间计算
+		if (parseInt(pickertimes) < 8 || parseInt(pickertimes) > 18) {
+			Toast("上门时间选择错误");
+		  } else {
+			state.pickertimes = pickertimes;
+		  }		 
+	},
+	//获得服务项目列表，每个列表对象增加计数属性num，初始值为0
+	serviceProject(state){
+		console.log('success')		
+		httpPost("/api/sp/serviceItem/queryServiceItem", {}).then(data => {
+			    let foo = data.data;
+			    for (let i = 0, len = foo.length; i < len; i++) {
+			      foo[i].num = 0;
+			    }
+			    state.Project = foo;
+			  });
+	},
+	addnums(state,{id}){
+		 let Project = state.Project;
+    //    如果总服务数量已经等于3，返回
+      let result = Project.reduce(function(pre, next) {
+        return pre + next.num;
+      }, 0);
+      if (result == 3) {
+        // 选择台数等于3
+        Toast("不能超过3台");
+        return false;
+      }
+    //   否则当前服务项目加1
+      for (let i = 0, len = Project.length; i < len; i++) {
+        if (Project[i].id == id) {
+          Project[i].num++;
+        }
+      }
+    //    重新计算总服务数量，预约服务时长
+      let totalnum = Project.reduce(function(pre, next) {
+        return pre + next.num;
+      }, 0);
+      if (totalnum < 3) {
+        state.serviceLength = totalnum * 4;
+      } else {
+        state.serviceLength = 10;
+      }
+      state.Project = Project;
+	},
+	prenums(state,{id}){
+		let Project = state.Project;
+		//  如果当前项目num为0，返回，否则减1
+		for (let i = 0, len = Project.length; i < len; i++) {
+		  if (Project[i].id == id) {
+			if (Project[i].num == 0) {
+			  return false;
+			} else {
+			  Project[i].num--;
+			}
+		  }
+		}
+		//  重新计算总服务数量，服务时长
+		let totalnum = Project.reduce(function(pre, next) {
+		  return pre + next.num;
+		}, 0);
+		state.serviceLength = totalnum * 4;
+		state.Project = Project;
+	},
+	setAddLen(state,{addressListLength}){//地址为空addressListLength为0
+		state.addressListLength = addressListLength
+	},
+	setJerAdd(state,{addressUserName,address,phone,addressListLength}){//用户有地址设置默认地址
+		state.addressUserName = addressUserName;
+		state.address = address;
+		state.phone = phone;
+		state.addressListLength = addressListLength;	
+	},
+	userChioceAdd(state,{addressUserName,address,phone}){//用户切换地址
+		state.addressUserName = addressUserName;
+		state.address = address;
+		state.phone = phone;
 	}
 };
 
 const getters = {	
-	timeLength(state){
-		return state.timelength
+	timeLength(state){//剩余权益时长
+		return state.timeLength
 	},
-	rightsValidity(state){
+	rightsValidity(state){//权益有效期
 		return state.rightsValidity
 	},
 	addressActive(state){
 		return state.addressActive
 	},
-	grneralSerLen(state){
+	grneralSerLen(state){//一般清洁服务时长
 		return state.grneralSerLen
+	},
+	userId(state){//用户userId
+		return state.userId
+	},
+	bjUserId(state){//用户权益码
+		return state.bjUserId
+	},
+	pickerdata(state){//一般清洁预约日期
+		return state.pickerdata
+	},
+	pickertime(state){//一般清洁预约时间
+		return state.pickertime
+	},
+	pickerdatas(state){//家电清洁预约日期
+		return state.pickerdatas
+	},
+	pickertimes(state){//家电清洁预约时间
+		return state.pickertimes
+	},
+	Project(state){//家电清洁服务项目列表
+		// console.log(JSON.stringify(state.Project))
+		return state.Project
+	},
+	serviceLength(state){//家电预约选择服务时长
+		return state.serviceLength
+	},
+	addressUserName(state){//服务人
+		return state.addressUserName
+	},
+	address(state){//服务地址
+		return state.address
+	},
+	phone(state){//服务电话
+		return state.phone
+	},
+	addressListLength(state){//地址length
+		return state.addressListLength
 	}
+
 }
 
 export default new Vuex.Store({

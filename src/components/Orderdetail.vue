@@ -4,25 +4,27 @@
 	<div class="color_back_white border-b border-t pb_20">
 		<div class="c_content">
 			<div class="top flex-wrap flex-horizontal flex-justify-between flex-align-center font_28">
-				<div><span class="color_regu">订单号：</span><span class="color_gray">{{orderNumber}}</span></div>
-				<div class="classObject flex-wrap flex-align-center flex-justify-center" :class="{ 'waite': status == 0,'send':status == 1,'complate':status == 2,'cancled':status == 3}">
-					<span class="color_white" v-if="status == 0">待处理</span>
-					<span class="color_white" v-if="status == 1">已派单</span>
-					<span class="color_white" v-if="status == 2">已完成</span>
-					<span class="color_white" v-if="status == 3">已取消</span>
+				<div><span class="color_regu">订单号：</span><span class="color_gray">{{orderDetail.orderNumber}}</span></div>
+				<div class="classObject flex-wrap flex-align-center flex-justify-center" :class="{ 'waite': orderDetail.status == 0,'send':orderDetail.status == 1,'complate':orderDetail.status == 2,'cancled':orderDetail.status == 3}">
+					<span class="color_white" v-if="orderDetail.status == 0">待处理</span>
+					<span class="color_white" v-if="orderDetail.status == 1">已派单</span>
+					<span class="color_white" v-if="orderDetail.status == 2">已完成</span>
+					<span class="color_white" v-if="orderDetail.status == 3">已取消</span>
 				</div>
 			</div>
 			<div class="flex-wrap flex-horizonta">
 				<div class="shopimg"><img src="../assets/images/shopimg.png" alt=""></div>
 				<div class="rtext flex-wrap flex-vertical flex-justify-around font_28">				
-					<p class="color_blue font_b" v-if="type == 1">一般清洁服务</p>
-					<p class="color_blue font_b" v-if="type == 0">家电清洁服务</p>
-					<p><span class="color_regu">服务时长：</span><span class="color_gray">{{appointmentTimeLength}}小时</span></p>
-					<p><span class="color_regu">预约时间：</span><span class="color_gray">{{createTime}}</span></p>	
+					<p class="color_blue font_b" v-if="orderDetail.type == 1">一般清洁服务</p>
+					<p class="color_blue font_b" v-if="orderDetail.type == 0">家电清洁服务</p>
+					<p><span class="color_regu">服务时长：</span><span class="color_gray">{{orderDetail.appointmentTimeLength}}小时</span></p>
+					<p><span class="color_regu">预约时间：</span><span class="color_gray">{{dataFormet(orderDetail.createTime)}}</span></p>	
 					<div class="flex-wrap flex-horizontal">
 						<p class="color_regu">服务项目：</p>
-						<div class="color_gray" v-if="type == 0">
-							<p v-for="item in service">{{item.project}}×{{item.num}}</p>							
+						<div class="color_gray" v-if="orderDetail.type == 0">
+							<template v-for="(item,index) in service">
+								<p :key="index">{{item.project}}×{{item.num}}</p>
+							</template>														
 						</div>
 						<div v-else>
 							
@@ -35,14 +37,14 @@
 
 	<div class="color_back_white border-b">
 			<p class="pt_20 font_28 ptop"><span class="color_regu">优惠：</span><span class="color_gray">{{discount >= 3? 2 : 0}}小时</span></p>
-			<p class="pb_20 font_28 ptop"><span class="color_regu">共计：</span><span class="color_gray">{{appointmentTimeLength}}小时</span></p>
+			<p class="pb_20 font_28 ptop"><span class="color_regu">共计：</span><span class="color_gray">{{orderDetail.appointmentTimeLength}}小时</span></p>
 	</div>
 
-	<div class="color_back_white border-b font_28" v-for="item in addressList">
+	<div class="color_back_white border-b font_28">
 		<div class="c_content addressBox pt_20 pb_20">
-			<p class="color_regu"> <span>{{userName}}</span><span class="ml_20">{{phone}}</span></p>
+			<p class="color_regu"> <span>{{orderDetail.userName}}</span><span class="ml_20">{{orderDetail.phone}}</span></p>
 			<p class="flex-wrap flex-horizontal flex-justify-between">
-				<span class="color_regu">{{address}}</span>				
+				<span class="color_regu">{{orderDetail.address}}</span>				
 			</p>
 		</div>
 	</div>
@@ -56,26 +58,11 @@
 export default{
 	name:'Order',
 	data(){
-		return{
-			addressList:[
-				{
-					name:'张三',
-					number:13598096793,
-					address:'北京市东城区张自忠路15号'
-				}
-
-			],
-			id:'',//订单id
-			orderNumber:'',//订单号
-			status:'',//订单状态
-			appointmentTimeLength:'',//服务时长
-			createTime:'',//下单时间
+		return{	
+			orderDetail:{},
+			id:'',//订单id			
 			service:[],//服务项目
-			userName:'',
-			phone:'',
-			address:'',
-			type:'',//服务类型0家电清洁  1一般清洁
-			discount:0//服务项目总和
+			discount:''//清洁电器数量
 		}
 	},
 	methods:{
@@ -104,40 +91,42 @@ export default{
 			return year + '-' + addaroe(month) + '-' + addaroe(day) + '日' +' ' + addaroe(hour) + ':' + addaroe(min) + '时';
 		},
 		creatService(arr){//项目字符串转数组
+			var bar = arr.split(';');
+			if(bar[bar.length-1] == ''){
+				bar.length = bar.length -1;
+			}			
 			var service = [];
 			var discount = 0;
-			for(var i = 0;i<arr.length;i++){
-				var arrs = arr[i].split(',');
-				var project = arrs[0];
-				var num = arrs[1].slice(1,-1);
-				discount += Number(num);
+			for(var i = 0;i<bar.length;i++){
 				var obj = {};
+				var arrs = bar[i].split(',');				
+				var project = arrs[0];
+				var num = arrs[1].charAt(1);
+				discount += Number(num);				
 				obj.project = project;
 				obj.num = num;
 				service.push(obj);
 			}
 			this.service = service;
 			this.discount = discount;//服务项目总数量			
+		},
+		getOrderDetail(){
+			this.$post('/api/sp/order/queryOrder',{
+				id:this.id
+			}).then(data=>{
+				let obj = data.data[0];
+				console.log(obj.serviceItem)
+				this.creatService(obj.serviceItem);
+				this.orderDetail = obj;			
+			})
 		}
 	},
 	created(){
-		console.log(this.$route.query);
-		let serviceObj = this.$route.query
-		let str = Number(serviceObj.createTime);
-		let arr = serviceObj.serviceItem.split(';');
-		this.orderNumber = serviceObj.orderNumber;
-		this.status = serviceObj.status;
-		this.appointmentTimeLength = serviceObj.appointmentTimeLength;		
-		this.createTime = this.dataFormet(str);	//格式化时间	
-		this.creatService(arr);//家电清洁服务项目数据字符串转数组
-		this.userName = serviceObj.userName;
-		this.phone = serviceObj.phone;
-		this.address = serviceObj.address;
-		this.type = serviceObj.type;
-		this.id = serviceObj.id;
+		console.log(this.$route.query);	
+		this.id = this.$route.query.id;
 	},
 	mounted(){
-				
+			this.getOrderDetail();
 	},
 	computed:{
 		classObject:function(){

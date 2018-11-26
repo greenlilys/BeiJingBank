@@ -54,8 +54,8 @@ axios.interceptors.response.use(
   (res) => {
         loadingInstance.close();
         //控制台打印请求接口返回数据
-        // console.log(res.config.url);
-        console.log(res.data);        
+        console.log(res.config.url);         
+        console.log(res.data);       
         if(res.status != 200){ 
           Toast(res.status + res.statusText);
             return false;
@@ -153,25 +153,9 @@ export function httpGet(url,params){
           if(res.data.errcode.toString() == '200') {
             resolve(res.data);           
           } else{
-              switch(res.data.errcode.toString()){
-              case '201':
-              Toast('验证码已失效');
-              reject('验证码已失效');
-              break;
-              case '202':
-              Toast('验证码输入错误');
-              reject('验证码输入错误');
-              break;
-              case '501':
-              Toast('参数为空');
-              reject('参数为空');
-              break;
-              case '500':
-              Toast('系统异常');
-              reject('系统异常');
-              break;
-            }
-          }       
+            Toast(res.data.errmsg);
+            reject(res.data.errcode);           
+          }      
                    
         },err => {          
           reject(err)

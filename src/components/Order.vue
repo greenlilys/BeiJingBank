@@ -2,10 +2,11 @@
 
 <div class="w_100">
 <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :top-distance="topDis" 
-:bottom-distance="botDis" :auto-fill="false" ref="loadmore">
+:bottom-distance="botDis" :auto-fill="false" :topPullText='pullText' :topDropText='dropText' :topLoadingText='loadingText' ref="loadmore" class="font_28 color_gray">
 <div class="topTiao border-bot"></div>
 	<template v-for="(item,index) in orderList">
-	<div class="color_back_white border-bot pb_40" :key="index" @click="navOrderdetail(item.orderNumber,item.status,item.appointmentTimeLength,item.createTime,item.serviceItem,item.userName,item.phone,item.address,item.type,item.id)">
+	<div class="color_back_white border-bot pb_40" :key="index" @click="navOrderdetail(item.id)">
+
 		<div class="c_content">
 			<div class="top flex-wrap flex-horizontal flex-justify-between flex-align-center font_28">
 				<div><span class="color_regu">订单号：</span><span class="color_gray">{{item.orderNumber}}</span></div>
@@ -27,7 +28,7 @@
 			</div>
 		</div>
 	</div>
-	</template>
+	</template>	
 	</mt-loadmore>
 </div>
 
@@ -42,35 +43,41 @@ export default{
 		return{
 			orderList:[],
 			pageNo:1,
+			totalPage:'',//总页数
 			allLoaded:false,
 			topDis:70,
 			botDis:10,
 			scrollMode:"touch",
-			totalPage:2
+			totalPage:2,
+			pullText:'',
+			dropText:'释放更新',
+			loadingText:''
 
 		}
 	},
 	methods:{
-		navOrderdetail(orderNumber,status,appointmentTimeLength,createTime,serviceItem,userName,phone,address,type,id){
-			this.$router.push({path:'/Orderdetail',query:{orderNumber:orderNumber,status:status,appointmentTimeLength:appointmentTimeLength,createTime:createTime,serviceItem:serviceItem,userName:userName,phone:phone,address:address,type:type,id:id}});
-
+		//跳转到订单详情
+		navOrderdetail(id){
+			this.$router.push({path:'/Orderdetail',query:{id:id}});
 		},
-		...mapActions([
-			'increment'
-			]),
 		//查询订单列表
-		getOrderList(){
-			if(this.totalPage == 3){
-				this.allLoaded = true;
+		getOrderList({userId=this.userId,pageNo=this.pageNo,pageSize=10}={}){
+			if(this.pageNo > this.totalPage){
+				this.allLoaded = true;//禁止上拉加载
 				return false;
 			}
 			this.$post('/api/sp/order/queryOrder',{
-				userId:'27d2ecc5b92640dbbe895922e0bb85b3',
-				pageNo:this.pageNo,
-				pageSize:10
+				userId:userId,
+				pageNo:pageNo,
+				pageSize:pageSize
 			}).then(data=>{
-				this.orderList = data.data;
-				this.pageNo++;				
+				if(this.pageNo == 1){
+					this.orderList = data.data;					
+				}else{
+					this.orderList = this.orderList.concat(data.data);
+				}				
+				this.totalPage = Math.ceil(data.pageCount/10);				
+				this.pageNo++;					
 			})
 		},
 		
@@ -87,25 +94,28 @@ export default{
 			var second = datas.getSeconds();			
 			return year + '-' + addaroe(month) + '-' + addaroe(day) + '日' +' ' + addaroe(hour) + ':' + addaroe(min) + '时';
 		},
-		loadBottom() {
-			Toast('到底')
-		 console.log('232')
-		  this.$refs.loadmore.onBottomLoaded();
-		  this.getOrderList();
-		 		
+		loadBottom() {//上拉加载	
+		 console.log('bottom')
+		 this.getOrderList();
+		  this.$refs.loadmore.onBottomLoaded();		  		 		
 		},
-		loadTop(){
-			Toast('ding')
+		loadTop(){//下拉刷新	
 			console.log('top')
+			this.pageNo = 1;
+			this.getOrderList();
+			this.$refs.loadmore.onTopLoaded();			
 		}
 	},
-	mounted(){
-		// this.getOrderList();
-			this.number = this.$store.state.count;
-		console.log(this.number)		
+	created(){
+		
+	},
+	mounted(){		
+		this.getOrderList({userId:this.userId});				
 	},
 	computed:{
-		
+		...mapGetters([
+			'userId'
+		])
 	}
 }
 </script>

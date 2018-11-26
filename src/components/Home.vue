@@ -9,7 +9,7 @@
 			</div>
 		</div>
 		<keep-alive>		
-		<component :is='current' :addressListLength='addressListLength' :showSetAddress='showSetAddress' :addressUserName='addressUserName' :phone='phone' :address='address'></component>
+		<component :is='current' :addressListLength='addressListLength' :addressUserName='addressUserName' :phone='phone' :address='address'></component>
 		</keep-alive>
 	</div>
 </template>
@@ -26,11 +26,7 @@
 				activeid:0,//处于激活状态的按钮索引
 				groups:['GeneralClean','Diqi'],
 				current:GeneralClean,
-				addressListLength:1,//地址列表是否有数据
-				showSetAddress:true,
-				addressUserName:'',
-				phone:'',
-				address:''						
+				addressLeng:''														
 			}
 		},
 		methods: {			
@@ -45,9 +41,19 @@
 			 //获得用户地址列表
 			getAddressList(){			
 				this.$post('/api/sp/appUser/queryAddress',{
-					userId:'27d2ecc5b92640dbbe895922e0bb85b3'
-				}).then(data=>{				
-					this.addressListLength = data.data.length;
+					userId:this.userId
+				}).then(data=>{					
+					if(data.data.length == 0){
+						this.$store.commit('setAddLen',{addressListLength:0})
+					}else{
+						let addressObj = data.data[0];					
+						this.$store.commit('setJerAdd',{
+							addressUserName:addressObj.addressUserName,
+							phone:addressObj.phone,
+							address:addressObj.address,
+							addressListLength:data.data.length
+						})
+					}					
 				})					
 			
 			},
@@ -74,28 +80,21 @@
 				}else{
 					this.current = 'GeneralClean';
 					this.activeid = 0;
-				}
-				this.showSetAddress = false;
-				this.addressUserName = queryObj.addressUserName;
-				this.phone = queryObj.phone;
-				this.address = queryObj.address;				
-			}
-			//获得地址列表，判断用户是否有地址		
-			// this.getAddressList();
+				}		
+				this.$store.commit('userChioceAdd',{
+					addressUserName:queryObj.addressUserName,
+					phone:queryObj.phone,
+					address:queryObj.address
+				})								
+			}else{
+				this.getAddressList();
+			}					
+			
 		},
-		mounted(){			
-			// var self = this;
-			// this.getUserId().then(data=>{
-			// 	self.$post('/api/sp/appUser/queryUser',{
-			// 		id:data
-			// 	}).then(data=>{
-			// 		console.log(data.data)					
-			// 		self.rightsValidity = data.data[0].rightsValidity;
-			// 		self.timeLength = data.data[0].timeLength;
-			// 		console.log(self.rightsValidity)
-			// 	})
-				
-			// })			
+		computed:{
+		...mapGetters([	'userId','addressUserName','address','phone','addressListLength'])
+		},		  
+		mounted(){	
 			
 		},
 		components:{

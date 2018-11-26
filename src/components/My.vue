@@ -52,34 +52,22 @@ export default{
 		return{
 			numobj:[
 				{
-					nums:'032',
+					nums:'0',
 					tests:'我的权益码'
 					
 				},
 				{
-					nums:'032',
+					nums:'0',
 					tests:'剩余时长'
 					
 				},
 				{
-					nums:'032',
+					nums:'0',
 					tests:'订单数量'
 					
 				}
 			],
-			addressList:[
-				{
-					addressUserName:'张三',
-					phone:13598096793,
-					address:'回龙观'
-				},
-				{
-					addressUserName:'王五',
-					phone:13598096793,
-					address:'天通苑'
-				}
-				
-			],
+			addressList:[],
 			number:'',		
 			type:''//是从一般清洁或者家电清洁跳转过来0：家电   1一般
 			
@@ -95,7 +83,7 @@ export default{
 		//获得用户地址列表
 		getAddressList(){			
 			this.$post('/api/sp/appUser/queryAddress',{
-				userId:'27d2ecc5b92640dbbe895922e0bb85b3'
+				userId:this.userId
 			}).then(data=>{				
 				this.addressList = data.data;
 			})	
@@ -118,21 +106,35 @@ export default{
 			if(this.addressActive){
 				this.$router.replace({path:'/Home',query:{type:this.type,addressUserName:addressUserName,phone:phone,address:address}});		
 			}			
+		},
+		//查询订单列表
+		getOrderList({userId=this.userId,pageNo=1,pageSize=10}={}){			
+			this.$post('/api/sp/order/queryOrder',{
+				userId:userId,
+				pageNo:pageNo,
+				pageSize:pageSize
+			}).then(data=>{				
+				this.numobj[2].nums = data.pageCount;		
+			})
 		}
 	},	
 	created(){	
 		if(this.$route.query.type){
 			this.type = this.$route.query.type;			
 		}		
-		
+		this.getOrderList();
 	},
 	mounted(){
-		// console.log(this.addressActive)
-		// this.getAddressList();	
+		this.numobj[0].nums = this.bjUserId;
+		this.numobj[1].nums = this.timeLength;	
+		console.log(this.userId)
+		console.log(this.timeLength)
+		console.log(this.orderNum)
+		this.getAddressList();	
 	},
 	computed:{
 		...mapGetters([
-				'addressActive'
+				'addressActive','userId','timeLength','bjUserId'
 			])
 	}
 }

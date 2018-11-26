@@ -19,9 +19,9 @@
 							<div class="mb_10 flex-wrap flex-horizontal flex-align-center" :key="index">
 								<span class="color_gray flex-con">{{item.name}}</span>
 								<div class="inputbox ml_20 flex-wrap flex-horizontal">
-									<div class="pre flex-wrap flex-justify-center flex-align-center" @click="prenum(item.id)"><span class="sets">-</span></div>
+									<div class="pre flex-wrap flex-justify-center flex-align-center" @click="prenums(item.id)"><span class="sets">-</span></div>
 									<div class="num flex-wrap flex-justify-center flex-align-center"> <span class="sets">{{item.num}}</span></div>
-									<div class="add flex-wrap flex-justify-center flex-align-center" @click="addnum(item.id)"><span class="sets">+</span></div>
+									<div class="add flex-wrap flex-justify-center flex-align-center" @click="addnums(item.id)"><span class="sets">+</span></div>
 								</div>							
 							</div>
 						</template>	
@@ -43,7 +43,7 @@
 					<div class="flex-wrap flex-horizontal flex-align-center">
 						<span>日期选择：</span>
 						<div class="datay input-b flex-con" @click="openPicker">						
-							<input class="input_border font_28 color_regu" type="text" v-model="pickerdata" placeholder="请选择您需要服务的日期" />
+							<input class="input_border font_28 color_regu" type="text" v-model="pickerdatas" placeholder="请选择您需要服务的日期" />
 							<div class="arrowup"><img src="../assets/images/uparrow.png" alt="" /></div>
 						</div>
 					</div>	
@@ -51,7 +51,7 @@
 					<div class="flex-wrap flex-horizontal flex-align-center">
 						<span>选择时间：</span>
 						<div class="datay input-b flex-con" @click="openPickerTime">						
-							<input class="input_border font_28 color_regu" type="text" v-model="pickertime" placeholder="上门时间每日早8点到晚18点" />
+							<input class="input_border font_28 color_regu" type="text" v-model="pickertimes" placeholder="上门时间每日早8点到晚18点" />
 							<div class="arrowup"><img src="../assets/images/uparrow.png" alt="" /></div>
 						</div>
 					</div>	
@@ -64,7 +64,7 @@
 						  month-format="{value} 月"
 						  date-format="{value} 日"
 						  :startDate="startDate"
-						  @confirm="dataConfirm">
+						  @confirm="dataConfirms">
 						</mt-datetime-picker>	
 
 						  <mt-datetime-picker						 
@@ -72,7 +72,7 @@
 						  ref="pickertime"
 						  hour-format="{value} 时"
 						  minute-format="{value} 分"
-						  @confirm="timeConfirm"
+						  @confirm="timeConfirms"
 						  >
 						</mt-datetime-picker>					
 					</div>
@@ -81,7 +81,7 @@
 
 			<div class="mb_20 color_back_white border-b border-t pb_30">				
 				<div class="address pt_20 pb_30 flex-wrap flex-horizontal flex-justify-between flex-align-center"
-					 v-if="showSetAddress" @click="setAddress">
+					 v-if="addressListLength == 0" @click="setAddress">
 					<div class="color_regu">
 						<h1 class="name font_28">请设置服务地址</h1>						
 					</div>
@@ -100,7 +100,7 @@
 					</div>
 				</div>				
 
-		<div class="meet jianBian_blue flex-wrap flex-align-center flex-justify-center"><span>立即预约</span></div>
+		<div class="meet actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click=creatOrder><span>立即预约</span></div>
 	</div>
 
 	<div class="pt_40 pb_40 color_back_white border-t">
@@ -124,12 +124,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      pickerdata: "",
-      pickertime: "",
       startDate: new Date(),
-      Project: [],
-      num1: "",
-      serviceLength: 0, //服务时长
       serviceItem: "",
       serviceItems: ""
     };
@@ -143,117 +138,109 @@ export default {
       //打开时分选择器
       this.$refs.pickertime.open();
     },
-    dataConfirm(val) {
-      //确定年月日
-      let dataTime = new Date(val);
-      let y = dataTime.getFullYear();
-      let m = dataTime.getMonth() + 1;
-      let d = dataTime.getDate();
-      let setzero = function(str) {
-        return str < 10 ? "0" + str : str;
-      };
-      let result = y + "-" + setzero(m) + "-" + setzero(d);
-      this.pickerdata = result;
-    },
-    timeConfirm(val) {
-      //确定时分
-      if (parseInt(val) < 8 || parseInt(val) > 18) {
-        Toast("上门时间选择错误");
-      } else {
-        this.pickertime = val;
-      }
-    },
-    //获得服务项目列表，每个列表对象增加计数属性num，初始值为0
-    serviceProject() {
-      this.$post("/api/sp/serviceItem/queryServiceItem", {}).then(data => {
-        let foo = data.data;
-        for (let i = 0, len = foo.length; i < len; i++) {
-          foo[i].num = 0;
+    creatOrder() {
+      if(!this.pickerdatas){
+					Toast('请填写预约日期');
+					return false;
+				}
+				if(!this.pickertimes){
+					Toast('请填写预约时间');
+					return false;
         }
-        this.Project = foo;
-      });
-    },
-    //  减少 id:当前选择服务项目id
-    prenum(id) {
-      let Project = this.Project;
-      //  如果当前项目num为0，返回，否则减1
-      for (let i = 0, len = Project.length; i < len; i++) {
-        if (Project[i].id == id) {
-          if (Project[i].num == 0) {
-            return false;
-          } else {
-            Project[i].num--;
+        if(this.showSetAddress || !this.address){
+					Toast('请设置服务地址');
+					return false;
+				}
+				let bar = this.pickerdatas.split('-');
+				let foo = this.pickertimes.split(':');
+				let y = Number(bar[0]);
+				let m = Number(bar[1])-1;
+				let d = Number(bar[2]);
+				let h = Number(foo[0]);
+				let t = Number(foo[1]);
+        let result = new Date(y,m,d,h,t).getTime();
+        let Project = this.Project;
+        let serviceItem = '';
+         let serviceItems = '';
+        for(let i =0,len=Project.length;i<len;i++){
+          if(Project[i].num > 0){
+            serviceItem += Project[i].name + ',(' + Project[i].num + ');';
+            serviceItems += Project[i].id + ',' + Project[i].num + ';';
           }
-        }
-      }
-      //  重新计算总服务数量，服务时长
-      let totalnum = Project.reduce(function(pre, next) {
-        return pre + next.num;
-      }, 0);
-      this.serviceLength = totalnum * 4;
-      this.Project = Project;
+        }       
+      this.$post("/api/sp/order/createOrder", {
+        address: this.address,
+        appointmentTime: result,
+        type: 0,
+        userId: this.userId,
+        serviceItem: serviceItem,
+        serviceItems: serviceItems
+        // userName:''
+      }).then(data => {
+        if(data.errcode == 200){
+            Toast('下单成功');
+            this.$router.replace('/Order');
+					}
+      }).catch(err=>{
+						Toast('下单失败')
+			});
+    },
+    dataConfirms(val) {
+      this.$store.commit("dataConfirms", { pickerdatas: val });
+    },
+    timeConfirms(val) {
+      this.$store.commit("timeConfirms", { pickertimes: val });
+    }, 
+   
+    //  减少 id:当前选择服务项目id
+    prenums(id) {
+      this.$store.commit("prenums", { id: id });
     },
     //  增加
-    addnum(id) {
-      let Project = this.Project;
-      //  如果总服务数量已经等于3，返回
-      let result = Project.reduce(function(pre, next) {
-        return pre + next.num;
-      }, 0);
-      if (result == 3) {
-        //选择台数等于3
-        Toast("不能超过3台");
-        return false;
-      }
-      //否则当前服务项目加1
-      for (let i = 0, len = Project.length; i < len; i++) {
-        if (Project[i].id == id) {
-          Project[i].num++;
-        }
-      }
-      //  重新计算总服务数量，服务时长
-      let totalnum = Project.reduce(function(pre, next) {
-        return pre + next.num;
-      }, 0);
-      if (totalnum < 3) {
-        this.serviceLength = totalnum * 4;
-      } else {
-        this.serviceLength = 10;
-      }
-      this.Project = Project;
+    addnums(id) {
+      this.$store.commit("addnums", { id: id });
     },
     setAddress() {
       // 如果地址列表有数据跳转到我的，否则跳转到地址表单页
       if (this.addressListLength > 0) {
-		this.$router.push({ path: "/My", query: { type: 0 } });
-		this.$store.commit('setAddActive',{addressActive:true});
+        this.$router.push({ path: "/My", query: { type: 0 } });
+        this.$store.commit("setAddActive", { addressActive: true });
       } else {
         this.$router.push({ path: "/Addaddress", query: { type: 0 } });
       }
     },
     navAddList() {
-	  this.$router.push({ path: "/My", query: { type: 0 } });
-	  this.$store.commit('setAddActive',{addressActive:true});
+      this.$router.push({ path: "/My", query: { type: 0 } });
+      this.$store.commit("setAddActive", { addressActive: true });
     }
   },
   computed: {
-    ...mapGetters(["timeLength", "rightsValidity"])
-  }, 
-  created() {
-	// this.serviceProject();	
+    ...mapGetters([
+      "timeLength",
+      "rightsValidity",
+      'userId',
+      "pickerdatas",
+      "pickertimes",
+      "Project",
+      "serviceLength"
+    ])
   },
-  mounted() {
-
+  created() {    
+    if(this.Project){
+      return false;
+    }else{
+      this.$store.dispatch("serviceProject");
+    }    
   },
+  mounted() {},
   components: {
     Inputnumber
   },
   props: [
-    "addressListLength",
-    "showSetAddress",
+    "addressListLength",   
     "addressUserName",
     "phone",
-    "address"
+    "address"    
   ]
 };
 </script>
