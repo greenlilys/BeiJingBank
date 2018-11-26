@@ -118,15 +118,12 @@
 </template>
 
 <script>
-import Inputnumber from "./Inputnumber";
 import { Toast } from "mint-ui";
 import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      startDate: new Date(),
-      serviceItem: "",
-      serviceItems: ""
+      startDate: new Date()   
     };
   },
   methods: {
@@ -178,11 +175,11 @@ export default {
         // userName:''
       }).then(data => {
         if(data.errcode == 200){
-            Toast('下单成功');
+            Toast('预约成功');
             this.$router.replace('/Order');
 					}
       }).catch(err=>{
-						Toast('下单失败')
+						Toast('预约失败')
 			});
     },
     dataConfirms(val) {
@@ -201,15 +198,12 @@ export default {
       this.$store.commit("addnums", { id: id });
     },
     setAddress() {
-      // 如果地址列表有数据跳转到我的，否则跳转到地址表单页
-      if (this.addressListLength > 0) {
-        this.$router.push({ path: "/My", query: { type: 0 } });
-        this.$store.commit("setAddActive", { addressActive: true });
-      } else {
+      // 用户没有设置地址，跳转到地址表单页    
         this.$router.push({ path: "/Addaddress", query: { type: 0 } });
-      }
+     
     },
     navAddList() {
+      //用户有地址，进行地址切换
       this.$router.push({ path: "/My", query: { type: 0 } });
       this.$store.commit("setAddActive", { addressActive: true });
     }
@@ -226,16 +220,13 @@ export default {
     ])
   },
   created() {    
-    if(this.Project){
+    if(this.Project){//如果vuex里面有Project,则不重新创建,使用vuex数据
       return false;
     }else{
       this.$store.dispatch("serviceProject");
     }    
   },
-  mounted() {},
-  components: {
-    Inputnumber
-  },
+  mounted() {}, 
   props: [
     "addressListLength",   
     "addressUserName",

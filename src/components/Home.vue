@@ -25,8 +25,7 @@
 				tabtext:['一般清洁','家电清洗'],//按钮循环对象
 				activeid:0,//处于激活状态的按钮索引
 				groups:['GeneralClean','Diqi'],
-				current:GeneralClean,
-				addressLeng:''														
+				current:GeneralClean															
 			}
 		},
 		methods: {			
@@ -44,8 +43,10 @@
 					userId:this.userId
 				}).then(data=>{					
 					if(data.data.length == 0){
+						//用户没有地址 设置地址数量0
 						this.$store.commit('setAddLen',{addressListLength:0})
 					}else{
+						//用户有地址，设置地址列表第一个为默认地址
 						let addressObj = data.data[0];					
 						this.$store.commit('setJerAdd',{
 							addressUserName:addressObj.addressUserName,
@@ -54,24 +55,11 @@
 							addressListLength:data.data.length
 						})
 					}					
-				})					
-			
-			},
-		     //根据openid获得userid
-			getUserId(){	
-				var self = this;
-				return new Promise(function(resolve,reject){
-					self.$post('/api/sp/appUser/getUserId',{
-					openId:self.openId
-					}).then(data=>{															
-						resolve(data.data.userId);
-					}).catch(err=>{
-						reject(err)
-					})				
-				})
-			}			
+				})				
+			}		   			
 		},
-		created(){			
+		created(){
+			//是否是我的页面设置地址之后返回的			
 			if(this.$route.query.type == 1 || this.$route.query.type == 0){
 				let queryObj = this.$route.query;
 				if(queryObj.type == 0){//家电清洁

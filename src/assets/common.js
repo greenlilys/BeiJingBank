@@ -33,14 +33,12 @@ axios.interceptors.request.use(
   config => { 
         loadingInstance = Loading.service({
             background:'rgba(0,0,0,0)'
-        });
-    
+        });    
             if(config.method == 'get'){                
                 console.log(config);
             }else{
                 console.log(config);
-            }
-    
+            }    
         return config;
   },
   error => {     
@@ -59,8 +57,7 @@ axios.interceptors.response.use(
         if(res.status != 200){ 
           Toast(res.status + res.statusText);
             return false;
-        } 
-               
+        }                
         return res;
   },
   error => { 
@@ -140,7 +137,6 @@ export function httpGet(url,params){
  * @param data
  * @returns {Promise}
  */
-
 
  export function httpPost(url,data){  
     // let params = new URLSearchParams();

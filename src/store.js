@@ -64,7 +64,7 @@ const mutations = {
 			console.log('剩余权益时长' + state.timeLength)
 		})
 	},
-	setAddActive(state,{addressActive}){		
+	setAddActive(state,{addressActive}){//控制地址列表是否可点击		
 		state.addressActive = addressActive;		
 	},
 	addnum(state){

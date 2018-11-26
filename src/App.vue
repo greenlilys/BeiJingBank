@@ -94,13 +94,11 @@
 			},
 			//获得url地址的openid
 			getOpenId(){
-				var urlFull = window.location.href;
-				console.log(urlFull)
+				var urlFull = window.location.href;				
 				var arg = urlFull.split('?');
 				if(arg[0] == urlFull){
 					return false;
-				}
-				
+				}				
 				var args = arg[1].split('&');
 				for(var i =0;i<args.length;i++){
 					var arr = args[i].split('=');					
@@ -108,19 +106,19 @@
 						this.openId = arr[1];
 					}
 					if(arr[0] == 'orderId'){//有订单id,跳转到订单详情页
-						this.$router.push({path:'/Orderdetail',query:{id:arr[1]}})
+						this.$router.push({path:'/Orderdetail',query:{orderId:arr[1]}})
 					}
 				}				
 			}
 			
 		},
 		created(){
-			//页面刷新				
-			console.log(this.$route.name)						
+			//页面刷新									
 			var nameCun = this.$route.name;
-			this.resetTab(nameCun);	
-			this.getOpenId();
-			this.$store.commit('getmsg',{openId:this.openId});
+			this.resetTab(nameCun);	//刷新重置样式
+			this.getOpenId();//获得openId
+			this.$store.commit('getmsg',{openId:this.openId});//提交openId
+			//页面刷新保持数据
 			if (sessionStorage.getItem("store") ) {
 				this.$store.replaceState(Object.assign({}, this.$store.state,JSON.parse(sessionStorage.getItem("store"))))
 			} 
@@ -131,13 +129,13 @@
 			
 		},
 		mounted() {
-			this.init();
+			this.init();//计算根节点rem
 		},
 		watch:{
-			//切换页面路由改变
-			$route(to,from){
-				console.log(to.name);
-				this.resetTab(to.name);							
+			//切换页面监听路由设置样式
+			$route(to,from){				
+				this.resetTab(to.name);	
+				//除了Home到My，地址列表不可点击						
 				if(from.name != 'Home' || to.name != 'My'){					
 					this.$store.commit('setAddActive',{addressActive:false});
 				}

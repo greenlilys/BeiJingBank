@@ -135,18 +135,15 @@ import {mapGetters,mapActions} from 'vuex';
 		     },	    
 		    
 			setAddress(){
-				// 如果地址列表有数据跳转到我的，否则跳转到地址表单页
-				if(this.addressListLength > 0){
-					this.$router.push({path:'/My',query:{type:1}});	
-					this.$store.commit('setAddActive',{addressActive:true});				
-				}else{
-					this.$router.push({path:'/Addaddress',query:{type:1}});
-				}
+				// 用户没有设置地址，跳转到地址表单页				
+				this.$router.push({path:'/Addaddress',query:{type:1}});				
 			},
 			navAddList(){
+				//用户有地址，进行地址切换，跳转到我的页面,addressActive设置为true，地址列表可点击
 				this.$router.push({path:'/My',query:{type:1}});
 				this.$store.commit('setAddActive',{addressActive:true});
 			},
+			//创建订单
 			creatOrder(){
 				if(!this.pickerdata){
 					Toast('请填写预约日期');
@@ -159,8 +156,7 @@ import {mapGetters,mapActions} from 'vuex';
 				if(this.showSetAddress || !this.address){
 					Toast('请设置服务地址');
 					return false;
-				}
-				
+				}				
 				let bar = this.pickerdata.split('-');
 				let foo = this.pickertime.split(':');
 				let y = Number(bar[0]);
@@ -180,31 +176,27 @@ import {mapGetters,mapActions} from 'vuex';
 					// userName:''
 				}).then(data=>{
 					if(data.errcode == 200){
-						Toast('下单成功');
+						Toast('预约成功');
 						 this.$router.replace('/Order');
 					}
 				}).catch(err=>{
-						Toast('下单失败')
+						Toast('预约失败')
 				})
-			}
-		   
-		},
-		
+			}		   
+		},		
 		computed:{
 			...mapGetters([
 				'timeLength','rightsValidity','grneralSerLen','userId','pickerdata','pickertime'
 			])
 		},
+		props:['addressListLength','addressUserName','phone','address'],
 		created(){
 			
 		},
 		mounted(){
 			
-		},	
-		components: {
-			
-		},
-		props:['addressListLength','addressUserName','phone','address']
+		}
+		
 	}
 </script>
 

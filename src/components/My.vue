@@ -1,7 +1,5 @@
 <template>
-
 	<div class="w_100">
-	
 		<div class="color_back_blue person">
 			<div class="vipBox flex-wrap flex-horizontal flex-justify-center flex-align-center">
 				<div><img src="../assets/images/vip.png" alt=""></div>
@@ -14,7 +12,6 @@
 							<p class="font_28 color_white">{{item.tests}}</p>
 						</div>
 					</template>
-					
 				</div>
 			</div>
 		</div>
@@ -43,39 +40,17 @@
 </template>
 
 <script>
-import { Loadmore } from 'mint-ui'
 import {mapGetters,mapActions} from 'vuex';
-
 export default{
 	name:'My',
 	data(){
 		return{
-			numobj:[
-				{
-					nums:'0',
-					tests:'我的权益码'
-					
-				},
-				{
-					nums:'0',
-					tests:'剩余时长'
-					
-				},
-				{
-					nums:'0',
-					tests:'订单数量'
-					
-				}
-			],
-			addressList:[],
-			number:'',		
+			numobj:[{nums:'0',tests:'我的权益码'},{nums:'0',tests:'剩余时长'},{nums:'0',tests:'订单数量'}],
+			addressList:[],		
 			type:''//是从一般清洁或者家电清洁跳转过来0：家电   1一般
-			
-		
 		}
 	},
-	methods:{
-		
+	methods:{		
 		//添加地址
 		addAddress(){
 			this.$router.push({path:'/Addaddress',query:{}})
@@ -86,9 +61,7 @@ export default{
 				userId:this.userId
 			}).then(data=>{				
 				this.addressList = data.data;
-			})	
-			
-		
+			})
 		},
 		//编辑地址
 		editAddress(phone,address,addressUserName,id){
@@ -107,7 +80,7 @@ export default{
 				this.$router.replace({path:'/Home',query:{type:this.type,addressUserName:addressUserName,phone:phone,address:address}});		
 			}			
 		},
-		//查询订单列表
+		//查询订单列表,获取用户订单数
 		getOrderList({userId=this.userId,pageNo=1,pageSize=10}={}){			
 			this.$post('/api/sp/order/queryOrder',{
 				userId:userId,
@@ -119,17 +92,15 @@ export default{
 		}
 	},	
 	created(){	
-		if(this.$route.query.type){
+		//判断是否是Home页面过来设置地址
+		if(this.$route.query && this.$route.query.type){
 			this.type = this.$route.query.type;			
 		}		
 		this.getOrderList();
 	},
 	mounted(){
 		this.numobj[0].nums = this.bjUserId;
-		this.numobj[1].nums = this.timeLength;	
-		console.log(this.userId)
-		console.log(this.timeLength)
-		console.log(this.orderNum)
+		this.numobj[1].nums = this.timeLength;			
 		this.getAddressList();	
 	},
 	computed:{

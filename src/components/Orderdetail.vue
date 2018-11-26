@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { Toast } from 'mint-ui';
 export default{
 	name:'Order',
 	data(){
@@ -74,7 +75,8 @@ export default{
 			this.$post('/api/sp/order/cancelOrder/',{
 				id:this.id
 			}).then(data=>{
-
+				Toast('订单已取消');
+				this.$router.replace('/Order');
 			})
 		},
 		dataFormet(data){//格式化时间
@@ -110,20 +112,28 @@ export default{
 			this.service = service;
 			this.discount = discount;//服务项目总数量			
 		},
-		getOrderDetail(){
+		getOrderDetail({id=this.id}={}){
 			this.$post('/api/sp/order/queryOrder',{
-				id:this.id
+				id:id
 			}).then(data=>{
-				let obj = data.data[0];
-				console.log(obj.serviceItem)
+				let obj = data.data[0];			
 				this.creatService(obj.serviceItem);
 				this.orderDetail = obj;			
 			})
 		}
 	},
 	created(){
-		console.log(this.$route.query);	
-		this.id = this.$route.query.id;
+		//订单列表跳转			
+		if(this.$route.query.id){
+			this.id= this.$route.query.id;
+			this.getOrderDetail({id:this.$route.query.id})
+		}
+		//url  orderId跳转
+		if(this.$route.query.orderId){
+			this.id= this.$route.query.orderId;
+			this.getOrderDetail({id:this.$route.query.orderId})
+		}
+		
 	},
 	mounted(){
 			this.getOrderDetail();
