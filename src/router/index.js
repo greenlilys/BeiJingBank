@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import Home from '@/components/Home'
 import Order from '@/components/Order'
 import My from '@/components/My'
 import Orderdetail from '@/components/Orderdetail'
 import Addaddress from '@/components/Addaddress'
 
-import Home from '@/components/Home'
-import GeneralClean from '@/components/GeneralClean'
-import Diqi from '@/components/Diqi'
 Vue.use(Router)
 
 export default new Router({
