@@ -52,7 +52,7 @@ const mutations = {
 			openId:openId
 		}).then(data=>{
 			state.userId = data.data.userId;			
-			return data.data.userId
+			return data.data.userId;
 		}).then(data=>{//userId
 			return httpPost('sp/appUser/queryUser',{
 				id:data
@@ -128,6 +128,7 @@ const mutations = {
 	addnums(state,{id}){
 			if(state.timeLength < 4){
 				Toast('剩余权限不足');
+				return false;
 			}	
 	
 		 let Project = state.Project;
@@ -137,9 +138,11 @@ const mutations = {
 			}, 0);
 			if(state.timeLength < 8 && result ==1){
 				Toast('剩余权限不足');
+				return false;
 			}
 			if(state.timeLength < 10 && result ==2){
 				Toast('剩余权限不足');
+				return false;
 			}
       if (result == 3) {// 选择台数等于3        
         Toast("不能超过3台");
