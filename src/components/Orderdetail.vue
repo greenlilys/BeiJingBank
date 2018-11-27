@@ -72,7 +72,7 @@ export default{
 		},
 		cancleOrder(){
 			console.log(this.id)
-			this.$post('/api/sp/order/cancelOrder/',{
+			this.$post('sp/order/cancelOrder/',{
 				id:this.id
 			}).then(data=>{
 				Toast('订单已取消');
@@ -113,7 +113,7 @@ export default{
 			this.discount = discount;//服务项目总数量			
 		},
 		getOrderDetail({id=this.id}={}){
-			this.$post('/api/sp/order/queryOrder',{
+			this.$post('sp/order/queryOrder',{
 				id:id
 			}).then(data=>{
 				let obj = data.data[0];			

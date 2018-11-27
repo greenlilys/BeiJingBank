@@ -22,7 +22,8 @@ var state = {
 	orderNum:'',//用户订单总数
 	addressUserName:'',//服务人
 	phone:'',//电话
-	address:''//服务地址
+	address:'',//服务地址
+	id:''//地址id
 
 };
 
@@ -47,13 +48,13 @@ const actions = {
 const mutations = {	
 	getmsg(state,{openId}){		
 		state.openId = openId;		
-		httpPost('/api/sp/appUser/getUserId',{
+		httpPost('sp/appUser/getUserId',{
 			openId:openId
 		}).then(data=>{
 			state.userId = data.data.userId;			
 			return data.data.userId
 		}).then(data=>{//userId
-			return httpPost('/api/sp/appUser/queryUser',{
+			return httpPost('sp/appUser/queryUser',{
 				id:data
 			})
 		}).then(data=>{						
@@ -96,12 +97,8 @@ const mutations = {
 				 let result = y + '-' +setzero(m) + '-' + setzero(d);
 				 state.pickerdata = result;					
 	},
-	timeConfirm(state,{pickertime}){
-		  if(parseInt(pickertime) < 8 || parseInt(pickertime) > 18){
-					  Toast('上门时间选择错误');
-				  }else{
-					   state.pickertime = pickertime;
-				  }	
+	timeConfirm(state,{pickertime}){		 
+				 state.pickertime = pickertime;				
 	},
 	dataConfirms(state,{pickerdatas}){//家电清洁日期计算
 		let dataTime = new Date(pickerdatas);
@@ -114,12 +111,8 @@ const mutations = {
 				 let result = y + '-' +setzero(m) + '-' + setzero(d);
 				 state.pickerdatas = result;	
 	},
-	timeConfirms(state,{pickertimes}){//家电清洁时间计算
-		if (parseInt(pickertimes) < 8 || parseInt(pickertimes) > 18) {
-			Toast("上门时间选择错误");
-		  } else {
-			state.pickertimes = pickertimes;
-		  }		 
+	timeConfirms(state,{pickertimes}){//家电清洁时间计算		
+			state.pickertimes = pickertimes;		 	 
 	},
 	//获得服务项目列表，每个列表对象增加计数属性num，初始值为0
 	serviceProject(state){
@@ -133,13 +126,22 @@ const mutations = {
 			  });
 	},
 	addnums(state,{id}){
+			if(state.timeLength < 4){
+				Toast('剩余权限不足');
+			}	
+	
 		 let Project = state.Project;
     //    如果总服务数量已经等于3，返回
       let result = Project.reduce(function(pre, next) {
         return pre + next.num;
-      }, 0);
-      if (result == 3) {
-        // 选择台数等于3
+			}, 0);
+			if(state.timeLength < 8 && result ==1){
+				Toast('剩余权限不足');
+			}
+			if(state.timeLength < 10 && result ==2){
+				Toast('剩余权限不足');
+			}
+      if (result == 3) {// 选择台数等于3        
         Toast("不能超过3台");
         return false;
       }
@@ -148,13 +150,9 @@ const mutations = {
         if (Project[i].id == id) {
           Project[i].num++;
         }
-      }
-    //    重新计算总服务数量，预约服务时长
-      let totalnum = Project.reduce(function(pre, next) {
-        return pre + next.num;
-      }, 0);
-      if (totalnum < 3) {
-        state.serviceLength = totalnum * 4;
+      }    
+      if (result + 1 < 3) {
+        state.serviceLength = (result + 1) * 4;
       } else {
         state.serviceLength = 10;
       }
@@ -182,16 +180,18 @@ const mutations = {
 	setAddLen(state,{addressListLength}){//地址为空addressListLength为0
 		state.addressListLength = addressListLength
 	},
-	setJerAdd(state,{addressUserName,address,phone,addressListLength}){//用户有地址设置默认地址
+	setJerAdd(state,{addressUserName,address,phone,id,addressListLength}){//用户有地址设置默认地址
 		state.addressUserName = addressUserName;
 		state.address = address;
 		state.phone = phone;
+		state.id = id;
 		state.addressListLength = addressListLength;	
 	},
-	userChioceAdd(state,{addressUserName,address,phone}){//用户切换地址
+	userChioceAdd(state,{addressUserName,address,phone,id}){//用户切换地址
 		state.addressUserName = addressUserName;
 		state.address = address;
 		state.phone = phone;
+		state.id = id;
 	}
 };
 
@@ -227,7 +227,7 @@ const getters = {
 		return state.pickertimes
 	},
 	Project(state){//家电清洁服务项目列表
-		// console.log(JSON.stringify(state.Project))
+		console.log(JSON.stringify(state.Project))
 		return state.Project
 	},
 	serviceLength(state){//家电预约选择服务时长
@@ -244,6 +244,15 @@ const getters = {
 	},
 	addressListLength(state){//地址length
 		return state.addressListLength
+	},
+	id(state){//服务地址id
+		return state.id
+	},
+	appointmentTimeLength(state){//一般清洁时长
+		return state.grneralSerLen
+	},
+	serviceLength(state){//家电清洁时长
+		return state.serviceLength
 	}
 
 }

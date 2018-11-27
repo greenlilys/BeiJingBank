@@ -73,7 +73,7 @@ import {mapGetters,mapActions} from 'vuex';
 					Toast('手机号码输入有误');
 					return false;
 				}
-				this.$post('/api/sp/appUser/sendSms',{
+				this.$post('sp/appUser/sendSms',{
 					phone:this.phone
 				}).then(data=>{
 					if(data.errcode.toString() == '200'){
@@ -100,7 +100,7 @@ import {mapGetters,mapActions} from 'vuex';
 			sendAddress(){
 				if(!this.testForm()) return false;
 				if(this.isCreate){//创建地址
-					this.$post('/api/sp/appUser/createAddress',{
+					this.$post('sp/appUser/createAddress',{
 						userId:this.userId,						
 						address:this.address,
 						phone:this.phone,
@@ -112,7 +112,7 @@ import {mapGetters,mapActions} from 'vuex';
 						this.$router.replace('/My');
 					})
 				}else{//编辑地址
-					this.$post('/api/sp/appUser/editAddress',{
+					this.$post('sp/appUser/editAddress',{
 					userId:this.userId,
 					id:this.id,
 					address:this.address,

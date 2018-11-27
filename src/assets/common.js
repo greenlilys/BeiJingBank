@@ -4,12 +4,13 @@ import { Message,Loading } from 'element-ui'
 import router from '../router/index'
 import Vue from 'vue'
 import { Toast } from 'mint-ui';
-// import sha1 from 'sha1'
+
 // 全局配置对象
 export var GLOBALconfig = {};
 var serverconfig = {
-    /*服务器后台地址*/   
-// 'serviceIP': 'http://192.168.3.212:81/' 
+    /*服务器地址*/   
+  // 'serviceIP': 'http://192.168.3.212:81/'
+  'serviceIP': '/api/'
 };
 // 接口请求虚拟目录
 var http_api = {   
@@ -17,15 +18,16 @@ var http_api = {
 };
 // 接口请求地址
 var url_api = {   
-  agent: serverconfig.serviceIP + http_api.agent 
+  agent: serverconfig.serviceIP + http_api.agent
 };
 // 暴露全局变量作用
-GLOBALconfig.agent_api = url_api.agent; //接口请求地址 
+GLOBALconfig.agent_api = serverconfig.serviceIP; //接口请求地址 
 
 axios.defaults.withCredentials = true;//允许cookei跨域
 axios.defaults.timeout = 50000;//请求超时时间
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-// axios.defaults.baseURL = GLOBALconfig.agent_api;
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.baseURL = GLOBALconfig.agent_api;
 
 
 var loadingInstance;
@@ -157,43 +159,8 @@ export function httpGet(url,params){
           reject(err)
         })
    })
- }
- 
- /**
- * 成功提示
- */
-
-  export function ye(msg){
-    var msg = msg || '操作成功';
-          Message({
-                    type:'success',
-                    message:msg
-                })
-  }
-  
-   /**
- * 失败提示
- */
-
-  export function fail(msg){    
-          Message({
-                    type:'error',
-                    message:msg
-                })
-  }
-  
-  
- /**
- * 输入金额正则验证
- */
-  export let exp = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
-    
-  export let bus = new Vue();
-  
-  
-  export function sendTitle(str) {
-                this.$bus.$emit('getTitle', str);
-    }
+ }  
+   
 
 //日期格式化
   export function  dataFormet(data){

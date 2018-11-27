@@ -31,7 +31,7 @@
 			</div>
 		</div>
 		
-		<div class="border-b w_100 color_back_white mb_20">
+		<div class="border-b border-t w_100 color_back_white mb_20">
 			<div class="content" style="color:#ff6600;">
 				<p class="font_28 pt_30" style="line-height: 0.5rem;">1、任选1台折合权益时间为4小时</p>
 				<p class="font_28" style="line-height: 0.5rem;padding-bottom:0.24rem">2、任选3台折合权益时间为10小时（推荐）</p>
@@ -70,6 +70,8 @@
 						  <mt-datetime-picker						 
 						  type="time"
 						  ref="pickertime"
+              :startHour='8'
+						  :endHour='18'	
 						  hour-format="{value} 时"
 						  minute-format="{value} 分"
 						  @confirm="timeConfirms"
@@ -123,7 +125,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      startDate: new Date()   
+      startDate: new Date(new Date().getTime() + 259200000)
     };
   },
   methods: {
@@ -165,11 +167,13 @@ export default {
             serviceItems += Project[i].id + ',' + Project[i].num + ';';
           }
         }       
-      this.$post("/api/sp/order/createOrder", {
+      this.$post("sp/order/createOrder", {
         address: this.address,
-        appointmentTime: result,
+        appointmentTime: result,//下单时间
         type: 0,
         userId: this.userId,
+        id:this.id,
+        appointmentTimeLength:this.serviceLength,//预约时长
         serviceItem: serviceItem,
         serviceItems: serviceItems
         // userName:''
@@ -216,15 +220,15 @@ export default {
       "pickerdatas",
       "pickertimes",
       "Project",
-      "serviceLength"
+      "serviceLength",
+      "id",
+      'serviceLength'
     ])
   },
   created() {    
-    if(this.Project){//如果vuex里面有Project,则不重新创建,使用vuex数据
-      return false;
-    }else{
+    if(this.Project.length == 0){//如果vuex里面有Project,则不重新创建,使用vuex数据
       this.$store.dispatch("serviceProject");
-    }    
+    }   
   },
   mounted() {}, 
   props: [
@@ -237,6 +241,7 @@ export default {
 </script>
 
 <style scoped>
+
 .dianqi {
   width: 100%;
 }

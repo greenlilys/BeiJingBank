@@ -24,7 +24,7 @@
 				</div>
 			</div>
 
-			<div class="second mb_20 color_back_white border-b border-t font_28">
+			<div class="second mb_20 color_back_white border-bs border-t font_28">
 				<div class="f_content">
 					<div class="flex-wrap flex-horizontal flex-align-center">
 						<span>日期选择：</span>
@@ -55,7 +55,9 @@
 
 						  <mt-datetime-picker						 
 						  type="time"
-						  ref="pickertime"
+						  ref="pickertime"	
+						  :startHour='8'
+						  :endHour='18'					  
 						  hour-format="{value} 时"
 						  minute-format="{value} 分"
 						  @confirm="timeConfirm"
@@ -65,7 +67,7 @@
 				</div>				
 			</div>
 
-			<div class=" pb_30 mb_20 color_back_white border-bot border-t">
+			<div class=" pb_30 mb_20 color_back_white border-b border-t">
 
 				<div class="address pt_20 pb_30 flex-wrap flex-horizontal flex-justify-between flex-align-center"
 				 v-if="addressListLength == 0" @click="setAddress">
@@ -114,7 +116,7 @@ import {mapGetters,mapActions} from 'vuex';
 	export default {
 		data() {
 			return {
-				startDate:new Date()				
+				startDate:new Date(new Date().getTime() + 259200000)					
 			}
 		},
 		methods: {
@@ -168,11 +170,13 @@ import {mapGetters,mapActions} from 'vuex';
 				let result = new Date(y,m,d,h,t).getTime();
 				console.log(result)			
 				let resultTime = this.pickerdata + ' ' + this.pickertime;
-				this.$post('/api/sp/order/createOrder',{
+				this.$post('sp/order/createOrder',{
 					address:this.address,
-					appointmentTime:result,
+					appointmentTime:result,//下单时间
+					appointmentTimeLength:this.appointmentTimeLength,//预约时长
 					type:'1',
-					userId:this.userId
+					userId:this.userId,
+					id:this.id
 					// userName:''
 				}).then(data=>{
 					if(data.errcode == 200){
@@ -186,7 +190,7 @@ import {mapGetters,mapActions} from 'vuex';
 		},		
 		computed:{
 			...mapGetters([
-				'timeLength','rightsValidity','grneralSerLen','userId','pickerdata','pickertime'
+				'timeLength','rightsValidity','grneralSerLen','userId','pickerdata','pickertime','id','appointmentTimeLength'
 			])
 		},
 		props:['addressListLength','addressUserName','phone','address'],
@@ -216,8 +220,11 @@ import {mapGetters,mapActions} from 'vuex';
 	.serverdetail{font-size:0.3rem;font-weight:bolder;color:#333;margin-bottom:0.2rem;}
 	.houseserver{line-height:0.38rem;color:#666;font-size:0.28rem;}		
 	/*input::-webkit-input-placeholder{color:#999;}*/	
-	.border-top,.border-bot{ position:relative; }
-	.border-top:before,.border-bot:after{content: ''; position: absolute; left: 0;right:0;background: #ddd;height: 0.02rem;-webkit-transform: scaleY(0.5);transform: scaleY(0.5); }
-	.border-bot:after{ bottom:-0.02rem;-webkit-transform-origin: 0 0;transform-origin: 0 0;}
-	.border-top:before{top:0;-webkit-transform-origin: 0 0;transform-origin: 0 0;}
+	.border-bs{ position:relative; }
+	.border-bs:after{content: ''; position: absolute; left: 0;right:0;
+	background: #ddd;height: 0.02rem;-webkit-transform: scaleY(0.5);
+	transform: scaleY(0.5);bottom:-0.01rem;-webkit-transform-origin: 0 0;transform-origin: 0 0; }
+	
+
+	
 </style>

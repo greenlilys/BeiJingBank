@@ -1,6 +1,7 @@
 <template>
 
 <div class="w_100">
+	<template v-if="orderNumber != 0">
 <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :top-distance="topDis" 
 :bottom-distance="botDis" :auto-fill="false" :topPullText='pullText' :topDropText='dropText' :topLoadingText='loadingText' ref="loadmore" class="font_28 color_gray">
 <div class="topTiao border-bot"></div>
@@ -23,13 +24,19 @@
 					<p v-if="item.type == 1">一般清洁服务</p>
 					<p v-if="item.type == 0">家电清洁服务</p>
 					<p><span class="color_regu">服务时长：</span><span class="color_gray">{{item.appointmentTimeLength}}小时</span></p>
-					<p><span class="color_regu">预约时间：</span><span class="color_gray">{{dataFormet(item.createTime)}}</span></p>
+					<p><span class="color_regu">预约时间：</span><span class="color_gray">{{dataFormet(item.appointmentTime)}}</span></p>
 				</div>
 			</div>
 		</div>
 	</div>
 	</template>	
 	</mt-loadmore>
+	</template>
+	<template v-else>
+		<div class="noOrder">
+			<div class="font_28 color_gray">您暂时没有订单</div>
+		</div>
+	</template>
 </div>
 
 </template>
@@ -43,12 +50,12 @@ export default{
 		return{
 			orderList:[],
 			pageNo:1,
-			totalPage:'',//总页数
+			totalPage:1,//总页数
+			orderNumber:0,//用户订单数
 			allLoaded:false,
 			topDis:70,
 			botDis:10,
-			scrollMode:"touch",
-			totalPage:2,
+			scrollMode:"touch",			
 			pullText:'',
 			dropText:'释放更新',
 			loadingText:''
@@ -64,20 +71,23 @@ export default{
 		getOrderList({userId=this.userId,pageNo=this.pageNo,pageSize=10}={}){
 			if(this.pageNo > this.totalPage){
 				this.allLoaded = true;//禁止上拉加载
+				Toast('到底了');
 				return false;
 			}
-			this.$post('/api/sp/order/queryOrder',{
+			this.$post('sp/order/queryOrder',{
 				userId:userId,
 				pageNo:pageNo,
 				pageSize:pageSize
 			}).then(data=>{
 				if(this.pageNo == 1){
 					this.orderList = data.data;					
-				}else{
+				}else{					
 					this.orderList = this.orderList.concat(data.data);
-				}				
-				this.totalPage = Math.ceil(data.pageCount/10);				
-				this.pageNo++;					
+				}
+				this.pageNo++;				
+				this.totalPage = Math.ceil(data.pageCount/10);
+				this.orderNumber = 	data.pageCount;			
+									
 			})
 		},
 		
@@ -92,7 +102,7 @@ export default{
 			var hour = datas.getHours();
 			var min = datas.getMinutes();
 			var second = datas.getSeconds();			
-			return year + '-' + addaroe(month) + '-' + addaroe(day) + '日' +' ' + addaroe(hour) + ':' + addaroe(min) + '时';
+			return year + '-' + addaroe(month) + '-' + addaroe(day) + ' ' + addaroe(hour) + ':' + addaroe(min);
 		},
 		loadBottom() {//上拉加载	
 		 console.log('bottom')
@@ -138,4 +148,6 @@ transform: scaleY(0.5); }
 .send{background: #0099ff;}
 .complate{background: #339933;}
 .cancled{background: #999;}
+.noOrder{display:relative;}
+.noOrder div{position:absolute;top:50%;text-align:center;width:100%;transform:translateY(-50%);}
 </style>

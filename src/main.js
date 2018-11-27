@@ -13,15 +13,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import './assets/common.css'
 
-import {httpPost,httpGet,ye,fail,GLOBALconfig,bus,sendTitle} from './assets/common'
+import {httpPost,httpGet,GLOBALconfig} from './assets/common'
 
 Vue.prototype.$post=httpPost;
 Vue.prototype.$get=httpGet;
-Vue.prototype.$ye=ye; 
-Vue.prototype.$fail=fail;
 Vue.prototype.$GLOBALconfig=GLOBALconfig;
-Vue.prototype.$bus = bus;
-Vue.prototype.$sendTitle = sendTitle;
+
 
 Vue.use(ElementUI);
 Vue.use(MintUI)

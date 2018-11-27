@@ -39,7 +39,7 @@
 			 },
 			 //获得用户地址列表
 			getAddressList(){			
-				this.$post('/api/sp/appUser/queryAddress',{
+				this.$post('sp/appUser/queryAddress',{
 					userId:this.userId
 				}).then(data=>{					
 					if(data.data.length == 0){
@@ -52,6 +52,7 @@
 							addressUserName:addressObj.addressUserName,
 							phone:addressObj.phone,
 							address:addressObj.address,
+							id:addressObj.id,
 							addressListLength:data.data.length
 						})
 					}					
@@ -72,7 +73,8 @@
 				this.$store.commit('userChioceAdd',{
 					addressUserName:queryObj.addressUserName,
 					phone:queryObj.phone,
-					address:queryObj.address
+					address:queryObj.address,
+					id:queryObj.id
 				})								
 			}else{
 				this.getAddressList();
