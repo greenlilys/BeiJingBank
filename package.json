@@ -1,7 +1,7 @@
 {
   "name": "beiJingBank",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "北京银行H5",
   "author": "wangdongwen <1635382999@qq.com>",
   "private": true,
   "scripts": {
