@@ -9,7 +9,7 @@
 			</div>
 		</div>
 		<keep-alive>		
-		<component :is='current' :addressListLength='addressListLength' :addressUserName='addressUserName' :phone='phone' :address='address'></component>
+		<component :is='current' :addressListLength='addressListLength' :addressUserName='addressUserName' :phone='phone' :address='address' :content='content'></component>
 		</keep-alive>
 	</div>
 </template>
@@ -25,7 +25,9 @@
 				tabtext:['一般清洁','家电清洗'],//按钮循环对象
 				activeid:0,//处于激活状态的按钮索引
 				groups:['GeneralClean','Diqi'],
-				current:GeneralClean															
+				current:GeneralClean,
+				content:'',//描述说明
+				openId:'NtL9yyJE3UU7E6qyKKuo/dz68y9Ke7m1pGPdreqZQlsL+7UfWz0PSZh6p/98JK9rJLL0nGfME7p+yurzoYMHmCFq/MOncjj45TZesZip+GgjtlE3R1rcDYJZ+EklVAKLDVESHHMVLEMXuYFuyC3jxg=='															
 			}
 		},
 		methods: {			
@@ -57,9 +59,38 @@
 						})
 					}					
 				})				
+			},		
+			//查询服务说明
+			getServiceText(){
+				this.$post('sp/serviceItem/queryDescription',{
+					type:'1'
+				}).then(data=>{
+					this.content = data.data[0].content;
+				})
+			},
+			//获得url地址的openid
+			getOpenId(){
+				var urlFull = window.location.href;				
+				var arg = urlFull.split('?');
+				if(arg[0] == urlFull){
+					return false;
+				}				
+				var args = arg[1].split('&');
+				for(var i =0;i<args.length;i++){
+					var arr = args[i].split('=');					
+					if(arr[0] == 'openId'){
+						this.openId = arr[1];
+					}
+					if(arr[0] == 'orderId'){//有订单id,跳转到订单详情页
+						this.$router.push({path:'/Orderdetail',query:{orderId:arr[1]}})
+					}
+				}				
 			}		   			
 		},
 		created(){
+			this.getOpenId();//获得openId
+			this.$store.commit('getmsg',{openId:this.openId});//提交openId
+			console.log('首页' + this.userId)
 			//是否是我的页面设置地址之后返回的			
 			if(this.$route.query.type == 1 || this.$route.query.type == 0){
 				let queryObj = this.$route.query;
@@ -76,8 +107,8 @@
 					address:queryObj.address,
 					id:queryObj.id
 				})								
-			}else{
-				this.getAddressList();
+			}else{				
+				this.getAddressList();								
 			}					
 			
 		},
@@ -85,7 +116,7 @@
 		...mapGetters([	'userId','addressUserName','address','phone','addressListLength'])
 		},		  
 		mounted(){	
-			
+			this.getServiceText();
 		},
 		components:{
 			GeneralClean,

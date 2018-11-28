@@ -165,3 +165,14 @@ transform: scaleY(0.5);     -webkit-transform-origin: left bottom;transform-orig
 .add:active{background:#cac9ce;}
 .pre:active{background:#cac9ce;}	
 .num{width:0.6rem;text-align: center;border-left:1px #cac9ce solid;border-right:1px #cac9ce solid;color:#5c5b60;}
+
+/* 地址选择器 */
+.distpicker-address-wrapper .address-container ul li.active{color:#999}
+div.address-container{overflow:scroll;height:4.74rem;}
+.distpicker-address-wrapper .address-header ul li.active{color:#0099ff;border-bottom:none;}
+.distpicker-address-wrapper .address-header{height:0.8rem;font-size:0.32rem;}
+/* 日期选择器 */
+.mint-datetime-action{color:#0099ff;}
+/* mint-ui  button */
+.mint-button{border-radius:0;}
+

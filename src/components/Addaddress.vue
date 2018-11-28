@@ -1,26 +1,29 @@
 <template>
-	<div class="w_100">
+	<div class="w_100" id="addAdd">
 	<div class="topTiao border-b"></div>
 		<div class="color_back_white">
 			<div class="c_content pt_30 pb_30 hcenter">
 					<mt-field label="联系人：" placeholder="请输入联系人" v-model="addressUserName"></mt-field>
-					<mt-field label="服务地址：" placeholder="请输入服务地址" type="text" v-model="address"></mt-field>
+					<mt-field label="服务地址：" placeholder="请输入服务地址" type="text" v-model="address" ref="openAdd"></mt-field>
 					<mt-field label="联系电话：" placeholder="请输入联系电话" type="text" v-model="phone"></mt-field>
-					<mt-field label="短信验证码：" placeholder="请输入验证码" v-model="smsCode">
-					
+					<mt-field label="短信验证码：" placeholder="请输入验证码" v-model="smsCode">					
 						<mt-button class="getcode flex-wrap flex-align-center flex-justify-center" :class="[!isShowBg ? 'codeBtnBg' : 'color_back_blue','color_white']" :disabled='isdisabled' @click="getCode">
 							<span class="font_28">{{codeText}}<span v-show="isdisabled">s</span></span>
-						</mt-button>
-								
+						</mt-button>								
 					</mt-field>					
 			</div>
-		</div>	
-
-		<div class="meet actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="sendAddress"><span>确认</span></div>
-	
+		</div>
+		<div class="meet actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="sendAddress"><span>确认</span></div>		
+		<div class="addBox">
+				<v-distpicker v-show="isShow" type="mobile" @selected="onSelecteArea" province="北京市" city="北京城区" area="海淀区" class="font_28 color_regu">
+				</v-distpicker>	
+		</div>
+		
+		<div class="modles" v-show="modles" @click="hideModles"></div>	
 	</div>
 </template>
 <script>
+import VDistpicker from 'v-distpicker'
 import { Toast } from 'mint-ui';
 import {mapGetters,mapActions} from 'vuex';
 	export default{
@@ -36,32 +39,12 @@ import {mapGetters,mapActions} from 'vuex';
 				isdisabled:false,
 				codeText:'获取验证码',
 				interObj:null,
-				isCreate:true
+				isCreate:true,
+				isShow:false,
+				modles:false		
 			}
 		},
-		created(){
-			console.log(this.$route.query);
-			if(this.$route.query.type){//如果用户没有地址，下单时第一次创建地址，传过来的type
-					this.type = this.$route.query.type;			
-			}	
-			if(JSON.stringify(this.$route.query) == '{}'){
-				this.isCreate = true;//创建地址
-				return false;
-			}
-			this.isCreate = false;//编辑地址
-			let parameter = this.$route.query;
-			this.id = parameter.id;
-			this.phone = parameter.phone;
-			this.address = parameter.address;
-			this.addressUserName = parameter.addressUserName;
-			if(/^1[34578]\d{9}$/.test(this.phone)){
-				this.isShowBg = true; //激活验证码按钮
-			}
-			
-		},
-		mounted(){
-			
-		},
+	
 		methods:{
 			//获得验证码
 			getCode(){
@@ -124,8 +107,21 @@ import {mapGetters,mapActions} from 'vuex';
 						Toast('编辑成功');						
 						this.$router.replace('/My');
 					})
-				}
-				
+				}				
+			},		
+			//选择地址
+			onSelecteArea(data) {
+				if(data.province.value != '省' && data.city.value != '市' && data.area.value != '区') {
+					let address = data.province.value  + data.city.value + data.area.value;
+					console.log(address);
+					this.address = address;	
+					this.isShow = false;
+					this.modles = false;			
+				}				
+			},
+			hideModles(){
+				this.isShow = false;
+				this.modles = false;
 			},
 			testForm(){
 				if(!this.smsCode){
@@ -153,6 +149,34 @@ import {mapGetters,mapActions} from 'vuex';
 			
 			
 		},
+			created(){
+			console.log(this.$route.query);
+			if(this.$route.query.type){//如果用户没有地址，下单时第一次创建地址，传过来的type
+					this.type = this.$route.query.type;			
+			}	
+			if(JSON.stringify(this.$route.query) == '{}'){
+				this.isCreate = true;//创建地址
+				return false;
+			}
+			this.isCreate = false;//编辑地址
+			let parameter = this.$route.query;
+			this.id = parameter.id;
+			this.phone = parameter.phone;
+			this.address = parameter.address;
+			this.addressUserName = parameter.addressUserName;
+			if(/^1[34578]\d{9}$/.test(this.phone)){
+				this.isShowBg = true; //激活验证码按钮
+			}
+			
+		},
+		mounted(){
+			let self = this;
+			console.log(this.$refs.openAdd)
+			this.$refs.openAdd.$el.onclick = function(){				
+				self.isShow = !self.isShow;
+				self.modles = !self.modles;
+			}
+		},
 		watch:{
 			phone:function(newVal,oldVal){
 				console.log(newVal)
@@ -168,14 +192,19 @@ import {mapGetters,mapActions} from 'vuex';
 			...mapGetters([
 				'userId'
 			])
+		},
+		components: {
+			VDistpicker
 		}
 	}
 </script>
 <style scoped>
-.getcode{height:0.96rem;text-align:center;width:2rem;
+	.getcode{height:0.96rem;text-align:center;width:2rem;
 	display: flex;justify-content: center;align-items: center;}
 	.hcenter{line-height: 0.4rem;}
 	.meet{margin:0.4rem auto 0 auto;}
 	.codeBtnBg{background:#65C1FF;color:#fff;}	
-	
+	/* #addAdd{height:100%;overflow: hidden;}	 */
+	.modles{position:fixed;left:0;top:0;opacity:.5;background:#000;z-index: 10;width:100%;height:100%;}
+	.addBox{z-index:50;position:fixed;bottom:0;left:0;width:100%;}
 </style>

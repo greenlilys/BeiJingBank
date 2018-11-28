@@ -30,11 +30,7 @@
 				myImgActive:require('./assets/images/my_active.png'),
 				tabIndex:0,
 				isShowBorder:true,
-				title:'家政预约',
-				openId:'NtL9yyJE3UU7E6qyKKuo/dz68y9Ke7m1pGPdreqZQlsL+7UfWz0PSZh6p/98JK9rJLL0nGfME7p+yurzoYMHmCFq/MOncjj45TZesZip+GgjtlE3R1rcDYJZ+EklVAKLDVESHHMVLEMXuYFuyC3jxg=='
-				
-				
-				
+				title:'家政预约'				
 			}
 		},
 		methods: {
@@ -91,33 +87,13 @@
 					this.isShowBorder = true;
 					this.tabIndex = 2;
 				}
-			},
-			//获得url地址的openid
-			getOpenId(){
-				var urlFull = window.location.href;				
-				var arg = urlFull.split('?');
-				if(arg[0] == urlFull){
-					return false;
-				}				
-				var args = arg[1].split('&');
-				for(var i =0;i<args.length;i++){
-					var arr = args[i].split('=');					
-					if(arr[0] == 'openId'){
-						this.openId = arr[1];
-					}
-					if(arr[0] == 'orderId'){//有订单id,跳转到订单详情页
-						this.$router.push({path:'/Orderdetail',query:{orderId:arr[1]}})
-					}
-				}				
 			}
 			
 		},
 		created(){
 			//页面刷新									
 			var nameCun = this.$route.name;
-			this.resetTab(nameCun);	//刷新重置样式
-			this.getOpenId();//获得openId
-			this.$store.commit('getmsg',{openId:this.openId});//提交openId
+			this.resetTab(nameCun);	//刷新重置样式			
 			//页面刷新保持数据
 			if (sessionStorage.getItem("store") ) {
 				this.$store.replaceState(Object.assign({}, this.$store.state,JSON.parse(sessionStorage.getItem("store"))))

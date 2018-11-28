@@ -10,7 +10,7 @@ var state = {
 	userId:'',
 	rightsValidity:'',//权益有效期
 	timeLength:0,//剩余权益时长
-	bjUserId:'',//权益码
+	bjUserId:0,//权益码
 	addressActive:false,
 	grneralSerLen:2,//一般清洁预约时长
 	pickerdata:'',//一般清洁日期
@@ -51,6 +51,7 @@ const mutations = {
 		httpPost('sp/appUser/getUserId',{
 			openId:openId
 		}).then(data=>{
+			console.log('用户标示' + data.data.userId)
 			state.userId = data.data.userId;			
 			return data.data.userId;
 		}).then(data=>{//userId
@@ -117,7 +118,7 @@ const mutations = {
 	//获得服务项目列表，每个列表对象增加计数属性num，初始值为0
 	serviceProject(state){
 		console.log('success')		
-		httpPost("/api/sp/serviceItem/queryServiceItem", {}).then(data => {
+		httpPost("sp/serviceItem/queryServiceItem", {}).then(data => {
 			    let foo = data.data;
 			    for (let i = 0, len = foo.length; i < len; i++) {
 			      foo[i].num = 0;
@@ -230,7 +231,7 @@ const getters = {
 		return state.pickertimes
 	},
 	Project(state){//家电清洁服务项目列表
-		console.log(JSON.stringify(state.Project))
+		// console.log(JSON.stringify(state.Project))
 		return state.Project
 	},
 	serviceLength(state){//家电预约选择服务时长

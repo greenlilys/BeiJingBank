@@ -19,7 +19,6 @@ Vue.prototype.$post=httpPost;
 Vue.prototype.$get=httpGet;
 Vue.prototype.$GLOBALconfig=GLOBALconfig;
 
-
 Vue.use(ElementUI);
 Vue.use(MintUI)
 Vue.config.productionTip = false

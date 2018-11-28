@@ -25,8 +25,6 @@ GLOBALconfig.agent_api = serverconfig.serviceIP; //接口请求地址
 
 axios.defaults.withCredentials = true;//允许cookei跨域
 axios.defaults.timeout = 50000;//请求超时时间
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 axios.defaults.baseURL = GLOBALconfig.agent_api;
 
 

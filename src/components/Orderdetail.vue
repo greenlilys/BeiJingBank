@@ -20,15 +20,12 @@
 					<p><span class="color_regu">服务时长：</span><span class="color_gray">{{orderDetail.appointmentTimeLength}}小时</span></p>
 					<p><span class="color_regu">预约时间：</span><span class="color_gray">{{dataFormet(orderDetail.createTime)}}</span></p>	
 					<div class="flex-wrap flex-horizontal">
-						<p class="color_regu">服务项目：</p>
+						<p class="color_regu">服务项目：<span class="color_gray font_28" v-if="orderDetail.type == 1">无</span></p>
 						<div class="color_gray" v-if="orderDetail.type == 0">
 							<template v-for="(item,index) in service">
 								<p :key="index">{{item.project}}×{{item.num}}</p>
 							</template>														
-						</div>
-						<div v-else>
-							
-						</div>
+						</div>						
 					</div>
 				</div>
 			</div>			
@@ -44,7 +41,7 @@
 		<div class="c_content addressBox pt_20 pb_20">
 			<p class="color_regu"> <span>{{orderDetail.userName}}</span><span class="ml_20">{{orderDetail.phone}}</span></p>
 			<p class="flex-wrap flex-horizontal flex-justify-between">
-				<span class="color_regu">{{orderDetail.address}}</span>				
+				<span class="color_regu">{{orderDetail.addressName}}</span>				
 			</p>
 		</div>
 	</div>
@@ -123,7 +120,7 @@ export default{
 		}
 	},
 	created(){
-		//订单列表跳转			
+		//订单列表跳转					
 		if(this.$route.query.id){
 			this.id= this.$route.query.id;
 			this.getOrderDetail({id:this.$route.query.id})

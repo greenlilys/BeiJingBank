@@ -119,8 +119,8 @@ export default{
 	created(){
 		
 	},
-	mounted(){		
-		this.getOrderList({userId:this.userId});				
+	mounted(){	
+			this.getOrderList({userId:this.userId});						
 	},
 	computed:{
 		...mapGetters([

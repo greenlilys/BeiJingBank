@@ -97,13 +97,8 @@
 			<div class="pt_40 pb_40 color_back_white border-t">
 				<div class="f_content">
 					<h1 class="serverdetail">服务说明：</h1>
-					<p class="houseserver" style="text-align:justify;">
-						家政服务，为尊贵的您提供专业可靠的家政清洁服务和家电清洗服务。家政清洁服务包括墙面、地面、厨房卫生间以及玻璃清洁等，您仅需自行准备相关工具和清洁剂；
-						家电清洗包括抽油烟机、空调、冰箱、洗衣机等，清洗工携带专用清洁剂和专业工具上门服务，您只需保证水、电正常即可。
-					</p>
-					<p class="houseserver mt_20" style="text-align:justify;">
-						名士卡和私行卡持卡且达标者，作为北京银行高端客户，您可在我行签约的家政公司享受每年10小时免费的家政服务。
-					</p>
+					<p class="houseserver" style="text-align:justify;">{{content}}</p>
+					<!-- <p class="houseserver mt_20" style="text-align:justify;"></p> -->
 				</div>
 			</div>
 		</div>
@@ -165,18 +160,15 @@ import {mapGetters,mapActions} from 'vuex';
 				let m = Number(bar[1])-1;
 				let d = Number(bar[2]);
 				let h = Number(foo[0]);
-				let t = Number(foo[1]);
-				console.log(y,m,d,h,t);
-				let result = new Date(y,m,d,h,t).getTime();
-				console.log(result)			
+				let t = Number(foo[1]);				
+				let result = new Date(y,m,d,h,t).getTime();						
 				let resultTime = this.pickerdata + ' ' + this.pickertime;
 				this.$post('sp/order/createOrder',{
-					address:this.address,
+					address:this.id,
 					appointmentTime:result,//下单时间
 					appointmentTimeLength:this.appointmentTimeLength,//预约时长
 					type:'1',
-					userId:this.userId,
-					id:this.id
+					userId:this.userId					
 					// userName:''
 				}).then(data=>{
 					if(data.errcode == 200){
@@ -193,7 +185,7 @@ import {mapGetters,mapActions} from 'vuex';
 				'timeLength','rightsValidity','grneralSerLen','userId','pickerdata','pickertime','id','appointmentTimeLength'
 			])
 		},
-		props:['addressListLength','addressUserName','phone','address'],
+		props:['addressListLength','addressUserName','phone','address','content'],
 		created(){
 			
 		},
