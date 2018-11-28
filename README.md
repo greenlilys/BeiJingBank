@@ -1,6 +1,6 @@
-# tnweb
+# beiJingBank
 
-> A Vue.js project
+> 北京银行H5
 
 ## Build Setup
 
