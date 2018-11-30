@@ -26,8 +26,8 @@
 				activeid:0,//处于激活状态的按钮索引
 				groups:['GeneralClean','Diqi'],
 				current:GeneralClean,
-				content:'',//描述说明
-				openId:'NtL9yyJE3UU7E6qyKKuo/dz68y9Ke7m1pGPdreqZQlsL+7UfWz0PSZh6p/98JK9rJLL0nGfME7p+yurzoYMHmCFq/MOncjj45TZesZip+GgjtlE3R1rcDYJZ+EklVAKLDVESHHMVLEMXuYFuyC3jxg=='															
+				content:''//描述说明
+																			
 			}
 		},
 		methods: {			
@@ -70,26 +70,30 @@
 			},
 			//获得url地址的openid
 			getOpenId(){
-				var urlFull = window.location.href;				
-				var arg = urlFull.split('?');
+								
+				var urlFull = window.location.href;							
+				var arg = urlFull.split('?');				
 				if(arg[0] == urlFull){
 					return false;
 				}				
 				var args = arg[1].split('&');
+				console.log(args)	
+				var obj = {};
 				for(var i =0;i<args.length;i++){
-					var arr = args[i].split('=');					
-					if(arr[0] == 'openId'){
-						this.openId = arr[1];
-					}
-					if(arr[0] == 'orderId'){//有订单id,跳转到订单详情页
-						this.$router.push({path:'/Orderdetail',query:{orderId:arr[1]}})
-					}
-				}				
+					var arr = args[i].split('=');	
+					obj[decodeURIComponent(arr[0])]	= decodeURIComponent(arr[1]).replace(/\s+/g,'+');			
+					console.log(decodeURIComponent(arr[0]))					
+				}
+				console.log(JSON.stringify(obj))
+				this.$store.commit('getmsg',{openId:obj.openId});
+				if(obj.orderId){
+					this.$router.push({path:'/Orderdetail',query:{orderId:decodeURIComponent(arr[1])}})
+				}
+									
 			}		   			
 		},
 		created(){
-			this.getOpenId();//获得openId
-			this.$store.commit('getmsg',{openId:this.openId});//提交openId
+			this.getOpenId();//获得openId			
 			console.log('首页' + this.userId)
 			//是否是我的页面设置地址之后返回的			
 			if(this.$route.query.type == 1 || this.$route.query.type == 0){

@@ -4,7 +4,27 @@
 		<div class="color_back_white">
 			<div class="c_content pt_30 pb_30 hcenter">
 					<mt-field label="联系人：" placeholder="请输入联系人" v-model="addressUserName"></mt-field>
-					<mt-field label="服务地址：" placeholder="请输入服务地址" type="text" v-model="address" ref="openAdd"></mt-field>
+					<mt-field label="服务地址：" placeholder="请选择" type="text">
+						<select v-model="address" class="selected" :class="[address.length > 3 ? 'color_regu' : 'moren']">
+							<option disabled value="">请选择</option>
+							<option value ="北京市东城区">北京市东城区</option>
+							<option value ="北京市西城区">北京市西城区</option>
+							<option value="北京市朝阳区">北京市朝阳区</option>
+							<option value="北京市丰台区">北京市丰台区</option>
+							<option value="北京市石景山区">北京市石景山区</option>
+							<option value="北京市门头沟区">北京市门头沟区</option>
+							<option value="北京市房山区">北京市房山区</option>
+							<option value="北京市通州区">北京市通州区</option>
+							<option value="北京市顺义区">北京市顺义区</option>
+							<option value="北京市昌平区">北京市昌平区</option>
+							<option value="北京市大兴区">北京市大兴区</option>
+							<option value="北京市怀柔区">北京市怀柔区</option>
+							<option value="北京市平谷区">北京市平谷区</option>
+							<option value="北京市密云区">北京市密云区</option>
+							<option value="北京市延庆区">北京市延庆区</option>
+						</select>
+					</mt-field>
+					<mt-field label="详细地址：" placeholder="请输入详细服务地址" type="text" v-model="detailAddress"></mt-field>
 					<mt-field label="联系电话：" placeholder="请输入联系电话" type="text" v-model="phone"></mt-field>
 					<mt-field label="短信验证码：" placeholder="请输入验证码" v-model="smsCode">					
 						<mt-button class="getcode flex-wrap flex-align-center flex-justify-center" :class="[!isShowBg ? 'codeBtnBg' : 'color_back_blue','color_white']" :disabled='isdisabled' @click="getCode">
@@ -14,12 +34,12 @@
 			</div>
 		</div>
 		<div class="meet actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="sendAddress"><span>确认</span></div>		
-		<div class="addBox">
+		<!-- <div class="addBox">
 				<v-distpicker v-show="isShow" type="mobile" @selected="onSelecteArea" province="北京市" city="北京城区" area="海淀区" class="font_28 color_regu">
 				</v-distpicker>	
-		</div>
+		</div> -->
 		
-		<div class="modles" v-show="modles" @click="hideModles"></div>	
+		<!-- <div class="modles" v-show="modles" @click="hideModles"></div>	 -->
 	</div>
 </template>
 <script>
@@ -32,6 +52,7 @@ import {mapGetters,mapActions} from 'vuex';
 				// userName:'',
 				id:'',//地址id
 				address:'',//地址
+				detailAddress:'',
 				phone:"",//电话
 				addressUserName:'',//服务人姓名
 				smsCode:'',//验证码				
@@ -39,9 +60,9 @@ import {mapGetters,mapActions} from 'vuex';
 				isdisabled:false,
 				codeText:'获取验证码',
 				interObj:null,
-				isCreate:true,
-				isShow:false,
-				modles:false		
+				isCreate:true
+				// isShow:false,
+				// modles:false		
 			}
 		},
 	
@@ -81,11 +102,12 @@ import {mapGetters,mapActions} from 'vuex';
 			},
 			//确认
 			sendAddress(){
+				console.log(this.address + this.detailAddress)
 				if(!this.testForm()) return false;
 				if(this.isCreate){//创建地址
 					this.$post('sp/appUser/createAddress',{
 						userId:this.userId,						
-						address:this.address,
+						address:this.address + this.detailAddress,
 						phone:this.phone,
 						addressUserName:this.addressUserName,
 						smsCode:this.smsCode
@@ -98,7 +120,7 @@ import {mapGetters,mapActions} from 'vuex';
 					this.$post('sp/appUser/editAddress',{
 					userId:this.userId,
 					id:this.id,
-					address:this.address,
+					address:this.address + this.detailAddress,
 					phone:this.phone,
 					addressUserName:this.addressUserName,
 					smsCode:this.smsCode
@@ -110,15 +132,15 @@ import {mapGetters,mapActions} from 'vuex';
 				}				
 			},		
 			//选择地址
-			onSelecteArea(data) {
-				if(data.province.value != '省' && data.city.value != '市' && data.area.value != '区') {
-					let address = data.province.value  + data.city.value + data.area.value;
-					console.log(address);
-					this.address = address;	
-					this.isShow = false;
-					this.modles = false;			
-				}				
-			},
+			// onSelecteArea(data) {
+			// 	if(data.province.value != '省' && data.city.value != '市' && data.area.value != '区') {
+			// 		let address = data.province.value  + data.city.value + data.area.value;
+			// 		console.log(address);
+			// 		this.address = address;	
+			// 		this.isShow = false;
+			// 		this.modles = false;			
+			// 	}				
+			// },
 			hideModles(){
 				this.isShow = false;
 				this.modles = false;
@@ -138,6 +160,10 @@ import {mapGetters,mapActions} from 'vuex';
 				}
 				if(!this.address){
 					Toast('请输入服务地址');
+					return false;
+				}
+				if(!this.detailAddress){
+					Toast('请输入详细地址');
 					return false;
 				}
 				if(!this.phone){
@@ -171,11 +197,11 @@ import {mapGetters,mapActions} from 'vuex';
 		},
 		mounted(){
 			let self = this;
-			console.log(this.$refs.openAdd)
-			this.$refs.openAdd.$el.onclick = function(){				
-				self.isShow = !self.isShow;
-				self.modles = !self.modles;
-			}
+			// console.log(this.$refs.openAdd)
+			// this.$refs.openAdd.$el.onclick = function(){				
+			// 	self.isShow = !self.isShow;
+			// 	self.modles = !self.modles;
+			// }
 		},
 		watch:{
 			phone:function(newVal,oldVal){
@@ -207,4 +233,8 @@ import {mapGetters,mapActions} from 'vuex';
 	/* #addAdd{height:100%;overflow: hidden;}	 */
 	.modles{position:fixed;left:0;top:0;opacity:.5;background:#000;z-index: 10;width:100%;height:100%;}
 	.addBox{z-index:50;position:fixed;bottom:0;left:0;width:100%;}
+	.selected{appearance:none;-moz-appearance:none;-webkit-appearance:none; outline:none; width:6rem;height:0.94rem;
+	border:none;background:transparent;}
+	.moren{color:#757575;}
+
 </style>

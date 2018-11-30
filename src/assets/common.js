@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-import { Message,Loading } from 'element-ui'
+import {Loading } from 'element-ui'
 import router from '../router/index'
 import Vue from 'vue'
 import { Toast } from 'mint-ui';
@@ -8,9 +8,12 @@ import { Toast } from 'mint-ui';
 // 全局配置对象
 export var GLOBALconfig = {};
 var serverconfig = {
-    /*服务器地址*/   
-  // 'serviceIP': 'http://192.168.3.212:81/'
+    /*本地服务器地址*/   
   'serviceIP': '/api/'
+  /*线上服务器地址*/ 
+  // 'serviceIP': 'http://47.92.110.213:8080/' 
+  /*测试环境代理地址*/
+  // 'serviceIP': '/apis/'
 };
 // 接口请求虚拟目录
 var http_api = {   
@@ -37,7 +40,7 @@ axios.interceptors.request.use(
             if(config.method == 'get'){                
                 console.log(config);
             }else{
-                console.log(config);
+                // console.log(config);
             }    
         return config;
   },

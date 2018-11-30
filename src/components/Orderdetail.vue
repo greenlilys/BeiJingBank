@@ -32,12 +32,12 @@
 		</div>		
 	</div>
 
-	<div class="color_back_white border-b">
+	<div class="color_back_white border-t">
 			<p class="pt_20 font_28 ptop"><span class="color_regu">优惠：</span><span class="color_gray">{{discount >= 3? 2 : 0}}小时</span></p>
 			<p class="pb_20 font_28 ptop"><span class="color_regu">共计：</span><span class="color_gray">{{orderDetail.appointmentTimeLength}}小时</span></p>
 	</div>
 
-	<div class="color_back_white border-b font_28">
+	<div class="color_back_white border-b border-t font_28">
 		<div class="c_content addressBox pt_20 pb_20">
 			<p class="color_regu"> <span>{{orderDetail.userName}}</span><span class="ml_20">{{orderDetail.phone}}</span></p>
 			<p class="flex-wrap flex-horizontal flex-justify-between">
@@ -46,7 +46,7 @@
 		</div>
 	</div>
 	<div class="meet backList actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="backList"><span>返回列表</span></div>
-	<div class="meet cancle flex-wrap flex-align-center flex-justify-center" @click="cancleOrder"><span>取消订单</span></div>
+	<div v-if = "orderDetail.status == 0 || orderDetail.status == 1"  class="meet cancle flex-wrap flex-align-center flex-justify-center" @click="cancleOrder"><span>取消订单</span></div>
 	
 </div>
 </template>
@@ -87,7 +87,7 @@ export default{
 			var hour = datas.getHours();
 			var min = datas.getMinutes();
 			var second = datas.getSeconds();			
-			return year + '-' + addaroe(month) + '-' + addaroe(day) + '日' +' ' + addaroe(hour) + ':' + addaroe(min) + '时';
+			return year + '-' + addaroe(month) + '-' + addaroe(day)  +' ' + addaroe(hour) + ':' + addaroe(min) ;
 		},
 		creatService(arr){//项目字符串转数组
 			var bar = arr.split(';');
@@ -133,7 +133,7 @@ export default{
 		
 	},
 	mounted(){
-			this.getOrderDetail();
+			
 	},
 	computed:{
 		classObject:function(){
