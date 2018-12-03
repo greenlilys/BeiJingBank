@@ -48,7 +48,7 @@ export default{
 	name:'My',
 	data(){
 		return{
-			numobj:[{nums:'0',tests:'我的权益码'},{nums:'0',tests:'剩余时长'},{nums:'0',tests:'订单数量'}],
+			numobj:[{nums:0,tests:'我的权益码'},{nums:0,tests:'剩余时长'},{nums:0,tests:'订单数量'}],
 			addressList:[],		
 			type:'',//是从一般清洁或者家电清洁跳转过来0：家电   1一般
 			pageNo:1,
@@ -122,8 +122,11 @@ export default{
 				userId:userId,
 				pageNo:pageNo,
 				pageSize:pageSize
-			}).then(data=>{				
-				this.numobj[2].nums = data.pageCount;		
+			}).then(data=>{	
+				console.log(data.pageCount)
+				let nums = data.pageCount || 0;
+				// this.$set(this.numobj,2,{nums:nums,tests:'订单数量'})			
+				this.numobj[2].nums = nums;		
 			})
 		}
 	},	
@@ -131,13 +134,14 @@ export default{
 		//判断是否是Home页面过来设置地址
 		if(this.$route.query && this.$route.query.type){
 			this.type = this.$route.query.type;			
-		}		
-		this.getOrderList();
-	},
-	mounted(){
+		}	
 		this.numobj[0].nums = this.bjUserId;
-		this.numobj[1].nums = this.timeLength;			
-		this.getAddressList();	
+		this.numobj[1].nums = this.timeLength;	
+		this.getAddressList();
+	},
+	mounted(){		
+		this.getOrderList();			
+			
 	},
 	computed:{
 		...mapGetters([

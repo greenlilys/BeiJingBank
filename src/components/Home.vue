@@ -9,7 +9,7 @@
 			</div>
 		</div>
 		<keep-alive>		
-		<component :is='current' :addressUserName='addressUserName' :phone='phone' :address='address' :content='content'></component>
+		<component :is='current' :addressUserName='addressUserName' :phone='phone' :address='address' :content2='content2' :content1='content1'></component>
 		</keep-alive>
 	</div>
 </template>
@@ -26,7 +26,8 @@
 				activeid:0,//处于激活状态的按钮索引
 				groups:['GeneralClean','Diqi'],
 				current:GeneralClean,
-				content:''//描述说明
+				content2:'无',//描述说明
+				content1:'无'
 																			
 			}
 		},
@@ -61,11 +62,24 @@
 				})				
 			},		
 			//查询服务说明
-			getServiceText(){
+			getServiceText2(){
+				this.$post('sp/serviceItem/queryDescription',{
+					type:'2'
+				}).then(data=>{
+					console.log(data)
+					if(data.data.length>0 && data.data[0].content){
+						this.content2 = data.data[0].content;
+					}					
+				})
+			},
+				getServiceText1(){
 				this.$post('sp/serviceItem/queryDescription',{
 					type:'1'
 				}).then(data=>{
-					this.content = data.data[0].content;
+					console.log(data)
+					if(data.data.length>0 && data.data[0].content){
+						this.content1 = data.data[0].content
+					}					
 				})
 			},
 			//获得url地址的openid
@@ -81,8 +95,7 @@
 				var obj = {};
 				for(var i =0;i<args.length;i++){
 					var arr = args[i].split('=');	
-					obj[decodeURIComponent(arr[0])]	= decodeURIComponent(arr[1]).replace(/\s+/g,'+');			
-					console.log(decodeURIComponent(arr[0]))					
+					obj[decodeURIComponent(arr[0])]	= decodeURIComponent(arr[1]).replace(/\s+/g,'+');									
 				}
 				console.log(JSON.stringify(obj))
 				if(obj.openId){
@@ -95,6 +108,7 @@
 			}		   			
 		},
 		created(){
+			console.log('Home_created')
 			this.getOpenId();//获得openId			
 			console.log('首页' + this.userId)
 			//是否是我的页面设置地址之后返回的			
@@ -124,12 +138,13 @@
 		...mapGetters([	'userId','addressUserName','address','phone'])
 		},		  
 		mounted(){	
-			this.getServiceText();
+			this.getServiceText1();
+			this.getServiceText2();
 		},
 		watch:{
 			userId:function(newVal,oldVal){
 				if(newVal){
-					console.log('568')
+					console.log('newVal')
 					this.getAddressList();
 				}
 			}

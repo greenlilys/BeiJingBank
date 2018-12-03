@@ -60,7 +60,8 @@ const mutations = {
 			return httpPost('sp/appUser/queryUser',{
 				id:data
 			})
-		}).then(data=>{						
+		}).then(data=>{	
+			// console.log(data)					
 			state.rightsValidity = data.data[0].rightsValidity;
 			state.timeLength = data.data[0].timeLength;
 			state.bjUserId = data.data[0].bjUserId;
@@ -198,6 +199,18 @@ const mutations = {
 		state.address = address;
 		state.phone = phone;
 		state.id = id;
+	},
+	setRightsValidity(state){
+		console.log('qidongle')
+			httpPost('sp/appUser/queryUser',{
+				id:state.userId
+			})
+		.then(data=>{	
+			console.log(data)						
+			state.rightsValidity = data.data[0].rightsValidity;
+			state.timeLength = data.data[0].timeLength;
+			state.bjUserId = data.data[0].bjUserId;		
+		})
 	}
 };
 

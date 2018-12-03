@@ -108,7 +108,7 @@
 	<div class="pt_40 pb_40 color_back_white border-t">
 		<div class="f_content">
 			<h1 class="serverdetail">服务说明：</h1>
-			<p class="houseserver" style="text-align:justify;">{{content}}</p>
+			<p class="houseserver" style="text-align:justify;">{{content2}}</p>
 			<!-- <p class="houseserver mt_20" style="text-align:justify;"></p> -->
 		</div>
 	</div>
@@ -176,6 +176,7 @@ export default {
       }).then(data => {
         if(data.errcode == 200){
             Toast('预约成功');
+            this.$store.commit('setRightsValidity');
             this.$router.replace('/Order');
 					}
       }).catch(err=>{
@@ -232,7 +233,7 @@ export default {
     "addressUserName",
     "phone",
     "address",
-    'content'
+    'content2'
   ]
 };
 </script>

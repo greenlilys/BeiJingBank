@@ -97,7 +97,7 @@
 			<div class="pt_40 pb_40 color_back_white border-t">
 				<div class="f_content">
 					<h1 class="serverdetail">服务说明：</h1>
-					<p class="houseserver" style="text-align:justify;">{{content}}</p>
+					<p class="houseserver" style="text-align:justify;">{{content1}}</p>
 					<!-- <p class="houseserver mt_20" style="text-align:justify;"></p> -->
 				</div>
 			</div>
@@ -173,6 +173,7 @@ import {mapGetters,mapActions} from 'vuex';
 				}).then(data=>{
 					if(data.errcode == 200){
 						Toast('预约成功');
+						this.$store.commit('setRightsValidity');
 						 this.$router.replace('/Order');
 					}
 				}).catch(err=>{
@@ -185,7 +186,7 @@ import {mapGetters,mapActions} from 'vuex';
 				'timeLength','rightsValidity','grneralSerLen','userId','pickerdata','pickertime','id','appointmentTimeLength','addressListLength'
 			])
 		},
-		props:['addressUserName','phone','address','content'],
+		props:['addressUserName','phone','address','content1'],
 		created(){
 			
 		},
