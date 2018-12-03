@@ -23,7 +23,8 @@ var state = {
 	addressUserName:'',//服务人
 	phone:'',//电话
 	address:'',//服务地址
-	id:''//地址id
+	id:'',//地址id
+	addressListLength:''//地址列表数量
 
 };
 

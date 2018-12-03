@@ -182,10 +182,10 @@ import {mapGetters,mapActions} from 'vuex';
 		},		
 		computed:{
 			...mapGetters([
-				'timeLength','rightsValidity','grneralSerLen','userId','pickerdata','pickertime','id','appointmentTimeLength'
+				'timeLength','rightsValidity','grneralSerLen','userId','pickerdata','pickertime','id','appointmentTimeLength','addressListLength'
 			])
 		},
-		props:['addressListLength','addressUserName','phone','address','content'],
+		props:['addressUserName','phone','address','content'],
 		created(){
 			
 		},

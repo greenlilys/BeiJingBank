@@ -218,7 +218,8 @@ export default {
       "Project",
       "serviceLength",
       "id",
-      'serviceLength'
+      'serviceLength',
+      'addressListLength'
     ])
   },
   created() {    
@@ -227,8 +228,7 @@ export default {
     }   
   },
   mounted() {}, 
-  props: [
-    "addressListLength",   
+  props: [     
     "addressUserName",
     "phone",
     "address",

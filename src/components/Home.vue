@@ -9,7 +9,7 @@
 			</div>
 		</div>
 		<keep-alive>		
-		<component :is='current' :addressListLength='addressListLength' :addressUserName='addressUserName' :phone='phone' :address='address' :content='content'></component>
+		<component :is='current' :addressUserName='addressUserName' :phone='phone' :address='address' :content='content'></component>
 		</keep-alive>
 	</div>
 </template>
@@ -85,7 +85,9 @@
 					console.log(decodeURIComponent(arr[0]))					
 				}
 				console.log(JSON.stringify(obj))
-				this.$store.commit('getmsg',{openId:obj.openId});
+				if(obj.openId){
+					this.$store.commit('getmsg',{openId:obj.openId});
+				}				
 				if(obj.orderId){
 					this.$router.push({path:'/Orderdetail',query:{orderId:decodeURIComponent(arr[1])}})
 				}
@@ -112,15 +114,25 @@
 					id:queryObj.id
 				})								
 			}else{				
-				this.getAddressList();								
+				if(this.userId){
+					this.getAddressList();
+				}												
 			}					
 			
 		},
 		computed:{
-		...mapGetters([	'userId','addressUserName','address','phone','addressListLength'])
+		...mapGetters([	'userId','addressUserName','address','phone'])
 		},		  
 		mounted(){	
 			this.getServiceText();
+		},
+		watch:{
+			userId:function(newVal,oldVal){
+				if(newVal){
+					console.log('568')
+					this.getAddressList();
+				}
+			}
 		},
 		components:{
 			GeneralClean,

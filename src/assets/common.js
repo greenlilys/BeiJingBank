@@ -9,11 +9,11 @@ import { Toast } from 'mint-ui';
 export var GLOBALconfig = {};
 var serverconfig = {
     /*本地服务器地址*/   
-  'serviceIP': '/api/'
+  // 'serviceIP': '/api/'
   /*线上服务器地址*/ 
   // 'serviceIP': 'http://47.92.110.213:8080/' 
   /*测试环境代理地址*/
-  // 'serviceIP': '/apis/'
+  'serviceIP': '/apis/'
 };
 // 接口请求虚拟目录
 var http_api = {   
