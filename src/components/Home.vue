@@ -110,7 +110,7 @@
 		created(){
 			console.log('Home_created')
 			this.getOpenId();//获得openId			
-			console.log('首页' + this.userId)
+			// console.log('首页' + this.userId)
 			//是否是我的页面设置地址之后返回的			
 			if(this.$route.query.type == 1 || this.$route.query.type == 0){
 				let queryObj = this.$route.query;

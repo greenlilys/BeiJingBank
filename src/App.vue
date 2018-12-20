@@ -127,8 +127,6 @@
 	}
 
 #top{height:0.98rem; }
-
-
 .topBox{position:relative;height:0.98rem;  }
 
 .seeYou{

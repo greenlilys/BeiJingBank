@@ -8,11 +8,9 @@ import { Toast } from 'mint-ui';
 // 全局配置对象
 export var GLOBALconfig = {};
 var serverconfig = {
-    /*本地服务器地址*/   
-  // 'serviceIP': '/api/'
-  /*线上服务器地址*/ 
-  // 'serviceIP': 'http://47.92.110.213:8080/' 
-  /*测试环境代理地址*/
+    /*测试服务器地址*/   
+  // 'serviceIP': '/api/'  
+  /*上线代理地址*/
   'serviceIP': '/apis/'
 };
 // 接口请求虚拟目录
