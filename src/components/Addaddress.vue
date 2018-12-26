@@ -5,8 +5,8 @@
 			<div class="c_content pt_30 pb_30 hcenter">
 					<mt-field label="联系人：" placeholder="请输入联系人" v-model="addressUserName"></mt-field>
 					<mt-field label="服务地址：" placeholder="请选择" type="text">
-						<select v-model="address" class="selected" :class="[address.length > 3 ? 'color_regu' : 'moren']">
-							<option disabled value="">请选择</option>
+						<select v-model="address" class="selecteds" :class="[address != '请选择'? 'color_black' : 'moren']">
+							<option disabled>请选择</option>							
 							<option value ="北京市东城区">北京市东城区</option>
 							<option value ="北京市西城区">北京市西城区</option>
 							<option value="北京市朝阳区">北京市朝阳区</option>
@@ -33,13 +33,9 @@
 					</mt-field>					
 			</div>
 		</div>
-		<div class="meet actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="sendAddress"><span>确认</span></div>		
-		<!-- <div class="addBox">
-				<v-distpicker v-show="isShow" type="mobile" @selected="onSelecteArea" province="北京市" city="北京城区" area="海淀区" class="font_28 color_regu">
-				</v-distpicker>	
-		</div> -->
-		
-		<!-- <div class="modles" v-show="modles" @click="hideModles"></div>	 -->
+		<div class="meet actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="sendAddress">
+			<span>确认</span>
+		</div>		
 	</div>
 </template>
 <script>
@@ -51,7 +47,7 @@ import {mapGetters,mapActions} from 'vuex';
 			return{
 				// userName:'',
 				id:'',//地址id
-				address:'',//地址
+				address:'请选择',//地址
 				detailAddress:'',
 				phone:"",//电话
 				addressUserName:'',//服务人姓名
@@ -60,9 +56,9 @@ import {mapGetters,mapActions} from 'vuex';
 				isdisabled:false,
 				codeText:'获取验证码',
 				interObj:null,
-				isCreate:true
-				// isShow:false,
-				// modles:false		
+				isCreate:true,
+				type:''
+					
 			}
 		},
 	
@@ -102,7 +98,7 @@ import {mapGetters,mapActions} from 'vuex';
 			},
 			//确认
 			sendAddress(){
-				console.log(this.address + this.detailAddress)
+				// console.log(this.address + this.detailAddress)
 				if(!this.testForm()) return false;
 				if(this.isCreate){//创建地址
 					this.$post('sp/appUser/createAddress',{
@@ -112,9 +108,15 @@ import {mapGetters,mapActions} from 'vuex';
 						addressUserName:this.addressUserName,
 						smsCode:this.smsCode
 					}).then(data=>{
-						console.log(data)
-						Toast('添加成功');
-						this.$router.replace('/My');
+						console.log(data);
+						if(this.type){//Home页创建地址跳转过来 type 1  一般清洁页面  type 0 家电清洁页面
+							Toast('创建成功');
+							this.$router.replace({path:'/Home',query:{type:this.type}});
+						}else{
+							Toast('添加成功');
+							this.$router.replace('/My');
+						}
+						
 					})
 				}else{//编辑地址
 					this.$post('sp/appUser/editAddress',{
@@ -131,16 +133,7 @@ import {mapGetters,mapActions} from 'vuex';
 					})
 				}				
 			},		
-			//选择地址
-			// onSelecteArea(data) {
-			// 	if(data.province.value != '省' && data.city.value != '市' && data.area.value != '区') {
-			// 		let address = data.province.value  + data.city.value + data.area.value;
-			// 		console.log(address);
-			// 		this.address = address;	
-			// 		this.isShow = false;
-			// 		this.modles = false;			
-			// 	}				
-			// },
+			
 			hideModles(){
 				this.isShow = false;
 				this.modles = false;
@@ -175,12 +168,14 @@ import {mapGetters,mapActions} from 'vuex';
 			
 			
 		},
-			created(){
+		created(){
 			console.log(this.$route.query);
-			if(this.$route.query.type){//如果用户没有地址，下单时第一次创建地址，传过来的type
-					this.type = this.$route.query.type;			
+			if(this.$route.query.type){//如果用户没有地址，下单时第一次创建地址，传过来的type:1
+					this.type = this.$route.query.type;	
+					this.isCreate = true;
+					return false;		
 			}	
-			if(JSON.stringify(this.$route.query) == '{}'){
+			if(JSON.stringify(this.$route.query) == '{}'){//添加地址
 				this.isCreate = true;//创建地址
 				return false;
 			}
@@ -196,16 +191,10 @@ import {mapGetters,mapActions} from 'vuex';
 			
 		},
 		mounted(){
-			let self = this;
-			// console.log(this.$refs.openAdd)
-			// this.$refs.openAdd.$el.onclick = function(){				
-			// 	self.isShow = !self.isShow;
-			// 	self.modles = !self.modles;
-			// }
+			this.address = "请选择";
 		},
 		watch:{
-			phone:function(newVal,oldVal){
-				console.log(newVal)
+			phone:function(newVal,oldVal){				
 				if(!(/^1[34578]\d{9}$/.test(newVal))){ 
 					this.isShowBg = false;
 			        			        
@@ -233,8 +222,8 @@ import {mapGetters,mapActions} from 'vuex';
 	/* #addAdd{height:100%;overflow: hidden;}	 */
 	.modles{position:fixed;left:0;top:0;opacity:.5;background:#000;z-index: 10;width:100%;height:100%;}
 	.addBox{z-index:50;position:fixed;bottom:0;left:0;width:100%;}
-	.selected{appearance:none;-moz-appearance:none;-webkit-appearance:none; outline:none; width:6rem;height:0.94rem;
-	border:none;background:transparent;}
+	.selecteds{appearance:none;-moz-appearance:none;-webkit-appearance:none; outline:none; width:6rem;height:0.94rem;
+	border:none;background:rgba(0,0,0,0);}
 	.moren{color:#757575;}
-
+	.color_black{color:#000;}
 </style>

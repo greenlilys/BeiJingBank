@@ -15,8 +15,8 @@
 </template>
 
 <script>
-	import GeneralClean from './GeneralClean'
-	import Diqi from './Diqi'
+	import GeneralClean from './GeneralClean';
+	import Diqi from './Diqi';
 	import {mapGetters,mapActions} from 'vuex';
 	export default{
 		name:'Home',
@@ -27,8 +27,7 @@
 				groups:['GeneralClean','Diqi'],
 				current:GeneralClean,
 				content2:'无',//描述说明
-				content1:'无'
-																			
+				content1:'无'																			
 			}
 		},
 		methods: {			
@@ -95,10 +94,12 @@
 				var obj = {};
 				for(var i =0;i<args.length;i++){
 					var arr = args[i].split('=');	
-					obj[decodeURIComponent(arr[0])]	= decodeURIComponent(arr[1]).replace(/\s+/g,'+');									
+					// obj[decodeURIComponent(arr[0])]	= decodeURIComponent(arr[1]).replace(/\s+/g,'+');
+					obj[arr[0]]	= arr[1];									
 				}
 				console.log(JSON.stringify(obj))
 				if(obj.openId){
+					console.log(obj.openId)
 					this.$store.commit('getmsg',{openId:obj.openId});
 				}				
 				if(obj.orderId){
@@ -107,8 +108,7 @@
 									
 			}		   			
 		},
-		created(){
-			console.log('Home_created')
+		created(){			
 			this.getOpenId();//获得openId			
 			// console.log('首页' + this.userId)
 			//是否是我的页面设置地址之后返回的			
@@ -120,13 +120,14 @@
 				}else{
 					this.current = 'GeneralClean';
 					this.activeid = 0;
-				}		
-				this.$store.commit('userChioceAdd',{
-					addressUserName:queryObj.addressUserName,
-					phone:queryObj.phone,
-					address:queryObj.address,
-					id:queryObj.id
-				})								
+				}	
+				this.getAddressList();	
+				// this.$store.commit('userChioceAdd',{
+				// 	addressUserName:queryObj.addressUserName,
+				// 	phone:queryObj.phone,
+				// 	address:queryObj.address,
+				// 	id:queryObj.id
+				// })								
 			}else{				
 				if(this.userId){
 					this.getAddressList();
@@ -144,7 +145,7 @@
 		watch:{
 			userId:function(newVal,oldVal){
 				if(newVal){
-					console.log('newVal')
+					// console.log('newVal')
 					this.getAddressList();
 				}
 			}

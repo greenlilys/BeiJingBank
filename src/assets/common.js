@@ -38,7 +38,7 @@ axios.interceptors.request.use(
             if(config.method == 'get'){                
                 console.log(config);
             }else{
-                // console.log(config);
+                console.log(config);
             }    
         return config;
   },

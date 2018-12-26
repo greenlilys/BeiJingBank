@@ -47,7 +47,7 @@
 	</div>
 	<div class="meet backList actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="backList"><span>返回列表</span></div>
 	<div v-if = "orderDetail.status == 0 || orderDetail.status == 1"  class="meet cancle flex-wrap flex-align-center flex-justify-center" @click="cancleOrder"><span>取消订单</span></div>
-	
+	<!-- orderDetail.status   0：待处理 1：已派单 2：已完成 3：已取消 -->
 </div>
 </template>
 
@@ -73,6 +73,7 @@ export default{
 				id:this.id
 			}).then(data=>{
 				Toast('订单已取消');
+				this.$store.commit('setRightsValidity');
 				this.$router.replace('/Order');
 			})
 		},

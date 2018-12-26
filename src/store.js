@@ -200,7 +200,7 @@ const mutations = {
 		state.phone = phone;
 		state.id = id;
 	},
-	setRightsValidity(state){
+	setRightsValidity(state){//订单创建成功，重新获取用户剩余时长等数据
 		console.log('qidongle')
 			httpPost('sp/appUser/queryUser',{
 				id:state.userId

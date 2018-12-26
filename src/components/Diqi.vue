@@ -145,7 +145,11 @@ export default {
         if(this.showSetAddress || !this.address){
 					Toast('请设置服务地址');
 					return false;
-				}
+        }
+        if(this.serviceLength > this.timeLength){
+          Toast('剩余时长不足');
+					return false;
+        }
 				let bar = this.pickerdatas.split('-');
 				let foo = this.pickertimes.split(':');
 				let y = Number(bar[0]);
@@ -218,8 +222,7 @@ export default {
       "pickertimes",
       "Project",
       "serviceLength",
-      "id",
-      'serviceLength',
+      "id",     
       'addressListLength'
     ])
   },

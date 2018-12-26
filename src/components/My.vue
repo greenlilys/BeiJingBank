@@ -122,8 +122,7 @@ export default{
 				userId:userId,
 				pageNo:pageNo,
 				pageSize:pageSize
-			}).then(data=>{	
-				console.log(data.pageCount)
+			}).then(data=>{				
 				let nums = data.pageCount || 0;
 				// this.$set(this.numobj,2,{nums:nums,tests:'订单数量'})			
 				this.numobj[2].nums = nums;		

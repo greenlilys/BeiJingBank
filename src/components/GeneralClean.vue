@@ -153,7 +153,11 @@ import {mapGetters,mapActions} from 'vuex';
 				if(this.showSetAddress || !this.address){
 					Toast('请设置服务地址');
 					return false;
-				}				
+				}	
+				if(this.grneralSerLen > this.timeLength){
+					Toast('剩余时长不足');
+					return false;
+				}			
 				let bar = this.pickerdata.split('-');
 				let foo = this.pickertime.split(':');
 				let y = Number(bar[0]);
@@ -168,8 +172,7 @@ import {mapGetters,mapActions} from 'vuex';
 					appointmentTime:result,//下单时间
 					appointmentTimeLength:this.appointmentTimeLength,//预约时长
 					type:'1',
-					userId:this.userId					
-					// userName:''
+					userId:this.userId				
 				}).then(data=>{
 					if(data.errcode == 200){
 						Toast('预约成功');

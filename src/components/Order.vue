@@ -48,7 +48,7 @@ export default{
 	name:'Order',
 	data(){
 		return{
-			orderList:[],
+			orderList:[],//订单数据
 			pageNo:1,
 			totalPage:1,//总页数
 			orderNumber:0,//用户订单数
@@ -86,8 +86,8 @@ export default{
 				}
 				this.pageNo++;				
 				this.totalPage = Math.ceil(data.pageCount/10);
-				this.orderNumber = 	data.pageCount;			
-									
+				this.orderNumber = 	data.pageCount || 0;					
+				// console.log(data.pageCount);
 			})
 		},
 		
@@ -131,13 +131,12 @@ export default{
 </script>
 
 <style scoped>
-	.c_content{width: 6.7rem;	margin: auto;}
-	.top{height:0.9rem;}	
-	
-	.classObject{width:0.96rem;height:0.52rem;border-radius:0.26rem;overflow: hidden;}
-	.classObject span{font-size:0.2rem;}
-	.shopimg img{width:2.4rem;height:1.48rem;}
-	.shopimg{margin-right:0.25rem;}	
+.c_content{width: 6.7rem;	margin: auto;}
+.top{height:0.9rem;}	
+.classObject{width:0.96rem;height:0.52rem;border-radius:0.26rem;overflow: hidden;}
+.classObject span{font-size:0.2rem;}
+.shopimg img{width:2.4rem;height:1.48rem;}
+.shopimg{margin-right:0.25rem;}	
 .border-top,.border-bot{ position:relative; }
 .border-top:before,.border-bot:after{content: ''; position: absolute; left: 0;right:0;
 background: #ddd;height: 0.02rem;-webkit-transform: scaleY(0.5);
