@@ -64,8 +64,7 @@
 			getServiceText2(){
 				this.$post('sp/serviceItem/queryDescription',{
 					type:'2'
-				}).then(data=>{
-					console.log(data)
+				}).then(data=>{					
 					if(data.data.length>0 && data.data[0].content){
 						this.content2 = data.data[0].content;
 					}					
@@ -74,8 +73,7 @@
 				getServiceText1(){
 				this.$post('sp/serviceItem/queryDescription',{
 					type:'1'
-				}).then(data=>{
-					console.log(data)
+				}).then(data=>{				
 					if(data.data.length>0 && data.data[0].content){
 						this.content1 = data.data[0].content
 					}					

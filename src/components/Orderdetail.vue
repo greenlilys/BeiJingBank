@@ -67,7 +67,7 @@ export default{
 		backList(){//返回列表
 			this.$router.go(-1);
 		},
-		cancleOrder(){
+		cancleOrder(){//取消订单
 			console.log(this.id)
 			this.$post('sp/order/cancelOrder/',{
 				id:this.id

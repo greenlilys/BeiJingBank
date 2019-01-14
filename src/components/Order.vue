@@ -7,7 +7,6 @@
 <div class="topTiao border-bot"></div>
 	<template v-for="(item,index) in orderList">
 	<div class="color_back_white border-bot pb_40" :key="index" @click="navOrderdetail(item.id)">
-
 		<div class="c_content">
 			<div class="top flex-wrap flex-horizontal flex-justify-between flex-align-center font_28">
 				<div><span class="color_regu">订单号：</span><span class="color_gray">{{item.orderNumber}}</span></div>

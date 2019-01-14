@@ -179,9 +179,10 @@ import {mapGetters,mapActions} from 'vuex';
 						this.$store.commit('setRightsValidity');
 						 this.$router.replace('/Order');
 					}
-				}).catch(err=>{
-						Toast('预约失败')
 				})
+				// .catch(err=>{
+				// 		Toast('预约失败')
+				// })
 			}		   
 		},		
 		computed:{

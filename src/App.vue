@@ -65,8 +65,11 @@
 			},
 			//返回上一页
 			goBack(){
-				this.$router.go(-1);
-				console.log(this.$router.history.current.fullPath)
+				if(this.$route.name != 'Home'){
+					this.$router.go(-1);
+				}else{
+					window.location.href = 'http://219.237.75.69/weixinServer3/htmlShow/vipService/vipservice.html';
+				}
 			},
 			resetTab(str){
 				if(str == 'Home'){
@@ -105,7 +108,8 @@
 			
 		},
 		mounted() {
-			this.init();//计算根节点rem
+			//计算根节点rem
+			this.init();
 		},
 		watch:{
 			//切换页面监听路由设置样式

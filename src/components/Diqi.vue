@@ -183,9 +183,10 @@ export default {
             this.$store.commit('setRightsValidity');
             this.$router.replace('/Order');
 					}
-      }).catch(err=>{
-						Toast('预约失败')
-			});
+      })
+      // .catch(err=>{
+			// 			Toast('预约失败')
+			// });
     },
     dataConfirms(val) {
       this.$store.commit("dataConfirms", { pickerdatas: val });
