@@ -201,10 +201,9 @@ const mutations = {
 	},
 	setRightsValidity(state){//订单创建成功或者取消订单，重新获取用户剩余权限	
 			httpPost('sp/appUser/getUserId',{
-				id:state.openId
+				openId:state.openId
 			})
-		.then(data=>{	
-			console.log(data)						
+		.then(data=>{									
 			state.rightsValidity = data.data.rightsValidity;
 			state.timeLength = data.data.rightsNum;
 			state.bjUserId = data.data.consumerId;		

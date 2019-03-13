@@ -107,9 +107,9 @@
 			}		   			
 		},
 		created(){			
-			this.getOpenId();//获得openId			
-			// console.log('首页' + this.userId)
-			//是否是我的页面设置地址之后返回的			
+			this.getOpenId();		
+			//是否是我的页面设置地址之后返回的	
+			console.log(this.$route.query.type)		
 			if(this.$route.query.type == 1 || this.$route.query.type == 0){
 				let queryObj = this.$route.query;
 				if(queryObj.type == 0){//家电清洁
@@ -118,15 +118,14 @@
 				}else{
 					this.current = 'GeneralClean';
 					this.activeid = 0;
-				}	
-				this.getAddressList();	
-				// this.$store.commit('userChioceAdd',{
-				// 	addressUserName:queryObj.addressUserName,
-				// 	phone:queryObj.phone,
-				// 	address:queryObj.address,
-				// 	id:queryObj.id
-				// })								
-			}else{				
+				}					
+				this.$store.commit('userChioceAdd',{
+					addressUserName:queryObj.addressUserName,
+					phone:queryObj.phone,
+					address:queryObj.address,
+					id:queryObj.id
+				})								
+			}else{
 				if(this.userId){
 					this.getAddressList();
 				}												

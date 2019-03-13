@@ -24,7 +24,8 @@
 							<option value="北京市延庆区">北京市延庆区</option>
 						</select>
 					</mt-field>
-					<mt-field label="详细地址：" placeholder="请输入详细服务地址" type="text" v-model="detailAddress"></mt-field>
+					<mt-field label="详细地址：" placeholder="请输入详细服务地址" type="text" v-model="detailAddress"></mt-field>					
+					<mt-radio	title="" @change="check" v-model="result"	:options="['五环内', '五环外']"></mt-radio>					
 					<mt-field label="联系电话：" placeholder="请输入联系电话" type="text" v-model="phone"></mt-field>
 					<mt-field label="短信验证码：" placeholder="请输入验证码" v-model="smsCode">					
 						<mt-button class="getcode flex-wrap flex-align-center flex-justify-center" :class="[!isShowBg ? 'codeBtnBg' : 'color_back_blue','color_white']" :disabled='isdisabled' @click="getCode">
@@ -57,7 +58,8 @@ import {mapGetters,mapActions} from 'vuex';
 				codeText:'获取验证码',
 				interObj:null,
 				isCreate:true,
-				type:''
+				type:'',				
+				result:'五环内'
 					
 			}
 		},
@@ -100,12 +102,14 @@ import {mapGetters,mapActions} from 'vuex';
 			sendAddress(){
 				// console.log(this.address + this.detailAddress)
 				if(!this.testForm()) return false;
+				let flag = this.result == '五环内'? '是' : '否';
 				if(this.isCreate){//创建地址
 					this.$post('sp/appUser/createAddress',{
 						userId:this.userId,						
 						address:this.address + this.detailAddress,
 						phone:this.phone,
 						addressUserName:this.addressUserName,
+						flag:flag,
 						smsCode:this.smsCode
 					}).then(data=>{
 						console.log(data);
@@ -125,6 +129,7 @@ import {mapGetters,mapActions} from 'vuex';
 					address:this.address + this.detailAddress,
 					phone:this.phone,
 					addressUserName:this.addressUserName,
+					flag:flag,
 					smsCode:this.smsCode
 					}).then(data=>{
 						console.log(data)
@@ -133,7 +138,10 @@ import {mapGetters,mapActions} from 'vuex';
 					})
 				}				
 			},		
-			
+			//单选框是否在五环内
+			check(e){
+				console.log(e)
+			},
 			hideModles(){
 				this.isShow = false;
 				this.modles = false;
@@ -183,8 +191,9 @@ import {mapGetters,mapActions} from 'vuex';
 			let parameter = this.$route.query;
 			this.id = parameter.id;
 			this.phone = parameter.phone;
-			this.address = parameter.address;
+			this.detailAddress = parameter.address;
 			this.addressUserName = parameter.addressUserName;
+			this.result = parameter.flag == '是'? '五环内' : '五环外';
 			if(/^1[34578]\d{9}$/.test(this.phone)){
 				this.isShowBg = true; //激活验证码按钮
 			}
@@ -226,4 +235,6 @@ import {mapGetters,mapActions} from 'vuex';
 	border:none;background:rgba(0,0,0,0);}
 	.moren{color:#757575;}
 	.color_black{color:#000;}
+	.mint-radiolist .mint-radiolist-title{margin:0;}
+	
 </style>

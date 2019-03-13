@@ -38,7 +38,7 @@ axios.interceptors.request.use(
             if(config.method == 'get'){                
                 console.log(config);
             }else{
-                console.log(config);
+                console.log(config.url+"==========>>" + JSON.stringify(config.data));
             }    
         return config;
   },
@@ -53,8 +53,7 @@ axios.interceptors.response.use(
   (res) => {
         loadingInstance.close();
         //控制台打印请求接口返回数据
-        console.log(res.config.url);         
-        console.log(res.data);       
+        console.log(res.config.url + "==========>>" +JSON.stringify(res.data));  
         if(res.status != 200){ 
           Toast(res.status + res.statusText);
             return false;

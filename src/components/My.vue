@@ -32,7 +32,7 @@
 					<p class="color_regu"> <span>{{item.addressUserName}}</span><span class="ml_20">{{item.phone}}</span></p>
 					<p class="flex-wrap flex-horizontal flex-justify-between">
 						<span class="color_regu">{{item.address}}</span>
-						<span class="color_gray edit" @click.stop="editAddress(item.phone,item.address,item.addressUserName,item.id)">编辑</span>
+						<span class="color_gray edit" @click.stop="editAddress(item.phone,item.address,item.addressUserName,item.flag,item.id)">编辑</span>
 					</p>
 				</div>
 			</div>		
@@ -67,7 +67,7 @@ export default{
 		addAddress(){
 			this.$router.push({path:'/Addaddress',query:{}})
 		},
-		//获得用户地址列表
+		//获得用户地址列表-->绑定用户订单数量
 		getAddressList({userId=this.userId,pageNo=this.pageNo,pageSize=10}={}){						
 			if(this.pageNo > this.totalPage){//当前加载页码大于总页码
 				this.allLoaded = true;//禁止上拉加载
@@ -100,11 +100,12 @@ export default{
 			this.$refs.loadmore.onTopLoaded();			
 		},
 		//编辑地址
-		editAddress(phone,address,addressUserName,id){
+		editAddress(phone,address,addressUserName,flag,id){
 			this.$router.push({path:'/Addaddress',query:{			
 				phone:phone,
 				address:address,
 				addressUserName:addressUserName,
+				flag:flag,
 				id:id
 			}})
 		},
@@ -131,7 +132,7 @@ export default{
 	},	
 	created(){	
 		//判断是否是Home页面过来设置地址
-		if(this.$route.query && this.$route.query.type){
+		if(this.$route.query && String(this.$route.query.type)){
 			this.type = this.$route.query.type;			
 		}	
 		this.numobj[0].nums = this.bjUserId;

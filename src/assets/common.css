@@ -176,3 +176,6 @@ div.address-container{overflow:scroll;height:4.74rem;}
 /* mint-ui  button */
 .mint-button{border-radius:0;}
 
+.mint-radiolist .mint-radiolist-title{margin:0;}
+.mint-radiolist .mint-cell:last-child{background-position:top;}
+

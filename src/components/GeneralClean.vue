@@ -136,7 +136,7 @@ import {mapGetters,mapActions} from 'vuex';
 				this.$router.push({path:'/Addaddress',query:{type:1}});				
 			},
 			navAddList(){
-				//用户有地址，进行地址切换，跳转到我的页面,addressActive设置为true，地址列表可点击
+				//用户有地址，进行地址切换，跳转到我的页面,addressActive设置为true，地址列表可点击切换
 				this.$router.push({path:'/My',query:{type:1}});
 				this.$store.commit('setAddActive',{addressActive:true});
 			},
