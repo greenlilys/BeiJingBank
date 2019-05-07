@@ -179,3 +179,13 @@ div.address-container{overflow:scroll;height:4.74rem;}
 .mint-radiolist .mint-radiolist-title{margin:0;}
 .mint-radiolist .mint-cell:last-child{background-position:top;}
 
+/* 遮罩层 */
+.zhezhaobox{position:absolute;background:rgba(0,0,0,0.5);width:100%;height:100%;left:0;top:0;z-index:10;}
+.zhezhaobox .zhezhao{position:absolute;width:84%;height:74%;top:12%;left:8%;background:#fff;
+	border-radius:6px;z-index:20;display:flex;flex-direction: column;overflow: hidden;}
+.zhezhao .zhecontent{font-size:0.2rem;line-height:0.4rem;text-align: justify;flex:1;overflow-y: scroll;padding:0.2rem 0.3rem;box-sizing:border-box;}
+.zhezhao .head{font-size:0.4rem;height:0.5rem;text-align:center;padding: 0.5rem 0 0.3rem 0;}
+.bottombtn{display:flex;flex-direction:row;justify-content: space-around;height:1.2rem;align-items: center;background:#fff;}
+.bottombtn div{height:0.8rem;width:1.4rem;font-size:0.3rem;line-height:0.8rem;text-align:center;border-radius:0.1rem;}
+.sure{color:#fff;}
+

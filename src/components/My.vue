@@ -10,7 +10,7 @@
 				<div class="items flex-wrap flex-horizontal">
 					<template v-for = "(item,index) in numobj">
 						<div  class="color_white flex-con flex-vertical flex-justify-around borderR" :key='index'>
-							<p class="font_36 color_white">{{item.nums}}</p>
+							<p class="font_36 color_white">{{item.nums.length>6 ? item.nums.toString().slice(-6) : item.nums}}</p>
 							<p class="font_28 color_white">{{item.tests}}</p>
 						</div>
 					</template>

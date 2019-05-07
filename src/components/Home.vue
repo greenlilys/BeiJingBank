@@ -22,7 +22,7 @@
 		name:'Home',
 		data() {
 			return {
-				tabtext:['一般清洁','家电清洗'],//按钮循环对象
+				tabtext:['基础保洁','精致/专项服务'],//按钮循环对象
 				activeid:0,//处于激活状态的按钮索引
 				groups:['GeneralClean','Diqi'],
 				current:GeneralClean,

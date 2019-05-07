@@ -12,7 +12,7 @@ var state = {
 	timeLength:0,//剩余权益时长
 	bjUserId:0,//权益码
 	addressActive:false,
-	grneralSerLen:2,//一般清洁预约时长
+	grneralSerLen:3,//一般清洁预约时长
 	pickerdata:'',//一般清洁日期
 	pickertime:'',//一般清洁时间
 	pickerdatas:'',//家电清洁日期
@@ -75,16 +75,12 @@ const mutations = {
 		if(state.grneralSerLen >= state.timeLength){
 			Toast('剩余权限不足');
 			return false;
-		}
-		if(state.grneralSerLen == 10){
-			Toast('时长不超过10小时');
-			return false;
-		}
+		}		
 		state.grneralSerLen++
 	},
 	prenum(state){
-		if(state.grneralSerLen == 2) {
-			Toast('时长不少于2小时');
+		if(state.grneralSerLen == 3) {
+			Toast('时长不少于3小时');
 			return false;
 		}
 		state.grneralSerLen--;
@@ -128,41 +124,24 @@ const mutations = {
 			    state.Project = foo;
 			  });
 	},
-	addnums(state,{id}){
-			if(state.timeLength < 4){
-				Toast('剩余权限不足');
-				return false;
-			}	
-	
+	addnums(state,{id}){	
 		 let Project = state.Project;
-    //    如果总服务数量已经等于3，返回
-      let result = Project.reduce(function(pre, next) {
-        return pre + next.num;
-			}, 0);
-			if(state.timeLength < 8 && result ==1){
-				Toast('剩余权限不足');
-				return false;
+		 //计算服务项目    
+      		 let result = Project.reduce(function(pre, next) {
+        	 		return pre + next.num;
+			}, 0) || 0;
+		if(state.timeLength < (result+1) * 10){
+			Toast('剩余权限不足');
+			return false;
+		}
+    		//   否则当前服务项目加1
+		for (let i = 0, len = Project.length; i < len; i++) {
+			if (Project[i].id == id) {
+			Project[i].num++;
 			}
-			if(state.timeLength < 10 && result ==2){
-				Toast('剩余权限不足');
-				return false;
-			}
-      if (result == 3) {// 选择台数等于3        
-        Toast("不能超过3台");
-        return false;
-      }
-    //   否则当前服务项目加1
-      for (let i = 0, len = Project.length; i < len; i++) {
-        if (Project[i].id == id) {
-          Project[i].num++;
-        }
-      }    
-      if (result + 1 < 3) {
-        state.serviceLength = (result + 1) * 4;
-      } else {
-        state.serviceLength = 10;
-      }
-      state.Project = Project;
+		}    
+		state.serviceLength = (result+1) * 10;		
+     	        state.Project = Project;
 	},
 	prenums(state,{id}){
 		let Project = state.Project;
@@ -180,7 +159,7 @@ const mutations = {
 		let totalnum = Project.reduce(function(pre, next) {
 		  return pre + next.num;
 		}, 0);
-		state.serviceLength = totalnum * 4;
+		state.serviceLength = totalnum * 10;
 		state.Project = Project;
 	},
 	setAddLen(state,{addressListLength}){//地址为空addressListLength为0

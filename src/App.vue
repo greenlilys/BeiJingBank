@@ -30,7 +30,9 @@
 				myImgActive:require('./assets/images/my_active.png'),
 				tabIndex:0,
 				isShowBorder:true,
-				title:'家政预约'				
+				title:'家政预约',
+				lastTouchEnd:0
+							
 			}
 		},
 		methods: {
@@ -65,11 +67,12 @@
 			},
 			//返回上一页
 			goBack(){
-				if(this.$route.name != 'Home'){
-					this.$router.go(-1);
-				}else{
-					window.location.href = 'http://219.237.75.69/weixinServer3/htmlShow/vipService/vipservice.html';
-				}
+				this.$router.go(-1);
+				// if(this.$route.name != 'Home'){
+				// 	this.$router.go(-1);
+				// }else{
+				// 	window.location.href = 'http://219.237.75.69/weixinServer3/htmlShow/vipService/vipservice.html';
+				// }
 			},
 			resetTab(str){
 				if(str == 'Home'){
@@ -98,11 +101,14 @@
 			var nameCun = this.$route.name;
 			this.resetTab(nameCun);	//刷新重置样式			
 			//页面刷新保持数据
+			
 			if (sessionStorage.getItem("store") ) {
 				this.$store.replaceState(Object.assign({}, this.$store.state,JSON.parse(sessionStorage.getItem("store"))))
 			} 
-			//在页面刷新时将vuex里的信息保存到sessionStorage里
+			//在页面刷新时监听事件将vuex里的信息保存到sessionStorage里
 			window.addEventListener("beforeunload",()=>{
+				console.log('shuaixn')
+				console.log(this.$store.state)
 				sessionStorage.setItem("store",JSON.stringify(this.$store.state))
 			})
 			
@@ -110,6 +116,24 @@
 		mounted() {
 			//计算根节点rem
 			this.init();
+			var self = this;
+			document.documentElement.addEventListener('touchstart', function (event) {
+				if (event.touches.length > 1) {
+					event.preventDefault();
+				}
+			}, false);
+
+				
+			document.documentElement.addEventListener('touchend', function (event) {			
+				if (Date.now() - self.lastTouchEnd <= 600) {
+					event.preventDefault();
+				}
+				self.lastTouchEnd = Date.now();
+			}, false);
+			
+			document.addEventListener('gesturestart', function(event) {
+				event.preventDefault();
+			})			
 		},
 		watch:{
 			//切换页面监听路由设置样式
