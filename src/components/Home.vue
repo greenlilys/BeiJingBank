@@ -109,7 +109,7 @@
 		created(){			
 			this.getOpenId();		
 			//是否是我的页面设置地址之后返回的	
-			console.log(this.$route.query.type)		
+			// console.log(this.$route.query.type)		
 			if(this.$route.query.type == 1 || this.$route.query.type == 0){
 				let queryObj = this.$route.query;
 				if(queryObj.type == 0){//家电清洁

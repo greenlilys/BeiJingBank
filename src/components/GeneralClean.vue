@@ -67,6 +67,12 @@
 				</div>				
 			</div>
 
+			<div class="border-b border-t w_100 color_back_white mb_20">
+				<div class="content">					
+					<p class="font_28 pt_20" style="padding-bottom:0.24rem;color:red;">温馨提示：24小时以内取消预约，需扣除1小时的服务时长。</p>
+				</div>
+			</div>
+
 			<div class=" pb_30 mb_20 color_back_white border-b border-t">
 
 				<div class="address pt_20 pb_30 flex-wrap flex-horizontal flex-justify-between flex-align-center"
@@ -146,9 +152,9 @@ import {mapGetters,mapActions} from 'vuex';
 			}
 		},
 		methods: {
-			...mapActions([
+		...mapActions([
 			'addnum','prenum'
-			]),
+		]),
 			openPicker() {//打开年月日选择器
 		        this.$refs.picker.open();
 		     },
@@ -256,6 +262,7 @@ import {mapGetters,mapActions} from 'vuex';
 	.border-bs:after{content: ''; position: absolute; left: 0;right:0;
 	background: #ddd;height: 0.02rem;-webkit-transform: scaleY(0.5);
 	transform: scaleY(0.5);bottom:-0.01rem;-webkit-transform-origin: 0 0;transform-origin: 0 0; }
-	
+	.content { width: 6.7rem; margin: auto;}
+	.content p{ line-height:0.5rem;text-align:justify;}
 	
 </style>

@@ -35,7 +35,8 @@
 			<div class="content" style="color:#ff6600;">
 			  	<p class="font_28 pt_20">1、外窗玻璃双面清洁，按面积计（20平米）。</p>
         	<p class="font_28">2、开荒保洁，实际服务时长为7小时。</p>
-			  	<p class="font_28" style="padding-bottom:0.24rem">3、精致保洁，实际服务时长为5小时。</p>
+			  	<p class="font_28">3、精致保洁，实际服务时长为5小时。</p>
+          	<p class="font_28" style="padding-bottom:0.24rem">4、24小时以内取消预约，需扣除1小时的服务时长。</p>
 			</div>
 		</div>
 		

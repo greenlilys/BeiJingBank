@@ -12,7 +12,6 @@ var serverconfig = {
   // 'serviceIP': '/api/'  
   /*上线代理地址*/
   'serviceIP': '/apis/'
-
 };
 // 接口请求虚拟目录
 var http_api = {   
