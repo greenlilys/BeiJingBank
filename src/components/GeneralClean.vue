@@ -293,13 +293,11 @@ export default {
             "grneralSerLen",
             "userId",
             "pickerdata",
-            "pickertime",
-            "id",
-            "appointmentTimeLength",
-            "addressListLength"
+            "pickertime",            
+            "appointmentTimeLength"           
         ])
     },
-    props: ["addressUserName", "phone", "address", "content1"],
+    props: ["addressUserName", "phone", "address", 'addressListLength','id',"content1"],
     created() {},
     mounted() {}
 };

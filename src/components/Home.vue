@@ -9,7 +9,8 @@
 			</div>
 		</div>
 		<keep-alive>		
-		<component :is='current' :addressUserName='addressUserName' :phone='phone' :address='address' :content2='content2' :content1='content1'></component>
+		<component :is='current' :addressUserName='addressUserName' :phone='phone' :address='address' :id='id' :content2='content2' 
+		:addressListLength='addressListLength' :content1='content1'></component>
 		</keep-alive>
 	</div>
 </template>
@@ -27,7 +28,12 @@
 				groups:['GeneralClean','Diqi'],
 				current:GeneralClean,
 				content2:'无',//描述说明
-				content1:'无'																			
+				content1:'无',
+				addressUserName:'',	
+				phone:'',	
+				address:'',
+				id:'',
+				addressListLength:0															
 			}
 		},
 		methods: {			
@@ -46,17 +52,15 @@
 				}).then(data=>{					
 					if(data.data.length == 0){
 						//用户没有地址 设置地址数量0
-						this.$store.commit('setAddLen',{addressListLength:0})
+						this.addressListLength = 0;						
 					}else{
 						//用户有地址，设置地址列表第一个为默认地址
-						let addressObj = data.data[0];					
-						this.$store.commit('setJerAdd',{
-							addressUserName:addressObj.addressUserName,
-							phone:addressObj.phone,
-							address:addressObj.address,
-							id:addressObj.id,
-							addressListLength:data.data.length
-						})
+						let addressObj = data.data[0];	
+						this.addressUserName = addressObj.addressUserName;
+						this.phone = addressObj.phone;
+						this.address = addressObj.address;
+						this.id = addressObj.id;
+						this.addressListLength = 1;	
 					}					
 				})				
 			},		
@@ -70,12 +74,13 @@
 					}					
 				})
 			},
+			//查询服务说明
 				getServiceText1(){
 				this.$post('sp/serviceItem/queryDescription',{
 					type:'1'
 				}).then(data=>{				
 					if(data.data.length>0 && data.data[0].content){
-						this.content1 = data.data[0].content
+						this.content1 = data.data[0].content;
 					}					
 				})
 			},
@@ -106,7 +111,8 @@
 			}		   			
 		},
 		created(){			
-			this.getOpenId();	
+			this.getOpenId();
+			console.log(this.$route.query)	
 			if(this.$route.query && this.$route.query.type){
 				let queryObj = this.$route.query;
 				if(queryObj.type == 2){//家电清洁
@@ -115,13 +121,13 @@
 				}else{
 					this.current = 'GeneralClean';
 					this.activeid = 0;
-				}					
-				this.$store.commit('userChioceAdd',{
-					addressUserName:queryObj.addressUserName,
-					phone:queryObj.phone,
-					address:queryObj.address,
-					id:queryObj.id
-				})								
+				}			
+					this.addressUserName = queryObj.addressUserName;
+					this.phone = queryObj.phone;
+					this.address = queryObj.address;
+					this.id = queryObj.id;
+					this.addressListLength = 1;
+												
 			}else{
 				if(this.userId){
 					this.getAddressList();
@@ -130,7 +136,7 @@
 			
 		},
 		computed:{
-		...mapGetters([	'userId','addressUserName','address','phone'])
+		...mapGetters([	'userId'])
 		},		  
 		mounted(){	
 			this.getServiceText1();
@@ -154,11 +160,9 @@
 	.content{width:100%;height:100%;overflow:scroll;}
 	.btnbox {width: 100%;padding-top: 0.5rem;padding-bottom:0.6rem;background:#fff;}
 	.btn {width: 5.3rem;height: 0.8rem;	margin:0 auto;background:#fff;border-radius:0.4rem;border:0.04rem solid #dddddd;overflow: hidden;}	
-	.btntab {width: 50%;height:100%;text-align: center;}			
-	
+	.btntab {width: 50%;height:100%;text-align: center;}
 	.btnactive{	background: #018be6;color:#fff;}
-	.btnstyle{color:#484848;}	
-	/*.align_c{font-size:0.56rem;transform: scale(0.5);}*/
+	.btnstyle{color:#484848;}
 	.align_c{font-size:0.28rem;}
 	
 </style>

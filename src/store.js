@@ -18,12 +18,8 @@ var state = {
 	pickertimes:'',//家电清洁时间
 	Project:[],//服务项目数组
 	serviceLength:0,//家电预约服务时长
-	orderNum:'',//用户订单总数
-	addressUserName:'',//服务人
-	phone:'',//电话
-	address:'',//服务地址
-	id:'',//地址id
-	addressListLength:''//地址列表数量
+	orderNum:'',//用户订单总数	
+	
 
 };
 
@@ -152,16 +148,7 @@ const mutations = {
 		state.serviceLength = totalnum * 10;
 		state.Project = Project;
 	},
-	setAddLen(state,{addressListLength}){//地址为空addressListLength为0
-		state.addressListLength = addressListLength
-	},
-	setJerAdd(state,{addressUserName,address,phone,id,addressListLength}){//用户有地址设置默认地址
-		state.addressUserName = addressUserName;
-		state.address = address;
-		state.phone = phone;
-		state.id = id;
-		state.addressListLength = addressListLength;	
-	},
+	
 	userChioceAdd(state,{addressUserName,address,phone,id}){//用户切换地址
 		state.addressUserName = addressUserName;
 		state.address = address;
@@ -215,22 +202,7 @@ const getters = {
 	},
 	serviceLength(state){//家电预约选择服务时长
 		return state.serviceLength
-	},
-	addressUserName(state){//服务人
-		return state.addressUserName
-	},
-	address(state){//服务地址
-		return state.address
-	},
-	phone(state){//服务电话
-		return state.phone
-	},
-	addressListLength(state){//地址length
-		return state.addressListLength
-	},
-	id(state){//服务地址id
-		return state.id
-	},
+	},	
 	appointmentTimeLength(state){//一般清洁时长
 		return state.grneralSerLen
 	},

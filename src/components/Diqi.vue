@@ -266,9 +266,8 @@ export default {
       "pickerdatas",
       "pickertimes",
       "Project",
-      "serviceLength",
-      "id",     
-      'addressListLength'
+      "serviceLength"    
+      
     ])
   },
   created() {    
@@ -278,11 +277,7 @@ export default {
   },
   mounted() {}, 
   props: [     
-    "addressUserName",
-    "phone",
-    "address",
-    'content2'
-  ]
+    "addressUserName", "phone", "address",'addressListLength','id', 'content2']
 };
 </script>
 
