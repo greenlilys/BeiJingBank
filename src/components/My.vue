@@ -111,11 +111,9 @@ export default{
 		},
 		//设置为服务地址
 		setServiceAdd(addressUserName,phone,address,id){
-			// 只有从Home到My点击事件生效
-			console.log(this.addressActive)
-			if(this.addressActive){
-				this.$router.replace({path:'/Home',query:{type:this.type,addressUserName:addressUserName,phone:phone,address:address,id:id}});		
-			}			
+				let type = this.type || 1;			
+				this.$router.replace({path:'/Home',query:{type:type,addressUserName:addressUserName,phone:phone,address:address,id:id}});		
+						
 		},
 		//查询订单列表,获取用户订单数
 		getOrderList({userId=this.userId,pageNo=1,pageSize=10}={}){			
@@ -132,7 +130,7 @@ export default{
 	},	
 	created(){	
 		//判断是否是Home页面过来设置地址
-		if(this.$route.query && String(this.$route.query.type)){
+		if(this.$route.query && this.$route.query.type){
 			this.type = this.$route.query.type;			
 		}	
 		this.numobj[0].nums = this.bjUserId;
@@ -145,7 +143,7 @@ export default{
 	},
 	computed:{
 		...mapGetters([
-				'addressActive','userId','timeLength','bjUserId'
+				'userId','timeLength','bjUserId'
 			])
 	}
 }

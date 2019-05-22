@@ -11,14 +11,16 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
        '/api': {
-              target: 'http://192.168.3.86:82',
+        
+              // target: 'http://yjt.jiafb.com:8080',
+              target: 'http://192.168.3.210:82',
               changeOrigin: true,
               pathRewrite: {
                 '^/api':''  
               }
             }
     }, 
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '192.168.3.209', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

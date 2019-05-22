@@ -65,6 +65,7 @@ transform: scaleY(0.5);     -webkit-transform-origin: left bottom;transform-orig
  .color_back_white{	background-color:#fff; }
  .color_back_gray{background-color:#f5f5f3;}
  .c_content{width: 6.7rem;	margin: auto;}
+ .backgray{background:rgb(218, 217, 217);}
  
 /*字体颜色*/
   .color_blue{color:#0099ff;}

@@ -10,8 +10,7 @@ var state = {
 	userId:'',
 	rightsValidity:'',//权益有效期
 	timeLength:0,//剩余权益时长
-	bjUserId:0,//权益码
-	addressActive:false,
+	bjUserId:0,//权益码	
 	grneralSerLen:3,//一般清洁预约时长
 	pickerdata:'',//一般清洁日期
 	pickertime:'',//一般清洁时间
@@ -53,24 +52,15 @@ const mutations = {
 		httpPost('sp/appUser/getUserId',{
 			openId:openId
 		}).then(data=>{	
-			console.log(data)	
-			console.log('用户标示' + data.data.userId)
+			// console.log(data)	
+			// console.log('用户标示' + data.data.userId)
 			state.rightsValidity = data.data.rightsValidity;
 			state.timeLength = data.data.rightsNum;
 			state.bjUserId = data.data.consumerId;					
-			state.userId = data.data.userId;			
-			// return data.data.userId;
-		})
-		// .then(data=>{
-		// 	return httpPost('sp/appUser/queryUser',{
-		// 		id:data
-		// 	})
-		// }).then(data=>{					
-		// })
+			state.userId = data.data.userId;
+		})		
 	},
-	setAddActive(state,{addressActive}){//控制地址列表是否可点击		
-		state.addressActive = addressActive;		
-	},
+	
 	addnum(state){
 		if(state.grneralSerLen >= state.timeLength){
 			Toast('剩余权限不足');
@@ -197,9 +187,7 @@ const getters = {
 	rightsValidity(state){//权益有效期
 		return state.rightsValidity
 	},
-	addressActive(state){
-		return state.addressActive
-	},
+	
 	grneralSerLen(state){//一般清洁服务时长
 		return state.grneralSerLen
 	},

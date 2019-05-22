@@ -91,11 +91,10 @@
 				console.log(args)	
 				var obj = {};
 				for(var i =0;i<args.length;i++){
-					var arr = args[i].split('=');	
-					// obj[decodeURIComponent(arr[0])]	= decodeURIComponent(arr[1]).replace(/\s+/g,'+');
+					var arr = args[i].split('=');
 					obj[arr[0]]	= arr[1];									
 				}
-				console.log(JSON.stringify(obj))
+				
 				if(obj.openId){
 					console.log(obj.openId)
 					this.$store.commit('getmsg',{openId:obj.openId});
@@ -107,12 +106,10 @@
 			}		   			
 		},
 		created(){			
-			this.getOpenId();		
-			//是否是我的页面设置地址之后返回的	
-			// console.log(this.$route.query.type)		
-			if(this.$route.query.type == 1 || this.$route.query.type == 0){
+			this.getOpenId();	
+			if(this.$route.query && this.$route.query.type){
 				let queryObj = this.$route.query;
-				if(queryObj.type == 0){//家电清洁
+				if(queryObj.type == 2){//家电清洁
 					this.current = 'Diqi';
 					this.activeid = 1;										
 				}else{
@@ -141,8 +138,7 @@
 		},
 		watch:{
 			userId:function(newVal,oldVal){
-				if(newVal){
-					// console.log('newVal')
+				if(newVal){					
 					this.getAddressList();
 				}
 			}

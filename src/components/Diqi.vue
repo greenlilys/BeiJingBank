@@ -27,7 +27,7 @@
 						</template>	
 					</div>				
 				</div>
-				<p class="mt_40 font_28"><span class="color_regu">服务时常：</span><span class="color_gray"><span style="color:#0099ff;">{{serviceLength}}</span>小时</span></p>
+				<p class="mt_40 font_28"><span class="color_regu">服务时长：</span><span class="color_gray"><span style="color:#0099ff;">{{serviceLength}}</span>小时</span></p>
 			</div>
 		</div>
 		
@@ -45,7 +45,7 @@
 					<div class="flex-wrap flex-horizontal flex-align-center">
 						<span>日期选择：</span>
 						<div class="datay input-b flex-con" @click="openPicker">						
-							<input class="input_border font_28 color_regu" type="text" v-model="pickerdatas" placeholder="请选择您需要服务的日期" />
+							<input onfocus="this.blur();" class="input_border font_28 color_regu" type="text" v-model="pickerdatas" placeholder="请选择您需要服务的日期" />
 							<div class="arrowup"><img src="../assets/images/uparrow.png" alt="" /></div>
 						</div>
 					</div>	
@@ -53,7 +53,7 @@
 					<div class="flex-wrap flex-horizontal flex-align-center">
 						<span>选择时间：</span>
 						<div class="datay input-b flex-con" @click="openPickerTime">						
-							<input class="input_border font_28 color_regu" type="text" v-model="pickertimes" placeholder="上门时间每日早8点到晚18点" />
+							<input onfocus="this.blur();" class="input_border font_28 color_regu" type="text" v-model="pickertimes" placeholder="上门时间每日早8点到晚18点" />
 							<div class="arrowup"><img src="../assets/images/uparrow.png" alt="" /></div>
 						</div>
 					</div>	
@@ -104,7 +104,7 @@
 					</div>
 				</div>				
 
-		<div class="meet actived jianBian_blue flex-wrap flex-align-center flex-justify-center" @click="creatOrder"><span>立即预约</span></div>
+		<div class="meet actived jianBian_blue flex-wrap flex-align-center flex-justify-center" :class="[canUse ? 'jianBian_blue' : 'backgray']" @click="creatOrder"><span>立即预约</span></div>
 	</div>
 
 	<div class="pt_40 pb_40 color_back_white border-t">
@@ -154,7 +154,8 @@ export default {
   data() {
     return {
       startDate: new Date(new Date().getTime() + 172800000),
-      isShow:false
+      isShow:false,
+      canUse:true
     };
   },
   methods: {
@@ -183,6 +184,10 @@ export default {
           Toast('剩余时长不足');
 					return false;
         }
+          if(!this.canUse){
+               return false;
+            }
+            this.canUse = false;
         this.isShow = true;
 				
     },
@@ -214,12 +219,15 @@ export default {
           serviceItem: serviceItem,
           serviceItems: serviceItems         
         }).then(data => {
-          if(data.errcode == 200){
+         
               Toast('预约成功');
               this.$store.commit('setRightsValidity');
-              this.$router.replace('/Order');
-            }
-        })     
+              this.$router.push('/Order');
+               this.canUse = true;
+        }).catch(res=>{
+          Toast('预约失败');
+            this.canUse = true;
+        })    
     },
     dataConfirms(val) {
       this.$store.commit("dataConfirms", { pickerdatas: val });
@@ -238,16 +246,16 @@ export default {
     },
     setAddress() {
       // 用户没有设置地址，跳转到地址表单页    
-        this.$router.push({ path: "/Addaddress", query: { type: 0 } });
+        this.$router.push({ path: "/Addaddress", query: { type: 2 } });
      
     },
     navAddList() {
       //用户有地址，进行地址切换
-      this.$router.push({ path: "/My", query: { type: 0 } });
-      this.$store.commit("setAddActive", { addressActive: true });
+      this.$router.push({ path: "/My", query: { type: 2 } });     
     },
     cancle(){
 				this.isShow = false;
+         this.canUse = true;
 			}
   },
   computed: {

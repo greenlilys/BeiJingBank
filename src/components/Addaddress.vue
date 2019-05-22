@@ -10,6 +10,7 @@
 							<option value ="北京市东城区">北京市东城区</option>
 							<option value ="北京市西城区">北京市西城区</option>
 							<option value="北京市朝阳区">北京市朝阳区</option>
+							<option value="北京市海淀区">北京市海淀区</option>
 							<option value="北京市丰台区">北京市丰台区</option>
 							<option value="北京市石景山区">北京市石景山区</option>
 							<option value="北京市门头沟区">北京市门头沟区</option>
@@ -112,15 +113,10 @@ import {mapGetters,mapActions} from 'vuex';
 						flag:flag,
 						smsCode:this.smsCode
 					}).then(data=>{
-						console.log(data);
-						if(this.type){//Home页创建地址跳转过来 type 1  一般清洁页面  type 0 家电清洁页面
-							Toast('创建成功');
-							this.$router.replace({path:'/Home',query:{type:this.type}});
-						}else{
+							console.log(data);
+							let type = this.type || 1;					
 							Toast('添加成功');
-							this.$router.replace('/My');
-						}
-						
+							this.$router.replace({path:'/My',query:{type:type}});						
 					})
 				}else{//编辑地址
 					this.$post('sp/appUser/editAddress',{
@@ -134,7 +130,7 @@ import {mapGetters,mapActions} from 'vuex';
 					}).then(data=>{
 						console.log(data)
 						Toast('编辑成功');						
-						this.$router.replace('/My');
+						this.$router.replace({path:'/My',query:{type:1}});	
 					})
 				}				
 			},		
@@ -178,7 +174,7 @@ import {mapGetters,mapActions} from 'vuex';
 		},
 		created(){
 			console.log(this.$route.query);
-			if(this.$route.query.type){//如果用户没有地址，下单时第一次创建地址，传过来的type:1
+			if(this.$route.query.type){//首页创建地址
 					this.type = this.$route.query.type;	
 					this.isCreate = true;
 					return false;		

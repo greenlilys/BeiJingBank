@@ -138,11 +138,7 @@
 		watch:{
 			//切换页面监听路由设置样式
 			$route(to,from){				
-				this.resetTab(to.name);	
-				//除了Home到My，地址列表不可点击						
-				if(from.name != 'Home' || to.name != 'My'){					
-					this.$store.commit('setAddActive',{addressActive:false});
-				}
+				this.resetTab(to.name);					
 			}
 		}
 	}
