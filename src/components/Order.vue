@@ -6,7 +6,7 @@
 :bottom-distance="botDis" :auto-fill="false" :topPullText='pullText' :topDropText='dropText' :topLoadingText='loadingText' ref="loadmore" class="font_28 color_gray">
 <div class="topTiao border-bot"></div>
 	<template v-for="(item,index) in orderList">
-	<div class="color_back_white border-bot pb_40" :key="index" @click="navOrderdetail(item.id)">
+	<div class="color_back_white border-bot pb_40" :key="index" @click="navOrderdetail(item.id,item.appointmentTime)">
 		<div class="c_content">
 			<div class="top flex-wrap flex-horizontal flex-justify-between flex-align-center font_28">
 				<div><span class="color_regu">订单号：</span><span class="color_gray">{{item.orderNumber}}</span></div>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { Toast } from 'mint-ui';
+import { Toast,MessageBox } from 'mint-ui';
 import {mapGetters,mapActions} from 'vuex';
 export default{
 	name:'Order',
@@ -61,10 +61,10 @@ export default{
 
 		}
 	},
-	methods:{
+	methods:{		
 		//跳转到订单详情
-		navOrderdetail(id){
-			this.$router.push({path:'/Orderdetail',query:{id:id}});
+		navOrderdetail(id,appointmentTime){
+			this.$router.push({path:'/Orderdetail',query:{id:id,appointmentTime:appointmentTime}});
 		},
 		//查询订单列表
 		getOrderList({userId=this.userId,pageNo=this.pageNo,pageSize=10}={}){
@@ -85,8 +85,7 @@ export default{
 				}
 				this.pageNo++;				
 				this.totalPage = Math.ceil(data.pageCount/10);
-				this.orderNumber = 	data.pageCount || 0;					
-				// console.log(data.pageCount);
+				this.orderNumber = 	data.pageCount || 0;
 			})
 		},
 		

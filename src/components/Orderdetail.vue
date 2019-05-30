@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { Toast } from 'mint-ui';
+import { Toast,MessageBox } from 'mint-ui';
 export default{
 	name:'Order',
 	data(){
@@ -60,21 +60,39 @@ export default{
 			orderDetail:{},
 			id:'',//订单id			
 			service:[],//服务项目
-			discount:''//清洁电器数量
+			discount:'',//清洁电器数量
+			appointmentTime:'',//预约时间
 		}
 	},
 	methods:{
 		backList(){//返回列表
 			this.$router.go(-1);
 		},
-		cancleOrder(){//取消订单
-			console.log(this.id)
+		cancleOrder(){//取消订单			
+			let time = new Date(this.appointmentTime).getTime();			
+			if(time > Date.now() && time - Date.now() < 86400000){
+				MessageBox({
+					title: '提示',
+					message: '24小时以内取消预约，需扣除1小时的服务时长',
+					showCancelButton: true,
+					showConfirmButton: true
+				}).then(res=>{
+					console.log(res)
+					this.cancleSure();
+				}).catch(err=>{
+					console.log(err)
+				})
+			}else{
+				this.cancleSure();
+			}			
+		},
+		cancleSure(){//确定取消订单
 			this.$post('sp/order/cancelOrder/',{
-				id:this.id
+					id:this.id
 			}).then(data=>{
-				Toast('订单已取消');
-				this.$store.commit('setRightsValidity');
-				this.$router.replace('/Order');
+					Toast('订单已取消');
+					this.$store.commit('setRightsValidity');
+					this.$router.replace('/Order');
 			})
 		},
 		dataFormet(data){//格式化时间
@@ -122,14 +140,16 @@ export default{
 	},
 	created(){
 		//订单列表跳转					
-		if(this.$route.query.id){
-			this.id= this.$route.query.id;
-			this.getOrderDetail({id:this.$route.query.id})
+		let query = this.$route.query;
+		if(query.id){
+			this.id= query.id;
+			this.appointmentTime = query.appointmentTime;//预约时间
+			this.getOrderDetail({id:query.id})
 		}
 		//url  orderId跳转
-		if(this.$route.query.orderId){
-			this.id= this.$route.query.orderId;
-			this.getOrderDetail({id:this.$route.query.orderId})
+		if(query.orderId){
+			this.id = query.orderId;			
+			this.getOrderDetail({id:query.orderId});
 		}
 		
 	},
