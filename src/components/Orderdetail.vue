@@ -18,7 +18,7 @@
 					<p class="color_blue font_b" v-if="orderDetail.type == 1">一般清洁服务</p>
 					<p class="color_blue font_b" v-if="orderDetail.type == 0">家电清洁服务</p>
 					<p><span class="color_regu">服务时长：</span><span class="color_gray">{{orderDetail.appointmentTimeLength}}小时</span></p>
-					<p><span class="color_regu">预约时间：</span><span class="color_gray">{{dataFormet(orderDetail.createTime)}}</span></p>	
+					<p><span class="color_regu">预约时间：</span><span class="color_gray">{{dataFormet(appointmentTime)}}</span></p>	
 					<div class="flex-wrap flex-horizontal">
 						<p class="color_regu">服务项目：<span class="color_gray font_28" v-if="orderDetail.type == 1">无</span></p>
 						<div class="color_gray" v-if="orderDetail.type == 0">
@@ -68,9 +68,9 @@ export default{
 		backList(){//返回列表
 			this.$router.go(-1);
 		},
-		cancleOrder(){//取消订单			
-			let time = new Date(this.appointmentTime).getTime();			
-			if(time > Date.now() && time - Date.now() < 86400000){
+		cancleOrder(){//取消订单
+			let time = new Date(this.appointmentTime).getTime();							
+			if(time > Date.now() && (time - Date.now()) < 86400000){
 				MessageBox({
 					title: '提示',
 					message: '24小时以内取消预约，需扣除1小时的服务时长',
@@ -78,11 +78,12 @@ export default{
 					showConfirmButton: true
 				}).then(res=>{
 					console.log(res)
-					this.cancleSure();
-				}).catch(err=>{
-					console.log(err)
+					if(res == 'confirm'){					
+						this.cancleSure();
+					}
+					
 				})
-			}else{
+			}else{	
 				this.cancleSure();
 			}			
 		},

@@ -11,7 +11,7 @@ var serverconfig = {
     /*测试服务器地址*/   
   // 'serviceIP': '/api/'  
   /*上线代理地址*/
-  'serviceIP': '/apis/'
+  'serviceIP': '/apis2/'
 };
 // 接口请求虚拟目录
 var http_api = {   
