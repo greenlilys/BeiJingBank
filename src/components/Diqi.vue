@@ -218,14 +218,13 @@ export default {
           appointmentTimeLength:this.serviceLength,//预约时长
           serviceItem: serviceItem,
           serviceItems: serviceItems         
-        }).then(data => {
-         
+        }).then(data => {         
               Toast('预约成功');
               this.$store.commit('setRightsValidity');
               this.$router.push('/Order');
                this.canUse = true;
         }).catch(res=>{
-          Toast('预约失败');
+            Toast('预约失败');
             this.canUse = true;
         })    
     },

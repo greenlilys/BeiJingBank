@@ -25,7 +25,7 @@ var url_api = {
 GLOBALconfig.agent_api = serverconfig.serviceIP; //接口请求地址 
 
 axios.defaults.withCredentials = true;//允许cookei跨域
-axios.defaults.timeout = 5000;//请求超时时间
+axios.defaults.timeout = 10000;//请求超时时间
 axios.defaults.baseURL = GLOBALconfig.agent_api;
 
 
